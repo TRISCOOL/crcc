@@ -1,5 +1,6 @@
-package com.crcc.api.controller;
+package com.crcc.api.controller.user;
 
+import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.User;
@@ -9,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("/user")
-public class UserController extends BaseController{
+public class UserController extends BaseController {
 
     @Autowired
     private UserService userService;
