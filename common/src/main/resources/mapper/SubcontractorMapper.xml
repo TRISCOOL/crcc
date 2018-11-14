@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.SubcontractorMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.Subcontractor" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="set_up_time" property="setUpTime" jdbcType="TIMESTAMP" />
+    <result column="taxpayer_type_id" property="taxpayerTypeId" jdbcType="BIGINT" />
+    <result column="registered_capital" property="registeredCapital" jdbcType="DECIMAL" />
+    <result column="type_id" property="typeId" jdbcType="BIGINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="zip_code" property="zipCode" jdbcType="VARCHAR" />
+    <result column="legal_person_name" property="legalPersonName" jdbcType="VARCHAR" />
+    <result column="legal_person_position" property="legalPersonPosition" jdbcType="VARCHAR" />
+    <result column="legal_person_card" property="legalPersonCard" jdbcType="VARCHAR" />
+    <result column="legal_person_phone" property="legalPersonPhone" jdbcType="VARCHAR" />
+    <result column="legal_person_address" property="legalPersonAddress" jdbcType="VARCHAR" />
+    <result column="business_license_code" property="businessLicenseCode" jdbcType="VARCHAR" />
+    <result column="business_license_validity_period" property="businessLicenseValidityPeriod" jdbcType="TIMESTAMP" />
+    <result column="business_license_from" property="businessLicenseFrom" jdbcType="VARCHAR" />
+    <result column="qualification_code" property="qualificationCode" jdbcType="VARCHAR" />
+    <result column="qualification_validity_period" property="qualificationValidityPeriod" jdbcType="TIMESTAMP" />
+    <result column="qualification_from" property="qualificationFrom" jdbcType="VARCHAR" />
+    <result column="safety_code" property="safetyCode" jdbcType="VARCHAR" />
+    <result column="safety_validity_period" property="safetyValidityPeriod" jdbcType="TIMESTAMP" />
+    <result column="safety_from" property="safetyFrom" jdbcType="VARCHAR" />
+    <result column="bank" property="bank" jdbcType="VARCHAR" />
+    <result column="bank_account" property="bankAccount" jdbcType="VARCHAR" />
+    <result column="bank_from" property="bankFrom" jdbcType="VARCHAR" />
+    <result column="annex" property="annex" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="profession_type" property="professionType" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, set_up_time, taxpayer_type_id, registered_capital, type_id, phone, email, address, 
+    code, zip_code, legal_person_name, legal_person_position, legal_person_card, legal_person_phone, 
+    legal_person_address, business_license_code, business_license_validity_period, business_license_from, 
+    qualification_code, qualification_validity_period, qualification_from, safety_code, 
+    safety_validity_period, safety_from, bank, bank_account, bank_from, annex, create_time, 
+    create_user, update_time, update_user, profession_type
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from subcontractor
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from subcontractor
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.Subcontractor" >
+    insert into subcontractor (id, set_up_time, taxpayer_type_id, 
+      registered_capital, type_id, phone, 
+      email, address, code, 
+      zip_code, legal_person_name, legal_person_position, 
+      legal_person_card, legal_person_phone, legal_person_address, 
+      business_license_code, business_license_validity_period, 
+      business_license_from, qualification_code, 
+      qualification_validity_period, qualification_from, 
+      safety_code, safety_validity_period, safety_from, 
+      bank, bank_account, bank_from, 
+      annex, create_time, create_user, 
+      update_time, update_user, profession_type
+      )
+    values (#{id,jdbcType=BIGINT}, #{setUpTime,jdbcType=TIMESTAMP}, #{taxpayerTypeId,jdbcType=BIGINT}, 
+      #{registeredCapital,jdbcType=DECIMAL}, #{typeId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
+      #{zipCode,jdbcType=VARCHAR}, #{legalPersonName,jdbcType=VARCHAR}, #{legalPersonPosition,jdbcType=VARCHAR}, 
+      #{legalPersonCard,jdbcType=VARCHAR}, #{legalPersonPhone,jdbcType=VARCHAR}, #{legalPersonAddress,jdbcType=VARCHAR}, 
+      #{businessLicenseCode,jdbcType=VARCHAR}, #{businessLicenseValidityPeriod,jdbcType=TIMESTAMP}, 
+      #{businessLicenseFrom,jdbcType=VARCHAR}, #{qualificationCode,jdbcType=VARCHAR}, 
+      #{qualificationValidityPeriod,jdbcType=TIMESTAMP}, #{qualificationFrom,jdbcType=VARCHAR}, 
+      #{safetyCode,jdbcType=VARCHAR}, #{safetyValidityPeriod,jdbcType=TIMESTAMP}, #{safetyFrom,jdbcType=VARCHAR}, 
+      #{bank,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{bankFrom,jdbcType=VARCHAR}, 
+      #{annex,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{professionType,jdbcType=VARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.Subcontractor" >
+    insert into subcontractor
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="setUpTime != null" >
+        set_up_time,
+      </if>
+      <if test="taxpayerTypeId != null" >
+        taxpayer_type_id,
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital,
+      </if>
+      <if test="typeId != null" >
+        type_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="zipCode != null" >
+        zip_code,
+      </if>
+      <if test="legalPersonName != null" >
+        legal_person_name,
+      </if>
+      <if test="legalPersonPosition != null" >
+        legal_person_position,
+      </if>
+      <if test="legalPersonCard != null" >
+        legal_person_card,
+      </if>
+      <if test="legalPersonPhone != null" >
+        legal_person_phone,
+      </if>
+      <if test="legalPersonAddress != null" >
+        legal_person_address,
+      </if>
+      <if test="businessLicenseCode != null" >
+        business_license_code,
+      </if>
+      <if test="businessLicenseValidityPeriod != null" >
+        business_license_validity_period,
+      </if>
+      <if test="businessLicenseFrom != null" >
+        business_license_from,
+      </if>
+      <if test="qualificationCode != null" >
+        qualification_code,
+      </if>
+      <if test="qualificationValidityPeriod != null" >
+        qualification_validity_period,
+      </if>
+      <if test="qualificationFrom != null" >
+        qualification_from,
+      </if>
+      <if test="safetyCode != null" >
+        safety_code,
+      </if>
+      <if test="safetyValidityPeriod != null" >
+        safety_validity_period,
+      </if>
+      <if test="safetyFrom != null" >
+        safety_from,
+      </if>
+      <if test="bank != null" >
+        bank,
+      </if>
+      <if test="bankAccount != null" >
+        bank_account,
+      </if>
+      <if test="bankFrom != null" >
+        bank_from,
+      </if>
+      <if test="annex != null" >
+        annex,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="professionType != null" >
+        profession_type,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="setUpTime != null" >
+        #{setUpTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxpayerTypeId != null" >
+        #{taxpayerTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="registeredCapital != null" >
+        #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null" >
+        #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPosition != null" >
+        #{legalPersonPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonCard != null" >
+        #{legalPersonCard,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPhone != null" >
+        #{legalPersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonAddress != null" >
+        #{legalPersonAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseCode != null" >
+        #{businessLicenseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseValidityPeriod != null" >
+        #{businessLicenseValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessLicenseFrom != null" >
+        #{businessLicenseFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationCode != null" >
+        #{qualificationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationValidityPeriod != null" >
+        #{qualificationValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qualificationFrom != null" >
+        #{qualificationFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyCode != null" >
+        #{safetyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyValidityPeriod != null" >
+        #{safetyValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safetyFrom != null" >
+        #{safetyFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankFrom != null" >
+        #{bankFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="annex != null" >
+        #{annex,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="professionType != null" >
+        #{professionType,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.Subcontractor" >
+    update subcontractor
+    <set >
+      <if test="setUpTime != null" >
+        set_up_time = #{setUpTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="taxpayerTypeId != null" >
+        taxpayer_type_id = #{taxpayerTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="registeredCapital != null" >
+        registered_capital = #{registeredCapital,jdbcType=DECIMAL},
+      </if>
+      <if test="typeId != null" >
+        type_id = #{typeId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="zipCode != null" >
+        zip_code = #{zipCode,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonName != null" >
+        legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPosition != null" >
+        legal_person_position = #{legalPersonPosition,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonCard != null" >
+        legal_person_card = #{legalPersonCard,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonPhone != null" >
+        legal_person_phone = #{legalPersonPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="legalPersonAddress != null" >
+        legal_person_address = #{legalPersonAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseCode != null" >
+        business_license_code = #{businessLicenseCode,jdbcType=VARCHAR},
+      </if>
+      <if test="businessLicenseValidityPeriod != null" >
+        business_license_validity_period = #{businessLicenseValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="businessLicenseFrom != null" >
+        business_license_from = #{businessLicenseFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationCode != null" >
+        qualification_code = #{qualificationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="qualificationValidityPeriod != null" >
+        qualification_validity_period = #{qualificationValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qualificationFrom != null" >
+        qualification_from = #{qualificationFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyCode != null" >
+        safety_code = #{safetyCode,jdbcType=VARCHAR},
+      </if>
+      <if test="safetyValidityPeriod != null" >
+        safety_validity_period = #{safetyValidityPeriod,jdbcType=TIMESTAMP},
+      </if>
+      <if test="safetyFrom != null" >
+        safety_from = #{safetyFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="bank != null" >
+        bank = #{bank,jdbcType=VARCHAR},
+      </if>
+      <if test="bankAccount != null" >
+        bank_account = #{bankAccount,jdbcType=VARCHAR},
+      </if>
+      <if test="bankFrom != null" >
+        bank_from = #{bankFrom,jdbcType=VARCHAR},
+      </if>
+      <if test="annex != null" >
+        annex = #{annex,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="professionType != null" >
+        profession_type = #{professionType,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.Subcontractor" >
+    update subcontractor
+    set set_up_time = #{setUpTime,jdbcType=TIMESTAMP},
+      taxpayer_type_id = #{taxpayerTypeId,jdbcType=BIGINT},
+      registered_capital = #{registeredCapital,jdbcType=DECIMAL},
+      type_id = #{typeId,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      zip_code = #{zipCode,jdbcType=VARCHAR},
+      legal_person_name = #{legalPersonName,jdbcType=VARCHAR},
+      legal_person_position = #{legalPersonPosition,jdbcType=VARCHAR},
+      legal_person_card = #{legalPersonCard,jdbcType=VARCHAR},
+      legal_person_phone = #{legalPersonPhone,jdbcType=VARCHAR},
+      legal_person_address = #{legalPersonAddress,jdbcType=VARCHAR},
+      business_license_code = #{businessLicenseCode,jdbcType=VARCHAR},
+      business_license_validity_period = #{businessLicenseValidityPeriod,jdbcType=TIMESTAMP},
+      business_license_from = #{businessLicenseFrom,jdbcType=VARCHAR},
+      qualification_code = #{qualificationCode,jdbcType=VARCHAR},
+      qualification_validity_period = #{qualificationValidityPeriod,jdbcType=TIMESTAMP},
+      qualification_from = #{qualificationFrom,jdbcType=VARCHAR},
+      safety_code = #{safetyCode,jdbcType=VARCHAR},
+      safety_validity_period = #{safetyValidityPeriod,jdbcType=TIMESTAMP},
+      safety_from = #{safetyFrom,jdbcType=VARCHAR},
+      bank = #{bank,jdbcType=VARCHAR},
+      bank_account = #{bankAccount,jdbcType=VARCHAR},
+      bank_from = #{bankFrom,jdbcType=VARCHAR},
+      annex = #{annex,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      profession_type = #{professionType,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

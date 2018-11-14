@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.InspectionAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.InspectionAccount" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="subcontractor_id" property="subcontractorId" jdbcType="BIGINT" />
+    <result column="subcontractor_name" property="subcontractorName" jdbcType="VARCHAR" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="contract_price" property="contractPrice" jdbcType="DECIMAL" />
+    <result column="valuation_period" property="valuationPeriod" jdbcType="INTEGER" />
+    <result column="valuation_time" property="valuationTime" jdbcType="TIMESTAMP" />
+    <result column="valuation_type_id" property="valuationTypeId" jdbcType="BIGINT" />
+    <result column="valuation_person" property="valuationPerson" jdbcType="VARCHAR" />
+    <result column="valuation_price" property="valuationPrice" jdbcType="DECIMAL" />
+    <result column="valuation_price_reduce" property="valuationPriceReduce" jdbcType="DECIMAL" />
+    <result column="warranty" property="warranty" jdbcType="DECIMAL" />
+    <result column="performance_bond" property="performanceBond" jdbcType="DECIMAL" />
+    <result column="compensation" property="compensation" jdbcType="DECIMAL" />
+    <result column="should_amount" property="shouldAmount" jdbcType="DECIMAL" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="annex_url" property="annexUrl" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, subcontractor_id, subcontractor_name, team_name, contract_price, 
+    valuation_period, valuation_time, valuation_type_id, valuation_person, valuation_price, 
+    valuation_price_reduce, warranty, performance_bond, compensation, should_amount, 
+    remark, annex_url, create_time, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from inspection_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from inspection_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.InspectionAccount" >
+    insert into inspection_account (id, project_id, subcontractor_id, 
+      subcontractor_name, team_name, contract_price, 
+      valuation_period, valuation_time, valuation_type_id, 
+      valuation_person, valuation_price, valuation_price_reduce, 
+      warranty, performance_bond, compensation, 
+      should_amount, remark, annex_url, 
+      create_time, create_user, update_time, 
+      update_user)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
+      #{subcontractorName,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{contractPrice,jdbcType=DECIMAL}, 
+      #{valuationPeriod,jdbcType=INTEGER}, #{valuationTime,jdbcType=TIMESTAMP}, #{valuationTypeId,jdbcType=BIGINT}, 
+      #{valuationPerson,jdbcType=VARCHAR}, #{valuationPrice,jdbcType=DECIMAL}, #{valuationPriceReduce,jdbcType=DECIMAL}, 
+      #{warranty,jdbcType=DECIMAL}, #{performanceBond,jdbcType=DECIMAL}, #{compensation,jdbcType=DECIMAL}, 
+      #{shouldAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.InspectionAccount" >
+    insert into inspection_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id,
+      </if>
+      <if test="subcontractorName != null" >
+        subcontractor_name,
+      </if>
+      <if test="teamName != null" >
+        team_name,
+      </if>
+      <if test="contractPrice != null" >
+        contract_price,
+      </if>
+      <if test="valuationPeriod != null" >
+        valuation_period,
+      </if>
+      <if test="valuationTime != null" >
+        valuation_time,
+      </if>
+      <if test="valuationTypeId != null" >
+        valuation_type_id,
+      </if>
+      <if test="valuationPerson != null" >
+        valuation_person,
+      </if>
+      <if test="valuationPrice != null" >
+        valuation_price,
+      </if>
+      <if test="valuationPriceReduce != null" >
+        valuation_price_reduce,
+      </if>
+      <if test="warranty != null" >
+        warranty,
+      </if>
+      <if test="performanceBond != null" >
+        performance_bond,
+      </if>
+      <if test="compensation != null" >
+        compensation,
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="annexUrl != null" >
+        annex_url,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorName != null" >
+        #{subcontractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamName != null" >
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractPrice != null" >
+        #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valuationPeriod != null" >
+        #{valuationPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="valuationTime != null" >
+        #{valuationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valuationTypeId != null" >
+        #{valuationTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="valuationPerson != null" >
+        #{valuationPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="valuationPrice != null" >
+        #{valuationPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valuationPriceReduce != null" >
+        #{valuationPriceReduce,jdbcType=DECIMAL},
+      </if>
+      <if test="warranty != null" >
+        #{warranty,jdbcType=DECIMAL},
+      </if>
+      <if test="performanceBond != null" >
+        #{performanceBond,jdbcType=DECIMAL},
+      </if>
+      <if test="compensation != null" >
+        #{compensation,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAmount != null" >
+        #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="annexUrl != null" >
+        #{annexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.InspectionAccount" >
+    update inspection_account
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorName != null" >
+        subcontractor_name = #{subcontractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="teamName != null" >
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractPrice != null" >
+        contract_price = #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valuationPeriod != null" >
+        valuation_period = #{valuationPeriod,jdbcType=INTEGER},
+      </if>
+      <if test="valuationTime != null" >
+        valuation_time = #{valuationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="valuationTypeId != null" >
+        valuation_type_id = #{valuationTypeId,jdbcType=BIGINT},
+      </if>
+      <if test="valuationPerson != null" >
+        valuation_person = #{valuationPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="valuationPrice != null" >
+        valuation_price = #{valuationPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="valuationPriceReduce != null" >
+        valuation_price_reduce = #{valuationPriceReduce,jdbcType=DECIMAL},
+      </if>
+      <if test="warranty != null" >
+        warranty = #{warranty,jdbcType=DECIMAL},
+      </if>
+      <if test="performanceBond != null" >
+        performance_bond = #{performanceBond,jdbcType=DECIMAL},
+      </if>
+      <if test="compensation != null" >
+        compensation = #{compensation,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="annexUrl != null" >
+        annex_url = #{annexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.InspectionAccount" >
+    update inspection_account
+    set project_id = #{projectId,jdbcType=BIGINT},
+      subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      subcontractor_name = #{subcontractorName,jdbcType=VARCHAR},
+      team_name = #{teamName,jdbcType=VARCHAR},
+      contract_price = #{contractPrice,jdbcType=DECIMAL},
+      valuation_period = #{valuationPeriod,jdbcType=INTEGER},
+      valuation_time = #{valuationTime,jdbcType=TIMESTAMP},
+      valuation_type_id = #{valuationTypeId,jdbcType=BIGINT},
+      valuation_person = #{valuationPerson,jdbcType=VARCHAR},
+      valuation_price = #{valuationPrice,jdbcType=DECIMAL},
+      valuation_price_reduce = #{valuationPriceReduce,jdbcType=DECIMAL},
+      warranty = #{warranty,jdbcType=DECIMAL},
+      performance_bond = #{performanceBond,jdbcType=DECIMAL},
+      compensation = #{compensation,jdbcType=DECIMAL},
+      should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      remark = #{remark,jdbcType=VARCHAR},
+      annex_url = #{annexUrl,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

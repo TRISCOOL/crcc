@@ -1,0 +1,505 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.ProjectInfoMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.ProjectInfo" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="project_type" property="projectType" jdbcType="VARCHAR" />
+    <result column="address" property="address" jdbcType="VARCHAR" />
+    <result column="org_address" property="orgAddress" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="INTEGER" />
+    <result column="mileage_number" property="mileageNumber" jdbcType="INTEGER" />
+    <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
+    <result column="contract_number" property="contractNumber" jdbcType="VARCHAR" />
+    <result column="contract_day" property="contractDay" jdbcType="INTEGER" />
+    <result column="contract_start_time" property="contractStartTime" jdbcType="TIMESTAMP" />
+    <result column="contract_end_time" property="contractEndTime" jdbcType="TIMESTAMP" />
+    <result column="real_contract_day" property="realContractDay" jdbcType="INTEGER" />
+    <result column="real_contract_start_time" property="realContractStartTime" jdbcType="TIMESTAMP" />
+    <result column="real_contract_end_time" property="realContractEndTime" jdbcType="TIMESTAMP" />
+    <result column="proprietor_company
+proprietor_company" property="proprietorCompany
+proprietorCompany" jdbcType="VARCHAR" />
+    <result column="proprietor_address" property="proprietorAddress" jdbcType="VARCHAR" />
+    <result column="proprietor_phone" property="proprietorPhone" jdbcType="VARCHAR" />
+    <result column="supervision_company" property="supervisionCompany" jdbcType="VARCHAR" />
+    <result column="supervision_address" property="supervisionAddress" jdbcType="VARCHAR" />
+    <result column="supervision_phone" property="supervisionPhone" jdbcType="VARCHAR" />
+    <result column="project_manager" property="projectManager" jdbcType="VARCHAR" />
+    <result column="project_manager_position_id" property="projectManagerPositionId" jdbcType="BIGINT" />
+    <result column="project_manager_phone" property="projectManagerPhone" jdbcType="VARCHAR" />
+    <result column="project_manager_time" property="projectManagerTime" jdbcType="TIMESTAMP" />
+    <result column="project_secretary" property="projectSecretary" jdbcType="VARCHAR" />
+    <result column="project_secretary_position_id" property="projectSecretaryPositionId" jdbcType="BIGINT" />
+    <result column="project_secretary_phone" property="projectSecretaryPhone" jdbcType="VARCHAR" />
+    <result column="project_secretary_time" property="projectSecretaryTime" jdbcType="TIMESTAMP" />
+    <result column="chief_engineer" property="chiefEngineer" jdbcType="VARCHAR" />
+    <result column="chief_engineer_position_id" property="chiefEngineerPositionId" jdbcType="BIGINT" />
+    <result column="chief_engineer_time" property="chiefEngineerTime" jdbcType="TIMESTAMP" />
+    <result column="chief_engineer_phone" property="chiefEngineerPhone" jdbcType="VARCHAR" />
+    <result column="input_person" property="inputPerson" jdbcType="INTEGER" />
+    <result column="formal_employee" property="formalEmployee" jdbcType="INTEGER" />
+    <result column="external_employee" property="externalEmployee" jdbcType="INTEGER" />
+    <result column="description" property="description" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, project_type, address, org_address, status, mileage_number, total_price, 
+    contract_number, contract_day, contract_start_time, contract_end_time, real_contract_day, 
+    real_contract_start_time, real_contract_end_time, proprietor_company
+proprietor_company, 
+    proprietor_address, proprietor_phone, supervision_company, supervision_address, supervision_phone, 
+    project_manager, project_manager_position_id, project_manager_phone, project_manager_time, 
+    project_secretary, project_secretary_position_id, project_secretary_phone, project_secretary_time, 
+    chief_engineer, chief_engineer_position_id, chief_engineer_time, chief_engineer_phone, 
+    input_person, formal_employee, external_employee, description, create_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_info
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_info
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.ProjectInfo" >
+    insert into project_info (id, project_id, project_type, 
+      address, org_address, status, 
+      mileage_number, total_price, contract_number, 
+      contract_day, contract_start_time, contract_end_time, 
+      real_contract_day, real_contract_start_time, 
+      real_contract_end_time, proprietor_company
+proprietor_company, 
+      proprietor_address, proprietor_phone, supervision_company, 
+      supervision_address, supervision_phone, project_manager, 
+      project_manager_position_id, project_manager_phone, 
+      project_manager_time, project_secretary, 
+      project_secretary_position_id, project_secretary_phone, 
+      project_secretary_time, chief_engineer, 
+      chief_engineer_position_id, chief_engineer_time, 
+      chief_engineer_phone, input_person, formal_employee, 
+      external_employee, description, create_time
+      )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{projectType,jdbcType=VARCHAR}, 
+      #{address,jdbcType=VARCHAR}, #{orgAddress,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
+      #{mileageNumber,jdbcType=INTEGER}, #{totalPrice,jdbcType=DECIMAL}, #{contractNumber,jdbcType=VARCHAR}, 
+      #{contractDay,jdbcType=INTEGER}, #{contractStartTime,jdbcType=TIMESTAMP}, #{contractEndTime,jdbcType=TIMESTAMP}, 
+      #{realContractDay,jdbcType=INTEGER}, #{realContractStartTime,jdbcType=TIMESTAMP}, 
+      #{realContractEndTime,jdbcType=TIMESTAMP}, #{proprietorCompany
+proprietorCompany,jdbcType=VARCHAR}, 
+      #{proprietorAddress,jdbcType=VARCHAR}, #{proprietorPhone,jdbcType=VARCHAR}, #{supervisionCompany,jdbcType=VARCHAR}, 
+      #{supervisionAddress,jdbcType=VARCHAR}, #{supervisionPhone,jdbcType=VARCHAR}, #{projectManager,jdbcType=VARCHAR}, 
+      #{projectManagerPositionId,jdbcType=BIGINT}, #{projectManagerPhone,jdbcType=VARCHAR}, 
+      #{projectManagerTime,jdbcType=TIMESTAMP}, #{projectSecretary,jdbcType=VARCHAR}, 
+      #{projectSecretaryPositionId,jdbcType=BIGINT}, #{projectSecretaryPhone,jdbcType=VARCHAR}, 
+      #{projectSecretaryTime,jdbcType=TIMESTAMP}, #{chiefEngineer,jdbcType=VARCHAR}, 
+      #{chiefEngineerPositionId,jdbcType=BIGINT}, #{chiefEngineerTime,jdbcType=TIMESTAMP}, 
+      #{chiefEngineerPhone,jdbcType=VARCHAR}, #{inputPerson,jdbcType=INTEGER}, #{formalEmployee,jdbcType=INTEGER}, 
+      #{externalEmployee,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.ProjectInfo" >
+    insert into project_info
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="projectType != null" >
+        project_type,
+      </if>
+      <if test="address != null" >
+        address,
+      </if>
+      <if test="orgAddress != null" >
+        org_address,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="mileageNumber != null" >
+        mileage_number,
+      </if>
+      <if test="totalPrice != null" >
+        total_price,
+      </if>
+      <if test="contractNumber != null" >
+        contract_number,
+      </if>
+      <if test="contractDay != null" >
+        contract_day,
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time,
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time,
+      </if>
+      <if test="realContractDay != null" >
+        real_contract_day,
+      </if>
+      <if test="realContractStartTime != null" >
+        real_contract_start_time,
+      </if>
+      <if test="realContractEndTime != null" >
+        real_contract_end_time,
+      </if>
+      <if test="proprietorCompany
+proprietorCompany != null" >
+        proprietor_company
+proprietor_company,
+      </if>
+      <if test="proprietorAddress != null" >
+        proprietor_address,
+      </if>
+      <if test="proprietorPhone != null" >
+        proprietor_phone,
+      </if>
+      <if test="supervisionCompany != null" >
+        supervision_company,
+      </if>
+      <if test="supervisionAddress != null" >
+        supervision_address,
+      </if>
+      <if test="supervisionPhone != null" >
+        supervision_phone,
+      </if>
+      <if test="projectManager != null" >
+        project_manager,
+      </if>
+      <if test="projectManagerPositionId != null" >
+        project_manager_position_id,
+      </if>
+      <if test="projectManagerPhone != null" >
+        project_manager_phone,
+      </if>
+      <if test="projectManagerTime != null" >
+        project_manager_time,
+      </if>
+      <if test="projectSecretary != null" >
+        project_secretary,
+      </if>
+      <if test="projectSecretaryPositionId != null" >
+        project_secretary_position_id,
+      </if>
+      <if test="projectSecretaryPhone != null" >
+        project_secretary_phone,
+      </if>
+      <if test="projectSecretaryTime != null" >
+        project_secretary_time,
+      </if>
+      <if test="chiefEngineer != null" >
+        chief_engineer,
+      </if>
+      <if test="chiefEngineerPositionId != null" >
+        chief_engineer_position_id,
+      </if>
+      <if test="chiefEngineerTime != null" >
+        chief_engineer_time,
+      </if>
+      <if test="chiefEngineerPhone != null" >
+        chief_engineer_phone,
+      </if>
+      <if test="inputPerson != null" >
+        input_person,
+      </if>
+      <if test="formalEmployee != null" >
+        formal_employee,
+      </if>
+      <if test="externalEmployee != null" >
+        external_employee,
+      </if>
+      <if test="description != null" >
+        description,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="projectType != null" >
+        #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAddress != null" >
+        #{orgAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mileageNumber != null" >
+        #{mileageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalPrice != null" >
+        #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractNumber != null" >
+        #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDay != null" >
+        #{contractDay,jdbcType=INTEGER},
+      </if>
+      <if test="contractStartTime != null" >
+        #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realContractDay != null" >
+        #{realContractDay,jdbcType=INTEGER},
+      </if>
+      <if test="realContractStartTime != null" >
+        #{realContractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realContractEndTime != null" >
+        #{realContractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="proprietorCompany
+proprietorCompany != null" >
+        #{proprietorCompany
+proprietorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorAddress != null" >
+        #{proprietorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorPhone != null" >
+        #{proprietorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionCompany != null" >
+        #{supervisionCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionAddress != null" >
+        #{supervisionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionPhone != null" >
+        #{supervisionPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManager != null" >
+        #{projectManager,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerPositionId != null" >
+        #{projectManagerPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectManagerPhone != null" >
+        #{projectManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerTime != null" >
+        #{projectManagerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectSecretary != null" >
+        #{projectSecretary,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSecretaryPositionId != null" >
+        #{projectSecretaryPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectSecretaryPhone != null" >
+        #{projectSecretaryPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSecretaryTime != null" >
+        #{projectSecretaryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chiefEngineer != null" >
+        #{chiefEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefEngineerPositionId != null" >
+        #{chiefEngineerPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="chiefEngineerTime != null" >
+        #{chiefEngineerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chiefEngineerPhone != null" >
+        #{chiefEngineerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="inputPerson != null" >
+        #{inputPerson,jdbcType=INTEGER},
+      </if>
+      <if test="formalEmployee != null" >
+        #{formalEmployee,jdbcType=INTEGER},
+      </if>
+      <if test="externalEmployee != null" >
+        #{externalEmployee,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.ProjectInfo" >
+    update project_info
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="projectType != null" >
+        project_type = #{projectType,jdbcType=VARCHAR},
+      </if>
+      <if test="address != null" >
+        address = #{address,jdbcType=VARCHAR},
+      </if>
+      <if test="orgAddress != null" >
+        org_address = #{orgAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=INTEGER},
+      </if>
+      <if test="mileageNumber != null" >
+        mileage_number = #{mileageNumber,jdbcType=INTEGER},
+      </if>
+      <if test="totalPrice != null" >
+        total_price = #{totalPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="contractNumber != null" >
+        contract_number = #{contractNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="contractDay != null" >
+        contract_day = #{contractDay,jdbcType=INTEGER},
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realContractDay != null" >
+        real_contract_day = #{realContractDay,jdbcType=INTEGER},
+      </if>
+      <if test="realContractStartTime != null" >
+        real_contract_start_time = #{realContractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realContractEndTime != null" >
+        real_contract_end_time = #{realContractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="proprietorCompany
+proprietorCompany != null" >
+        proprietor_company
+proprietor_company = #{proprietorCompany
+proprietorCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorAddress != null" >
+        proprietor_address = #{proprietorAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="proprietorPhone != null" >
+        proprietor_phone = #{proprietorPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionCompany != null" >
+        supervision_company = #{supervisionCompany,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionAddress != null" >
+        supervision_address = #{supervisionAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="supervisionPhone != null" >
+        supervision_phone = #{supervisionPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManager != null" >
+        project_manager = #{projectManager,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerPositionId != null" >
+        project_manager_position_id = #{projectManagerPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectManagerPhone != null" >
+        project_manager_phone = #{projectManagerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectManagerTime != null" >
+        project_manager_time = #{projectManagerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="projectSecretary != null" >
+        project_secretary = #{projectSecretary,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSecretaryPositionId != null" >
+        project_secretary_position_id = #{projectSecretaryPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="projectSecretaryPhone != null" >
+        project_secretary_phone = #{projectSecretaryPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectSecretaryTime != null" >
+        project_secretary_time = #{projectSecretaryTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chiefEngineer != null" >
+        chief_engineer = #{chiefEngineer,jdbcType=VARCHAR},
+      </if>
+      <if test="chiefEngineerPositionId != null" >
+        chief_engineer_position_id = #{chiefEngineerPositionId,jdbcType=BIGINT},
+      </if>
+      <if test="chiefEngineerTime != null" >
+        chief_engineer_time = #{chiefEngineerTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="chiefEngineerPhone != null" >
+        chief_engineer_phone = #{chiefEngineerPhone,jdbcType=VARCHAR},
+      </if>
+      <if test="inputPerson != null" >
+        input_person = #{inputPerson,jdbcType=INTEGER},
+      </if>
+      <if test="formalEmployee != null" >
+        formal_employee = #{formalEmployee,jdbcType=INTEGER},
+      </if>
+      <if test="externalEmployee != null" >
+        external_employee = #{externalEmployee,jdbcType=INTEGER},
+      </if>
+      <if test="description != null" >
+        description = #{description,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.ProjectInfo" >
+    update project_info
+    set project_id = #{projectId,jdbcType=BIGINT},
+      project_type = #{projectType,jdbcType=VARCHAR},
+      address = #{address,jdbcType=VARCHAR},
+      org_address = #{orgAddress,jdbcType=VARCHAR},
+      status = #{status,jdbcType=INTEGER},
+      mileage_number = #{mileageNumber,jdbcType=INTEGER},
+      total_price = #{totalPrice,jdbcType=DECIMAL},
+      contract_number = #{contractNumber,jdbcType=VARCHAR},
+      contract_day = #{contractDay,jdbcType=INTEGER},
+      contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      real_contract_day = #{realContractDay,jdbcType=INTEGER},
+      real_contract_start_time = #{realContractStartTime,jdbcType=TIMESTAMP},
+      real_contract_end_time = #{realContractEndTime,jdbcType=TIMESTAMP},
+      proprietor_company
+proprietor_company = #{proprietorCompany
+proprietorCompany,jdbcType=VARCHAR},
+      proprietor_address = #{proprietorAddress,jdbcType=VARCHAR},
+      proprietor_phone = #{proprietorPhone,jdbcType=VARCHAR},
+      supervision_company = #{supervisionCompany,jdbcType=VARCHAR},
+      supervision_address = #{supervisionAddress,jdbcType=VARCHAR},
+      supervision_phone = #{supervisionPhone,jdbcType=VARCHAR},
+      project_manager = #{projectManager,jdbcType=VARCHAR},
+      project_manager_position_id = #{projectManagerPositionId,jdbcType=BIGINT},
+      project_manager_phone = #{projectManagerPhone,jdbcType=VARCHAR},
+      project_manager_time = #{projectManagerTime,jdbcType=TIMESTAMP},
+      project_secretary = #{projectSecretary,jdbcType=VARCHAR},
+      project_secretary_position_id = #{projectSecretaryPositionId,jdbcType=BIGINT},
+      project_secretary_phone = #{projectSecretaryPhone,jdbcType=VARCHAR},
+      project_secretary_time = #{projectSecretaryTime,jdbcType=TIMESTAMP},
+      chief_engineer = #{chiefEngineer,jdbcType=VARCHAR},
+      chief_engineer_position_id = #{chiefEngineerPositionId,jdbcType=BIGINT},
+      chief_engineer_time = #{chiefEngineerTime,jdbcType=TIMESTAMP},
+      chief_engineer_phone = #{chiefEngineerPhone,jdbcType=VARCHAR},
+      input_person = #{inputPerson,jdbcType=INTEGER},
+      formal_employee = #{formalEmployee,jdbcType=INTEGER},
+      external_employee = #{externalEmployee,jdbcType=INTEGER},
+      description = #{description,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

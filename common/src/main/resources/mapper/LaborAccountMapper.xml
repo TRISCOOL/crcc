@@ -1,0 +1,377 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.LaborAccountMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.LaborAccount" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="subcontractor_id" property="subcontractorId" jdbcType="BIGINT" />
+    <result column="subcontractor_name" property="subcontractorName" jdbcType="VARCHAR" />
+    <result column="contract_time" property="contractTime" jdbcType="TIMESTAMP" />
+    <result column="construction_scope" property="constructionScope" jdbcType="VARCHAR" />
+    <result column="contract_code" property="contractCode" jdbcType="VARCHAR" />
+    <result column="team_name" property="teamName" jdbcType="VARCHAR" />
+    <result column="estimated_contract_amount" property="estimatedContractAmount" jdbcType="DECIMAL" />
+    <result column="should_amount" property="shouldAmount" jdbcType="DECIMAL" />
+    <result column="real_amount" property="realAmount" jdbcType="DECIMAL" />
+    <result column="contract_person" property="contractPerson" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="annex_url" property="annexUrl" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="team_time" property="teamTime" jdbcType="TIMESTAMP" />
+    <result column="team_qualification" property="teamQualification" jdbcType="TINYINT" />
+    <result column="team_annex" property="teamAnnex" jdbcType="VARCHAR" />
+    <result column="approval_time" property="approvalTime" jdbcType="TIMESTAMP" />
+    <result column="approval_filing" property="approvalFiling" jdbcType="TINYINT" />
+    <result column="approval_annex" property="approvalAnnex" jdbcType="VARCHAR" />
+    <result column="settlement_time" property="settlementTime" jdbcType="TIMESTAMP" />
+    <result column="settlement_remark" property="settlementRemark" jdbcType="VARCHAR" />
+    <result column="settlement_amount" property="settlementAmount" jdbcType="DECIMAL" />
+    <result column="settlement_filing" property="settlementFiling" jdbcType="TINYINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, subcontractor_id, subcontractor_name, contract_time, construction_scope, 
+    contract_code, team_name, estimated_contract_amount, should_amount, real_amount, 
+    contract_person, phone, annex_url, remark, team_time, team_qualification, team_annex, 
+    approval_time, approval_filing, approval_annex, settlement_time, settlement_remark, 
+    settlement_amount, settlement_filing, create_time, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from labor_account
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from labor_account
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.LaborAccount" >
+    insert into labor_account (id, project_id, subcontractor_id, 
+      subcontractor_name, contract_time, construction_scope, 
+      contract_code, team_name, estimated_contract_amount, 
+      should_amount, real_amount, contract_person, 
+      phone, annex_url, remark, 
+      team_time, team_qualification, team_annex, 
+      approval_time, approval_filing, approval_annex, 
+      settlement_time, settlement_remark, settlement_amount, 
+      settlement_filing, create_time, create_user, 
+      update_time, update_user)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
+      #{subcontractorName,jdbcType=VARCHAR}, #{contractTime,jdbcType=TIMESTAMP}, #{constructionScope,jdbcType=VARCHAR}, 
+      #{contractCode,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{estimatedContractAmount,jdbcType=DECIMAL}, 
+      #{shouldAmount,jdbcType=DECIMAL}, #{realAmount,jdbcType=DECIMAL}, #{contractPerson,jdbcType=VARCHAR}, 
+      #{phone,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{teamTime,jdbcType=TIMESTAMP}, #{teamQualification,jdbcType=TINYINT}, #{teamAnnex,jdbcType=VARCHAR}, 
+      #{approvalTime,jdbcType=TIMESTAMP}, #{approvalFiling,jdbcType=TINYINT}, #{approvalAnnex,jdbcType=VARCHAR}, 
+      #{settlementTime,jdbcType=TIMESTAMP}, #{settlementRemark,jdbcType=VARCHAR}, #{settlementAmount,jdbcType=DECIMAL}, 
+      #{settlementFiling,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.LaborAccount" >
+    insert into labor_account
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id,
+      </if>
+      <if test="subcontractorName != null" >
+        subcontractor_name,
+      </if>
+      <if test="contractTime != null" >
+        contract_time,
+      </if>
+      <if test="constructionScope != null" >
+        construction_scope,
+      </if>
+      <if test="contractCode != null" >
+        contract_code,
+      </if>
+      <if test="teamName != null" >
+        team_name,
+      </if>
+      <if test="estimatedContractAmount != null" >
+        estimated_contract_amount,
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount,
+      </if>
+      <if test="realAmount != null" >
+        real_amount,
+      </if>
+      <if test="contractPerson != null" >
+        contract_person,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="annexUrl != null" >
+        annex_url,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="teamTime != null" >
+        team_time,
+      </if>
+      <if test="teamQualification != null" >
+        team_qualification,
+      </if>
+      <if test="teamAnnex != null" >
+        team_annex,
+      </if>
+      <if test="approvalTime != null" >
+        approval_time,
+      </if>
+      <if test="approvalFiling != null" >
+        approval_filing,
+      </if>
+      <if test="approvalAnnex != null" >
+        approval_annex,
+      </if>
+      <if test="settlementTime != null" >
+        settlement_time,
+      </if>
+      <if test="settlementRemark != null" >
+        settlement_remark,
+      </if>
+      <if test="settlementAmount != null" >
+        settlement_amount,
+      </if>
+      <if test="settlementFiling != null" >
+        settlement_filing,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorName != null" >
+        #{subcontractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractTime != null" >
+        #{contractTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="constructionScope != null" >
+        #{constructionScope,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCode != null" >
+        #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="teamName != null" >
+        #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="estimatedContractAmount != null" >
+        #{estimatedContractAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAmount != null" >
+        #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPerson != null" >
+        #{contractPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="annexUrl != null" >
+        #{annexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="teamTime != null" >
+        #{teamTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teamQualification != null" >
+        #{teamQualification,jdbcType=TINYINT},
+      </if>
+      <if test="teamAnnex != null" >
+        #{teamAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null" >
+        #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalFiling != null" >
+        #{approvalFiling,jdbcType=TINYINT},
+      </if>
+      <if test="approvalAnnex != null" >
+        #{approvalAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementTime != null" >
+        #{settlementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlementRemark != null" >
+        #{settlementRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementAmount != null" >
+        #{settlementAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settlementFiling != null" >
+        #{settlementFiling,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.LaborAccount" >
+    update labor_account
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorName != null" >
+        subcontractor_name = #{subcontractorName,jdbcType=VARCHAR},
+      </if>
+      <if test="contractTime != null" >
+        contract_time = #{contractTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="constructionScope != null" >
+        construction_scope = #{constructionScope,jdbcType=VARCHAR},
+      </if>
+      <if test="contractCode != null" >
+        contract_code = #{contractCode,jdbcType=VARCHAR},
+      </if>
+      <if test="teamName != null" >
+        team_name = #{teamName,jdbcType=VARCHAR},
+      </if>
+      <if test="estimatedContractAmount != null" >
+        estimated_contract_amount = #{estimatedContractAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAmount != null" >
+        should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="realAmount != null" >
+        real_amount = #{realAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="contractPerson != null" >
+        contract_person = #{contractPerson,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="annexUrl != null" >
+        annex_url = #{annexUrl,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="teamTime != null" >
+        team_time = #{teamTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="teamQualification != null" >
+        team_qualification = #{teamQualification,jdbcType=TINYINT},
+      </if>
+      <if test="teamAnnex != null" >
+        team_annex = #{teamAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="approvalTime != null" >
+        approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="approvalFiling != null" >
+        approval_filing = #{approvalFiling,jdbcType=TINYINT},
+      </if>
+      <if test="approvalAnnex != null" >
+        approval_annex = #{approvalAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementTime != null" >
+        settlement_time = #{settlementTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="settlementRemark != null" >
+        settlement_remark = #{settlementRemark,jdbcType=VARCHAR},
+      </if>
+      <if test="settlementAmount != null" >
+        settlement_amount = #{settlementAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="settlementFiling != null" >
+        settlement_filing = #{settlementFiling,jdbcType=TINYINT},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.LaborAccount" >
+    update labor_account
+    set project_id = #{projectId,jdbcType=BIGINT},
+      subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      subcontractor_name = #{subcontractorName,jdbcType=VARCHAR},
+      contract_time = #{contractTime,jdbcType=TIMESTAMP},
+      construction_scope = #{constructionScope,jdbcType=VARCHAR},
+      contract_code = #{contractCode,jdbcType=VARCHAR},
+      team_name = #{teamName,jdbcType=VARCHAR},
+      estimated_contract_amount = #{estimatedContractAmount,jdbcType=DECIMAL},
+      should_amount = #{shouldAmount,jdbcType=DECIMAL},
+      real_amount = #{realAmount,jdbcType=DECIMAL},
+      contract_person = #{contractPerson,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      annex_url = #{annexUrl,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      team_time = #{teamTime,jdbcType=TIMESTAMP},
+      team_qualification = #{teamQualification,jdbcType=TINYINT},
+      team_annex = #{teamAnnex,jdbcType=VARCHAR},
+      approval_time = #{approvalTime,jdbcType=TIMESTAMP},
+      approval_filing = #{approvalFiling,jdbcType=TINYINT},
+      approval_annex = #{approvalAnnex,jdbcType=VARCHAR},
+      settlement_time = #{settlementTime,jdbcType=TIMESTAMP},
+      settlement_remark = #{settlementRemark,jdbcType=VARCHAR},
+      settlement_amount = #{settlementAmount,jdbcType=DECIMAL},
+      settlement_filing = #{settlementFiling,jdbcType=TINYINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

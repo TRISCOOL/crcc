@@ -1,0 +1,426 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.PersonnelMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.Personnel" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="famous_family" property="famousFamily" jdbcType="VARCHAR" />
+    <result column="join_association" property="joinAssociation" jdbcType="TINYINT" />
+    <result column="join_association_time" property="joinAssociationTime" jdbcType="TIMESTAMP" />
+    <result column="job_title" property="jobTitle" jdbcType="VARCHAR" />
+    <result column="work_time" property="workTime" jdbcType="INTEGER" />
+    <result column="birthplace" property="birthplace" jdbcType="VARCHAR" />
+    <result column="id_card" property="idCard" jdbcType="VARCHAR" />
+    <result column="home_address" property="homeAddress" jdbcType="VARCHAR" />
+    <result column="sex" property="sex" jdbcType="VARCHAR" />
+    <result column="health" property="health" jdbcType="VARCHAR" />
+    <result column="jiguan" property="jiguan" jdbcType="VARCHAR" />
+    <result column="position" property="position" jdbcType="VARCHAR" />
+    <result column="specialty" property="specialty" jdbcType="VARCHAR" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
+    <result column="brithday" property="brithday" jdbcType="TIMESTAMP" />
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR" />
+    <result column="status" property="status" jdbcType="VARCHAR" />
+    <result column="first_degree_school" property="firstDegreeSchool" jdbcType="VARCHAR" />
+    <result column="first_degree_profession" property="firstDegreeProfession" jdbcType="VARCHAR" />
+    <result column="first_degree_time" property="firstDegreeTime" jdbcType="TIMESTAMP" />
+    <result column="first_degree_level" property="firstDegreeLevel" jdbcType="VARCHAR" />
+    <result column="second_degree_school" property="secondDegreeSchool" jdbcType="VARCHAR" />
+    <result column="second_degree_level" property="secondDegreeLevel" jdbcType="VARCHAR" />
+    <result column="second_degree_time" property="secondDegreeTime" jdbcType="TIMESTAMP" />
+    <result column="second_degree_profession" property="secondDegreeProfession" jdbcType="VARCHAR" />
+    <result column="work_experience" property="workExperience" jdbcType="VARCHAR" />
+    <result column="certificate" property="certificate" jdbcType="VARCHAR" />
+    <result column="training" property="training" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="award" property="award" jdbcType="VARCHAR" />
+    <result column="head_url" property="headUrl" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, famous_family, join_association, join_association_time, job_title, work_time, 
+    birthplace, id_card, home_address, sex, health, jiguan, position, specialty, phone, 
+    project_name, brithday, qq_number, status, first_degree_school, first_degree_profession, 
+    first_degree_time, first_degree_level, second_degree_school, second_degree_level, 
+    second_degree_time, second_degree_profession, work_experience, certificate, training, 
+    remark, award, head_url
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from personnel
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from personnel
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.Personnel" >
+    insert into personnel (id, famous_family, join_association, 
+      join_association_time, job_title, work_time, 
+      birthplace, id_card, home_address, 
+      sex, health, jiguan, 
+      position, specialty, phone, 
+      project_name, brithday, qq_number, 
+      status, first_degree_school, first_degree_profession, 
+      first_degree_time, first_degree_level, second_degree_school, 
+      second_degree_level, second_degree_time, 
+      second_degree_profession, work_experience, 
+      certificate, training, remark, 
+      award, head_url)
+    values (#{id,jdbcType=BIGINT}, #{famousFamily,jdbcType=VARCHAR}, #{joinAssociation,jdbcType=TINYINT}, 
+      #{joinAssociationTime,jdbcType=TIMESTAMP}, #{jobTitle,jdbcType=VARCHAR}, #{workTime,jdbcType=INTEGER}, 
+      #{birthplace,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
+      #{sex,jdbcType=VARCHAR}, #{health,jdbcType=VARCHAR}, #{jiguan,jdbcType=VARCHAR}, 
+      #{position,jdbcType=VARCHAR}, #{specialty,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
+      #{projectName,jdbcType=VARCHAR}, #{brithday,jdbcType=TIMESTAMP}, #{qqNumber,jdbcType=VARCHAR}, 
+      #{status,jdbcType=VARCHAR}, #{firstDegreeSchool,jdbcType=VARCHAR}, #{firstDegreeProfession,jdbcType=VARCHAR}, 
+      #{firstDegreeTime,jdbcType=TIMESTAMP}, #{firstDegreeLevel,jdbcType=VARCHAR}, #{secondDegreeSchool,jdbcType=VARCHAR}, 
+      #{secondDegreeLevel,jdbcType=VARCHAR}, #{secondDegreeTime,jdbcType=TIMESTAMP}, 
+      #{secondDegreeProfession,jdbcType=VARCHAR}, #{workExperience,jdbcType=VARCHAR}, 
+      #{certificate,jdbcType=VARCHAR}, #{training,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
+      #{award,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.Personnel" >
+    insert into personnel
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="famousFamily != null" >
+        famous_family,
+      </if>
+      <if test="joinAssociation != null" >
+        join_association,
+      </if>
+      <if test="joinAssociationTime != null" >
+        join_association_time,
+      </if>
+      <if test="jobTitle != null" >
+        job_title,
+      </if>
+      <if test="workTime != null" >
+        work_time,
+      </if>
+      <if test="birthplace != null" >
+        birthplace,
+      </if>
+      <if test="idCard != null" >
+        id_card,
+      </if>
+      <if test="homeAddress != null" >
+        home_address,
+      </if>
+      <if test="sex != null" >
+        sex,
+      </if>
+      <if test="health != null" >
+        health,
+      </if>
+      <if test="jiguan != null" >
+        jiguan,
+      </if>
+      <if test="position != null" >
+        position,
+      </if>
+      <if test="specialty != null" >
+        specialty,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="projectName != null" >
+        project_name,
+      </if>
+      <if test="brithday != null" >
+        brithday,
+      </if>
+      <if test="qqNumber != null" >
+        qq_number,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+      <if test="firstDegreeSchool != null" >
+        first_degree_school,
+      </if>
+      <if test="firstDegreeProfession != null" >
+        first_degree_profession,
+      </if>
+      <if test="firstDegreeTime != null" >
+        first_degree_time,
+      </if>
+      <if test="firstDegreeLevel != null" >
+        first_degree_level,
+      </if>
+      <if test="secondDegreeSchool != null" >
+        second_degree_school,
+      </if>
+      <if test="secondDegreeLevel != null" >
+        second_degree_level,
+      </if>
+      <if test="secondDegreeTime != null" >
+        second_degree_time,
+      </if>
+      <if test="secondDegreeProfession != null" >
+        second_degree_profession,
+      </if>
+      <if test="workExperience != null" >
+        work_experience,
+      </if>
+      <if test="certificate != null" >
+        certificate,
+      </if>
+      <if test="training != null" >
+        training,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+      <if test="award != null" >
+        award,
+      </if>
+      <if test="headUrl != null" >
+        head_url,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="famousFamily != null" >
+        #{famousFamily,jdbcType=VARCHAR},
+      </if>
+      <if test="joinAssociation != null" >
+        #{joinAssociation,jdbcType=TINYINT},
+      </if>
+      <if test="joinAssociationTime != null" >
+        #{joinAssociationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jobTitle != null" >
+        #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="workTime != null" >
+        #{workTime,jdbcType=INTEGER},
+      </if>
+      <if test="birthplace != null" >
+        #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null" >
+        #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="health != null" >
+        #{health,jdbcType=VARCHAR},
+      </if>
+      <if test="jiguan != null" >
+        #{jiguan,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null" >
+        #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="brithday != null" >
+        #{brithday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qqNumber != null" >
+        #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeSchool != null" >
+        #{firstDegreeSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeProfession != null" >
+        #{firstDegreeProfession,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeTime != null" >
+        #{firstDegreeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstDegreeLevel != null" >
+        #{firstDegreeLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeSchool != null" >
+        #{secondDegreeSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeLevel != null" >
+        #{secondDegreeLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeTime != null" >
+        #{secondDegreeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="secondDegreeProfession != null" >
+        #{secondDegreeProfession,jdbcType=VARCHAR},
+      </if>
+      <if test="workExperience != null" >
+        #{workExperience,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="training != null" >
+        #{training,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="award != null" >
+        #{award,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        #{headUrl,jdbcType=VARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.Personnel" >
+    update personnel
+    <set >
+      <if test="famousFamily != null" >
+        famous_family = #{famousFamily,jdbcType=VARCHAR},
+      </if>
+      <if test="joinAssociation != null" >
+        join_association = #{joinAssociation,jdbcType=TINYINT},
+      </if>
+      <if test="joinAssociationTime != null" >
+        join_association_time = #{joinAssociationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jobTitle != null" >
+        job_title = #{jobTitle,jdbcType=VARCHAR},
+      </if>
+      <if test="workTime != null" >
+        work_time = #{workTime,jdbcType=INTEGER},
+      </if>
+      <if test="birthplace != null" >
+        birthplace = #{birthplace,jdbcType=VARCHAR},
+      </if>
+      <if test="idCard != null" >
+        id_card = #{idCard,jdbcType=VARCHAR},
+      </if>
+      <if test="homeAddress != null" >
+        home_address = #{homeAddress,jdbcType=VARCHAR},
+      </if>
+      <if test="sex != null" >
+        sex = #{sex,jdbcType=VARCHAR},
+      </if>
+      <if test="health != null" >
+        health = #{health,jdbcType=VARCHAR},
+      </if>
+      <if test="jiguan != null" >
+        jiguan = #{jiguan,jdbcType=VARCHAR},
+      </if>
+      <if test="position != null" >
+        position = #{position,jdbcType=VARCHAR},
+      </if>
+      <if test="specialty != null" >
+        specialty = #{specialty,jdbcType=VARCHAR},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="projectName != null" >
+        project_name = #{projectName,jdbcType=VARCHAR},
+      </if>
+      <if test="brithday != null" >
+        brithday = #{brithday,jdbcType=TIMESTAMP},
+      </if>
+      <if test="qqNumber != null" >
+        qq_number = #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="status != null" >
+        status = #{status,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeSchool != null" >
+        first_degree_school = #{firstDegreeSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeProfession != null" >
+        first_degree_profession = #{firstDegreeProfession,jdbcType=VARCHAR},
+      </if>
+      <if test="firstDegreeTime != null" >
+        first_degree_time = #{firstDegreeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="firstDegreeLevel != null" >
+        first_degree_level = #{firstDegreeLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeSchool != null" >
+        second_degree_school = #{secondDegreeSchool,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeLevel != null" >
+        second_degree_level = #{secondDegreeLevel,jdbcType=VARCHAR},
+      </if>
+      <if test="secondDegreeTime != null" >
+        second_degree_time = #{secondDegreeTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="secondDegreeProfession != null" >
+        second_degree_profession = #{secondDegreeProfession,jdbcType=VARCHAR},
+      </if>
+      <if test="workExperience != null" >
+        work_experience = #{workExperience,jdbcType=VARCHAR},
+      </if>
+      <if test="certificate != null" >
+        certificate = #{certificate,jdbcType=VARCHAR},
+      </if>
+      <if test="training != null" >
+        training = #{training,jdbcType=VARCHAR},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=VARCHAR},
+      </if>
+      <if test="award != null" >
+        award = #{award,jdbcType=VARCHAR},
+      </if>
+      <if test="headUrl != null" >
+        head_url = #{headUrl,jdbcType=VARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.Personnel" >
+    update personnel
+    set famous_family = #{famousFamily,jdbcType=VARCHAR},
+      join_association = #{joinAssociation,jdbcType=TINYINT},
+      join_association_time = #{joinAssociationTime,jdbcType=TIMESTAMP},
+      job_title = #{jobTitle,jdbcType=VARCHAR},
+      work_time = #{workTime,jdbcType=INTEGER},
+      birthplace = #{birthplace,jdbcType=VARCHAR},
+      id_card = #{idCard,jdbcType=VARCHAR},
+      home_address = #{homeAddress,jdbcType=VARCHAR},
+      sex = #{sex,jdbcType=VARCHAR},
+      health = #{health,jdbcType=VARCHAR},
+      jiguan = #{jiguan,jdbcType=VARCHAR},
+      position = #{position,jdbcType=VARCHAR},
+      specialty = #{specialty,jdbcType=VARCHAR},
+      phone = #{phone,jdbcType=VARCHAR},
+      project_name = #{projectName,jdbcType=VARCHAR},
+      brithday = #{brithday,jdbcType=TIMESTAMP},
+      qq_number = #{qqNumber,jdbcType=VARCHAR},
+      status = #{status,jdbcType=VARCHAR},
+      first_degree_school = #{firstDegreeSchool,jdbcType=VARCHAR},
+      first_degree_profession = #{firstDegreeProfession,jdbcType=VARCHAR},
+      first_degree_time = #{firstDegreeTime,jdbcType=TIMESTAMP},
+      first_degree_level = #{firstDegreeLevel,jdbcType=VARCHAR},
+      second_degree_school = #{secondDegreeSchool,jdbcType=VARCHAR},
+      second_degree_level = #{secondDegreeLevel,jdbcType=VARCHAR},
+      second_degree_time = #{secondDegreeTime,jdbcType=TIMESTAMP},
+      second_degree_profession = #{secondDegreeProfession,jdbcType=VARCHAR},
+      work_experience = #{workExperience,jdbcType=VARCHAR},
+      certificate = #{certificate,jdbcType=VARCHAR},
+      training = #{training,jdbcType=VARCHAR},
+      remark = #{remark,jdbcType=VARCHAR},
+      award = #{award,jdbcType=VARCHAR},
+      head_url = #{headUrl,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

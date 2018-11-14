@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.UserMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.User" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="account" property="account" jdbcType="VARCHAR" />
+    <result column="password" property="password" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="uuid" property="uuid" jdbcType="VARCHAR" />
+    <result column="age" property="age" jdbcType="INTEGER" />
+    <result column="gender" property="gender" jdbcType="CHAR" />
+    <result column="disable" property="disable" jdbcType="INTEGER" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="phone" property="phone" jdbcType="VARCHAR" />
+    <result column="qq_number" property="qqNumber" jdbcType="VARCHAR" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="token" property="token" jdbcType="VARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, name, account, password, code, uuid, age, gender, disable, org_id, phone, qq_number, 
+    email, create_time,token,create_user,update_user,update_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from user
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from user
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.User" >
+    insert into user (id, name, account, 
+      password, code, uuid, 
+      age, gender, disable, 
+      org_id, phone, qq_number, 
+      email, create_time,create_user,update_time,update_user,token)
+    values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
+      #{password,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
+      #{age,jdbcType=INTEGER}, #{gender,jdbcType=CHAR}, #{disable,jdbcType=INTEGER}, 
+      #{orgId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, #{qqNumber,jdbcType=VARCHAR}, 
+      #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{create_user},#{update_time},#{update_user},#{token})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.User" >
+    insert into user
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="account != null" >
+        account,
+      </if>
+      <if test="password != null" >
+        password,
+      </if>
+      <if test="code != null" >
+        code,
+      </if>
+      <if test="uuid != null" >
+        uuid,
+      </if>
+      <if test="age != null" >
+        age,
+      </if>
+      <if test="gender != null" >
+        gender,
+      </if>
+      <if test="disable != null" >
+        disable,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="phone != null" >
+        phone,
+      </if>
+      <if test="qqNumber != null" >
+        qq_number,
+      </if>
+      <if test="email != null" >
+        email,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+        <if test="createUser != null">
+            create_user,
+        </if>
+        <if test="updateTime != null">
+            update_time,
+        </if>
+        <if test="updateUser != null">
+            update_User,
+        </if>
+        <if test="token != null">
+            token,
+        </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        #{gender,jdbcType=CHAR},
+      </if>
+      <if test="disable != null" >
+        #{disable,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumber != null" >
+        #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        <if test="createUser != null">
+            #{createUser},
+        </if>
+        <if test="updateTime != null">
+            #{updateTime},
+        </if>
+        <if test="updateUser != null">
+            #{updateUser},
+        </if>
+        <if test="token != null">
+            #{token},
+        </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.User" >
+    update user
+    <set >
+      <if test="name != null" >
+        name = #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="account != null" >
+        account = #{account,jdbcType=VARCHAR},
+      </if>
+      <if test="password != null" >
+        password = #{password,jdbcType=VARCHAR},
+      </if>
+      <if test="code != null" >
+        code = #{code,jdbcType=VARCHAR},
+      </if>
+      <if test="uuid != null" >
+        uuid = #{uuid,jdbcType=VARCHAR},
+      </if>
+      <if test="age != null" >
+        age = #{age,jdbcType=INTEGER},
+      </if>
+      <if test="gender != null" >
+        gender = #{gender,jdbcType=CHAR},
+      </if>
+      <if test="disable != null" >
+        disable = #{disable,jdbcType=INTEGER},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="phone != null" >
+        phone = #{phone,jdbcType=VARCHAR},
+      </if>
+      <if test="qqNumber != null" >
+        qq_number = #{qqNumber,jdbcType=VARCHAR},
+      </if>
+      <if test="email != null" >
+        email = #{email,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+        <if test="createUser != null">
+            create_user = #{createUser},
+        </if>
+        <if test="updateTime != null">
+            update_time = #{updateTime},
+        </if>
+        <if test="updateUser != null">
+            update_user = #{updateUser},
+        </if>
+        <if test="token != null">
+            token = #{token}
+        </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.User" >
+    update user
+    set name = #{name,jdbcType=VARCHAR},
+      account = #{account,jdbcType=VARCHAR},
+      password = #{password,jdbcType=VARCHAR},
+      code = #{code,jdbcType=VARCHAR},
+      uuid = #{uuid,jdbcType=VARCHAR},
+      age = #{age,jdbcType=INTEGER},
+      gender = #{gender,jdbcType=CHAR},
+      disable = #{disable,jdbcType=INTEGER},
+      org_id = #{orgId,jdbcType=BIGINT},
+      phone = #{phone,jdbcType=VARCHAR},
+      qq_number = #{qqNumber,jdbcType=VARCHAR},
+      email = #{email,jdbcType=VARCHAR},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser},
+      update_time = #{updateTime},
+      update_user = #{updateUser},
+      token = #{token}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findUserByAccount" resultType="com.crcc.common.model.User">
+    SELECT *FROM `user` WHERE account = ${account}
+  </select>
+</mapper>

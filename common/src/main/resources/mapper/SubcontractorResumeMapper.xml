@@ -1,0 +1,224 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.SubcontractorResumeMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.SubcontractorResume" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="subcontractor_id" property="subcontractorId" jdbcType="BIGINT" />
+    <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
+    <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
+    <result column="real_start_time" property="realStartTime" jdbcType="TIMESTAMP" />
+    <result column="real_end_time" property="realEndTime" jdbcType="TIMESTAMP" />
+    <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="contract_price" property="contractPrice" jdbcType="DECIMAL" />
+    <result column="real_price" property="realPrice" jdbcType="DECIMAL" />
+    <result column="project_evaluation" property="projectEvaluation" jdbcType="VARCHAR" />
+    <result column="project_description" property="projectDescription" jdbcType="VARCHAR" />
+    <result column="comany_evalution" property="comanyEvalution" jdbcType="VARCHAR" />
+    <result column="group_evalution" property="groupEvalution" jdbcType="VARCHAR" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, subcontractor_id, start_time, end_time, real_start_time, real_end_time, org_id, 
+    contract_price, real_price, project_evaluation, project_description, comany_evalution, 
+    group_evalution, create_user, update_time, update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from subcontractor_resume
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from subcontractor_resume
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.SubcontractorResume" >
+    insert into subcontractor_resume (id, subcontractor_id, start_time, 
+      end_time, real_start_time, real_end_time, 
+      org_id, contract_price, real_price, 
+      project_evaluation, project_description, 
+      comany_evalution, group_evalution, create_user, 
+      update_time, update_user)
+    values (#{id,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, #{startTime,jdbcType=TIMESTAMP}, 
+      #{endTime,jdbcType=TIMESTAMP}, #{realStartTime,jdbcType=TIMESTAMP}, #{realEndTime,jdbcType=TIMESTAMP}, 
+      #{orgId,jdbcType=BIGINT}, #{contractPrice,jdbcType=DECIMAL}, #{realPrice,jdbcType=DECIMAL}, 
+      #{projectEvaluation,jdbcType=VARCHAR}, #{projectDescription,jdbcType=VARCHAR}, 
+      #{comanyEvalution,jdbcType=VARCHAR}, #{groupEvalution,jdbcType=VARCHAR}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.SubcontractorResume" >
+    insert into subcontractor_resume
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id,
+      </if>
+      <if test="startTime != null" >
+        start_time,
+      </if>
+      <if test="endTime != null" >
+        end_time,
+      </if>
+      <if test="realStartTime != null" >
+        real_start_time,
+      </if>
+      <if test="realEndTime != null" >
+        real_end_time,
+      </if>
+      <if test="orgId != null" >
+        org_id,
+      </if>
+      <if test="contractPrice != null" >
+        contract_price,
+      </if>
+      <if test="realPrice != null" >
+        real_price,
+      </if>
+      <if test="projectEvaluation != null" >
+        project_evaluation,
+      </if>
+      <if test="projectDescription != null" >
+        project_description,
+      </if>
+      <if test="comanyEvalution != null" >
+        comany_evalution,
+      </if>
+      <if test="groupEvalution != null" >
+        group_evalution,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null" >
+        #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realStartTime != null" >
+        #{realStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realEndTime != null" >
+        #{realEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null" >
+        #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="contractPrice != null" >
+        #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realPrice != null" >
+        #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="projectEvaluation != null" >
+        #{projectEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDescription != null" >
+        #{projectDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="comanyEvalution != null" >
+        #{comanyEvalution,jdbcType=VARCHAR},
+      </if>
+      <if test="groupEvalution != null" >
+        #{groupEvalution,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.SubcontractorResume" >
+    update subcontractor_resume
+    <set >
+      <if test="subcontractorId != null" >
+        subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="startTime != null" >
+        start_time = #{startTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="endTime != null" >
+        end_time = #{endTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realStartTime != null" >
+        real_start_time = #{realStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="realEndTime != null" >
+        real_end_time = #{realEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="orgId != null" >
+        org_id = #{orgId,jdbcType=BIGINT},
+      </if>
+      <if test="contractPrice != null" >
+        contract_price = #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="realPrice != null" >
+        real_price = #{realPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="projectEvaluation != null" >
+        project_evaluation = #{projectEvaluation,jdbcType=VARCHAR},
+      </if>
+      <if test="projectDescription != null" >
+        project_description = #{projectDescription,jdbcType=VARCHAR},
+      </if>
+      <if test="comanyEvalution != null" >
+        comany_evalution = #{comanyEvalution,jdbcType=VARCHAR},
+      </if>
+      <if test="groupEvalution != null" >
+        group_evalution = #{groupEvalution,jdbcType=VARCHAR},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.SubcontractorResume" >
+    update subcontractor_resume
+    set subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      start_time = #{startTime,jdbcType=TIMESTAMP},
+      end_time = #{endTime,jdbcType=TIMESTAMP},
+      real_start_time = #{realStartTime,jdbcType=TIMESTAMP},
+      real_end_time = #{realEndTime,jdbcType=TIMESTAMP},
+      org_id = #{orgId,jdbcType=BIGINT},
+      contract_price = #{contractPrice,jdbcType=DECIMAL},
+      real_price = #{realPrice,jdbcType=DECIMAL},
+      project_evaluation = #{projectEvaluation,jdbcType=VARCHAR},
+      project_description = #{projectDescription,jdbcType=VARCHAR},
+      comany_evalution = #{comanyEvalution,jdbcType=VARCHAR},
+      group_evalution = #{groupEvalution,jdbcType=VARCHAR},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>
