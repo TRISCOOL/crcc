@@ -1,6 +1,7 @@
 package com.crcc.common.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class Role {
     private Long id;
@@ -18,6 +19,16 @@ public class Role {
     private Date updateTime;
 
     private Long updateUserId;
+
+    private List<Resouce> resouces;
+
+    public List<Resouce> getResouces() {
+        return resouces;
+    }
+
+    public void setResouces(List<Resouce> resouces) {
+        this.resouces = resouces;
+    }
 
     public Long getId() {
         return id;

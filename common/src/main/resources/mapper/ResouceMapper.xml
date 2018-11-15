@@ -138,4 +138,27 @@
       deleted = #{deleted,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listAllResourceBySuperAdmin">
+    select * from resouce;
+  </select>
+
+  <select id="listResourceForRole" resultType="com.crcc.common.model.Resouce">
+    SELECT
+      res.*
+    FROM
+      role_resource_rel rel
+    LEFT JOIN resouce res ON rel.resource_id = res.id
+    WHERE rel.role_id = #{roleId}
+  </select>
+
+  <select id="listResourceForUser" resultType="com.crcc.common.model.Resouce">
+    SELECT
+      res.*
+    FROM
+      user_role_rel urel
+    LEFT JOIN role_resource_rel rrel ON rrel.role_id = urel.role_id
+    LEFT JOIN resouce res ON rrel.resource_id = res.id
+    WHERE urel.user_id = #{userId}
+  </select>
 </mapper>

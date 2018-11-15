@@ -1,6 +1,7 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.User;
+import org.apache.ibatis.annotations.Param;
 
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
@@ -15,5 +16,5 @@ public interface UserMapper {
 
     int updateByPrimaryKey(User record);
 
-    User findUserByAccount(String account);
+    User findUserByAccount(@Param("account") String account);
 }

@@ -10,6 +10,7 @@ import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+@SuppressWarnings("ALL")
 @Service
 public class UserServiceImpl implements UserService{
 

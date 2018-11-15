@@ -242,6 +242,6 @@
   </update>
 
   <select id="findUserByAccount" resultType="com.crcc.common.model.User">
-    SELECT *FROM `user` WHERE account = ${account}
+    SELECT *FROM `user` WHERE account = #{account}
   </select>
 </mapper>

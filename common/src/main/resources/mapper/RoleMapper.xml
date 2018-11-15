@@ -32,7 +32,7 @@
       #{disable,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.Role" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.Role" keyProperty="id" useGeneratedKeys="true">
     insert into role
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -125,4 +125,19 @@
       update_user_id = #{updateUserId,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listRoleForPage" resultType="com.crcc.common.model.Role">
+    SELECT
+    *
+    FROM
+      role
+    WHERE
+    <if test="name != null">
+      `name` LIKE CONCAT('%', '#{name}', '%')
+    </if>
+    ORDER BY create_time DESC
+    <if test="offset != null and length != null">
+      LIMIT #{offset} , #{length}
+    </if>
+  </select>
 </mapper>
