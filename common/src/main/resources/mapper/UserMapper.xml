@@ -20,10 +20,11 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
     <result column="token" property="token" jdbcType="VARCHAR" />
+    <result column="type" property="type" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, name, account, password, code, uuid, age, gender, disable, org_id, phone, qq_number, 
-    email, create_time,token,create_user,update_user,update_time
+    email, create_time,token,create_user,update_user,update_time,`type`
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -40,14 +41,15 @@
       password, code, uuid, 
       age, gender, disable, 
       org_id, phone, qq_number, 
-      email, create_time,create_user,update_time,update_user,token)
+      email, create_time,create_user,update_time,update_user,token,type)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{account,jdbcType=VARCHAR}, 
       #{password,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, #{uuid,jdbcType=VARCHAR}, 
       #{age,jdbcType=INTEGER}, #{gender,jdbcType=CHAR}, #{disable,jdbcType=INTEGER}, 
       #{orgId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, #{qqNumber,jdbcType=VARCHAR}, 
-      #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{create_user},#{update_time},#{update_user},#{token})
+      #{email,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},#{create_user},#{update_time},
+      #{update_user},#{token},#{type})
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.User" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.User" useGeneratedKeys="true" keyProperty="id">
     insert into user
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -104,6 +106,9 @@
         <if test="token != null">
             token,
         </if>
+      <if test="type != null">
+        `type`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -160,6 +165,9 @@
         <if test="token != null">
             #{token},
         </if>
+      <if test="type != null">
+        #{type},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.User" >
@@ -214,8 +222,11 @@
             update_user = #{updateUser},
         </if>
         <if test="token != null">
-            token = #{token}
+            token = #{token},
         </if>
+      <if test="type != null">
+        `type` = #{type}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -237,11 +248,45 @@
       create_user = #{createUser},
       update_time = #{updateTime},
       update_user = #{updateUser},
-      token = #{token}
+      token = #{token},
+      `type` = #{type}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
   <select id="findUserByAccount" resultType="com.crcc.common.model.User">
     SELECT *FROM `user` WHERE account = #{account}
+  </select>
+
+  <delete id="deleteUserById">
+    DELETE FROM `user` WHERE id = #{userId}
+  </delete>
+
+  <select id="findUserList" resultType="com.crcc.common.model.User">
+    SELECT *FROM `user` WHERE
+  </select>
+
+  <select id="listUser" resultType="com.crcc.common.model.User">
+    SELECT
+      u.*,p.name AS projectName,p.code AS projectCode,p.id AS projectId
+    FROM
+      `user` u
+    LEFT JOIN
+      user_project_rel rel ON u.id = rel.user_id
+    LEFT JOIN
+      project p ON p.id = rel.project_id
+    WHERE 1=1
+    <if test="code != null">
+      AND p.code LIKE CONCAT('%', #{code}, '%')
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="disable != null">
+      AND u.disable = #{disable}
+    </if>
+    ORDER BY u.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
   </select>
 </mapper>

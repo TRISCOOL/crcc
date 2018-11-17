@@ -68,31 +68,43 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
+    @Transactional
     public boolean deleteRole(Long id) {
 
         int result = roleMapper.deleteByPrimaryKey(id);
-        if (result != 0)
-            return true;
+        if (result != 0){
+            int deleteResult = resourceRelMapper.deleteRelByRole(id);
+            if (deleteResult != 0)
+                return true;
+        }
 
         return false;
     }
 
     @Override
     @Transactional
-    public boolean settingPermissions(Long roleId, List<Resouce> resouces) {
+    public boolean settingPermissions(Role role) {
 
         //先删除原来的权限
-        resourceRelMapper.deleteRelByRole(roleId);
+        resourceRelMapper.deleteRelByRole(role.getId());
 
-        //添加权限
-        for (Resouce resouce:resouces){
-            RoleResourceRelKey resourceRelKey = new RoleResourceRelKey();
-            resourceRelKey.setRoleId(roleId);
-            resourceRelKey.setResourceId(resouce.getId());
-            resourceRelMapper.insertSelective(resourceRelKey);
+        if (role.getResouces() != null && role.getResouces().size() > 0){
+            //添加权限
+            for (Resouce resouce:role.getResouces()){
+                Resouce resouce1 = resouceMapper.findResourceByPermissions(resouce.getPermission());
+                if (resouce1 != null){
+                    RoleResourceRelKey resourceRelKey = new RoleResourceRelKey();
+                    resourceRelKey.setRoleId(role.getId());
+                    resourceRelKey.setResourceId(resouce1.getId());
+                    resourceRelMapper.insertSelective(resourceRelKey);
+                }
+            }
         }
 
-        return false;
+        role.setUpdateTime(new Date());
+        roleMapper.updateByPrimaryKeySelective(role);
+
+        return true;
     }
 
     @Override
@@ -113,5 +125,10 @@ public class RoleServiceImpl implements RoleService{
     @Override
     public List<Role> listAllRole(String name, Integer offset, Integer length) {
         return roleMapper.listRoleForPage(name,offset,length);
+    }
+
+    @Override
+    public Role findRoleByUserId(Long userId) {
+        return roleMapper.findRoleByUserId(userId);
     }
 }

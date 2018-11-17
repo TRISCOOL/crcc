@@ -20,6 +20,8 @@ public class Role {
 
     private Long updateUserId;
 
+    private Integer isSuperAdmin;
+
     private List<Resouce> resouces;
 
     public List<Resouce> getResouces() {
@@ -28,6 +30,14 @@ public class Role {
 
     public void setResouces(List<Resouce> resouces) {
         this.resouces = resouces;
+    }
+
+    public Integer getIsSuperAdmin() {
+        return isSuperAdmin;
+    }
+
+    public void setIsSuperAdmin(Integer isSuperAdmin) {
+        this.isSuperAdmin = isSuperAdmin;
     }
 
     public Long getId() {

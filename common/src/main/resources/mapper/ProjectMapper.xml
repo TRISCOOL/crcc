@@ -11,10 +11,11 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
     <result column="org_id" property="orgId" jdbcType="BIGINT" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, code, dict_id, status, create_time, create_user_id, update_time, update_user_id, 
-    org_id
+    org_id,`name`
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -29,14 +30,14 @@
   <insert id="insert" parameterType="com.crcc.common.model.Project" >
     insert into project (id, code, dict_id, 
       status, create_time, create_user_id, 
-      update_time, update_user_id, org_id
-      )
+      update_time, update_user_id, org_id,
+      `name`)
     values (#{id,jdbcType=BIGINT}, #{code,jdbcType=VARCHAR}, #{dictId,jdbcType=BIGINT}, 
       #{status,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{orgId,jdbcType=BIGINT}
-      )
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT}, #{orgId,jdbcType=BIGINT},
+      #{name})
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.Project" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.Project" useGeneratedKeys="true" keyProperty="id">
     insert into project
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -65,6 +66,9 @@
       </if>
       <if test="orgId != null" >
         org_id,
+      </if>
+      <if test="name != null">
+        `name`,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -95,6 +99,9 @@
       <if test="orgId != null" >
         #{orgId,jdbcType=BIGINT},
       </if>
+      <if test="name != null">
+        #{name},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.Project" >
@@ -124,6 +131,9 @@
       <if test="orgId != null" >
         org_id = #{orgId,jdbcType=BIGINT},
       </if>
+      <if test="name != null">
+        `name` = #{name},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -136,7 +146,47 @@
       create_user_id = #{createUserId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user_id = #{updateUserId,jdbcType=BIGINT},
-      org_id = #{orgId,jdbcType=BIGINT}
+      org_id = #{orgId,jdbcType=BIGINT},
+      `name` = #{name}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findProjectsByUserId" resultType="com.crcc.common.model.Project">
+    SELECT p.* FROM user_project_rel rel LEFT JOIN project p ON rel.project_id = p.id WHERE rel.user_id = #{userId}
+  </select>
+
+  <select id="listProjectForPage" resultType="com.crcc.common.model.Project">
+    SELECT
+      p.*, d.id AS dictId, d.value AS projectType
+    FROM
+      project p
+    LEFT JOIN
+      dict d ON p.dict_id = d.id
+    WHERE
+      1=1
+    <if test="projectName != null">
+      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="code != null">
+      AND p.code LIKE CONCAT('%', #{code}, '%')
+    </if>
+    <if test="dictId != null">
+      AND d.id = #{dictId}
+    </if>
+    <if test="status != null">
+      AND p.status = #{status}
+    </if>
+    ORDER BY p.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="getDetails" resultType="com.crcc.common.model.Project">
+    SELECT
+      p.*, d.id AS dictId, d.value AS projectType
+    FROM
+      project p LEFT JOIN dict d ON p.dict_id = d.id
+    WHERE p.id = #{projectId}
+  </select>
 </mapper>

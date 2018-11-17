@@ -1,6 +1,7 @@
 package com.crcc.common.model;
 
 import java.util.Date;
+import java.util.List;
 
 public class User {
     private Long id;
@@ -38,6 +39,111 @@ public class User {
     private Long updateUser;
 
     private String token;
+
+    private Integer type;
+
+    private String projectName;
+    private String projectCode;
+    private Long projectId;
+
+    private List<Long> projectIds;
+    private List<Project> projects;
+
+    private List<Resouce> resouces;
+    private List<String> permissions;
+
+    private String roleName;
+    private String roleDescription;
+
+    public String getRoleName() {
+        return roleName;
+    }
+
+    public void setRoleName(String roleName) {
+        this.roleName = roleName;
+    }
+
+    public String getRoleDescription() {
+        return roleDescription;
+    }
+
+    public void setRoleDescription(String roleDescription) {
+        this.roleDescription = roleDescription;
+    }
+
+    public Long getRoleId() {
+        return roleId;
+    }
+
+    public void setRoleId(Long roleId) {
+        this.roleId = roleId;
+    }
+
+    private Long roleId;
+
+    public List<Resouce> getResouces() {
+        return resouces;
+    }
+
+    public void setResouces(List<Resouce> resouces) {
+        this.resouces = resouces;
+    }
+
+    public List<String> getPermissions() {
+        return permissions;
+    }
+
+    public void setPermissions(List<String> permissions) {
+        this.permissions = permissions;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getProjectCode() {
+        return projectCode;
+    }
+
+    public void setProjectCode(String projectCode) {
+        this.projectCode = projectCode;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public List<Long> getProjectIds() {
+        return projectIds;
+    }
+
+    public void setProjectIds(List<Long> projectIds) {
+        this.projectIds = projectIds;
+    }
+
+    public List<Project> getProjects() {
+        return projects;
+    }
+
+    public void setProjects(List<Project> projects) {
+        this.projects = projects;
+    }
+
+    public Integer getType() {
+        return type;
+    }
+
+    public void setType(Integer type) {
+        this.type = type;
+    }
 
     public String getToken() {
         return token;

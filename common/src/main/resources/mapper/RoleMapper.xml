@@ -10,9 +10,10 @@
     <result column="create_user_id" property="createUserId" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user_id" property="updateUserId" jdbcType="BIGINT" />
+    <result column="is_super_admin" property="isSuperAdmin" jdbcType="INTEGER"/>
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, description, disable, create_time, create_user_id, update_time, update_user_id
+    id, name, description, disable, create_time, create_user_id, update_time, update_user_id,is_super_admin
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -26,11 +27,11 @@
   </delete>
   <insert id="insert" parameterType="com.crcc.common.model.Role" >
     insert into role (id, name, description, 
-      disable, create_time, create_user_id, 
+      disable, create_time, create_user_id, is_super_admin
       update_time, update_user_id)
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{description,jdbcType=VARCHAR}, 
       #{disable,jdbcType=INTEGER}, #{createTime,jdbcType=TIMESTAMP}, #{createUserId,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT})
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUserId,jdbcType=BIGINT},#{isSuperAdmin})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.Role" keyProperty="id" useGeneratedKeys="true">
     insert into role
@@ -59,6 +60,9 @@
       <if test="updateUserId != null" >
         update_user_id,
       </if>
+      <if test="isSuperAdmin != null">
+        is_super_admin,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -84,6 +88,9 @@
       </if>
       <if test="updateUserId != null" >
         #{updateUserId,jdbcType=BIGINT},
+      </if>
+      <if test="isSuperAdmin != null">
+        #{isSuperAdmin},
       </if>
     </trim>
   </insert>
@@ -111,6 +118,9 @@
       <if test="updateUserId != null" >
         update_user_id = #{updateUserId,jdbcType=BIGINT},
       </if>
+      <if test="isSuperAdmin != null">
+        is_super_admin = #{isSuperAdmin},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -122,7 +132,8 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user_id = #{createUserId,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user_id = #{updateUserId,jdbcType=BIGINT}
+      update_user_id = #{updateUserId,jdbcType=BIGINT},
+      is_super_admin = #{isSuperAdmin}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -131,13 +142,16 @@
     *
     FROM
       role
-    WHERE
     <if test="name != null">
-      `name` LIKE CONCAT('%', '#{name}', '%')
+      WHERE `name` LIKE CONCAT('%', #{name}, '%')
     </if>
     ORDER BY create_time DESC
     <if test="offset != null and length != null">
       LIMIT #{offset} , #{length}
     </if>
+  </select>
+
+  <select id="findRoleByUserId" resultType="com.crcc.common.model.Role">
+    SELECT *FROM user_role_rel rel LEFT JOIN role r ON rel.role_id = r.id WHERE rel.user_id = #{userId}
   </select>
 </mapper>

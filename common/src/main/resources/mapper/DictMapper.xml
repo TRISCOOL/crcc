@@ -79,4 +79,8 @@
       description = #{description,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="findByType" resultType="com.crcc.common.model.Dict">
+    select *from dict where `type` = #{type}
+  </select>
 </mapper>

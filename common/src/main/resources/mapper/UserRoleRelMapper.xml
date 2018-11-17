@@ -79,4 +79,8 @@
       disable = #{disable,jdbcType=INTEGER}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <delete id="deleteUserRel">
+    DELETE FROM user_role_rel WHERE user_id = #{userId}
+  </delete>
 </mapper>

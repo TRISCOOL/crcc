@@ -18,6 +18,8 @@ public interface ResouceMapper {
 
     int updateByPrimaryKey(Resouce record);
 
+    Resouce findResourceByPermissions(@Param("permission") String permission);
+
     List<Resouce> listResourceForRole(@Param("roleId")Long roleId);
 
     List<Resouce> listResourceForUser(@Param("userId")Long userId);

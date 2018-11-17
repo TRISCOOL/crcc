@@ -161,4 +161,8 @@
     LEFT JOIN resouce res ON rrel.resource_id = res.id
     WHERE urel.user_id = #{userId}
   </select>
+
+  <select id="findResourceByPermissions" resultType="com.crcc.common.model.Resouce">
+    SELECT *FROM resouce WHERE permission = #{permission} limit 1
+  </select>
 </mapper>

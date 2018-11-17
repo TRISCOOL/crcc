@@ -12,11 +12,13 @@ public interface RoleService {
 
     boolean deleteRole(Long id);
 
-    boolean settingPermissions(Long roleId, List<Resouce> resouces);
+    boolean settingPermissions(Role role);
 
     Role getDetailsForRole(Long roleId);
 
     Role onlyGetRole(Long roleId);
 
     List<Role> listAllRole(String name,Integer offset,Integer length);
+
+    Role findRoleByUserId(Long userId);
 }

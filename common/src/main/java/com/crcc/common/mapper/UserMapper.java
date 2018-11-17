@@ -3,6 +3,8 @@ package com.crcc.common.mapper;
 import com.crcc.common.model.User;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.List;
+
 public interface UserMapper {
     int deleteByPrimaryKey(Long id);
 
@@ -17,4 +19,10 @@ public interface UserMapper {
     int updateByPrimaryKey(User record);
 
     User findUserByAccount(@Param("account") String account);
+
+    int deleteUserById(@Param("userId")Long userId);
+
+    List<User> listUser(@Param("code")String code,@Param("projectName")String projectName,
+                        @Param("disable")Integer disable,@Param("offset")Integer offset,
+                        @Param("length")Integer length);
 }

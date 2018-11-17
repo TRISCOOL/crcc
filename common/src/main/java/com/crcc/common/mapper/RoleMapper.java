@@ -19,4 +19,6 @@ public interface RoleMapper {
     int updateByPrimaryKey(Role record);
 
     List<Role> listRoleForPage(@Param("name")String name,@Param("offset")Integer offset,@Param("length")Integer length);
+
+    Role findRoleByUserId(@Param("userId")Long userId);
 }
