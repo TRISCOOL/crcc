@@ -2,8 +2,10 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.mapper.ProjectInfoMapper;
 import com.crcc.common.mapper.ProjectMapper;
 import com.crcc.common.model.Project;
+import com.crcc.common.model.ProjectInfo;
 import com.crcc.common.service.ProjectService;
 import com.crcc.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,6 +27,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private ProjectInfoMapper projectInfoMapper;
 
     @Override
     public Long addProject(Project project) {
@@ -64,6 +69,43 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public Project getDetails(Long projectId) {
         return projectMapper.getDetails(projectId);
+    }
+
+    @Override
+    public Long addProjectInfo(ProjectInfo projectInfo) {
+        projectInfo.setCreateTime(new Date());
+        projectInfoMapper.insertSelective(projectInfo);
+        return projectInfo.getId();
+    }
+
+    @Override
+    public boolean updateProjectInfo(ProjectInfo projectInfo) {
+        projectInfo.setUpdateTime(new Date());
+        int result = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public boolean deleteInfo(Long projectInfoId) {
+        int result = projectInfoMapper.deleteByPrimaryKey(projectInfoId);
+        if (result != 0)
+            return true;
+        return false;
+    }
+
+    @Override
+    public ProjectInfo getInfo(Long projectInfoId) {
+        return projectInfoMapper.getDetails(projectInfoId);
+    }
+
+    @Override
+    public List<ProjectInfo> listProjectInfoForUser(Long userId, String projectName, Integer status, String projectManager, String projectSecretary, String chiefEngineer, Date contractStartTime, Date contractEndTime, Date realContractStartTime, Date realContractEndTime, Integer offset, Integer length) {
+        return projectInfoMapper.projectInfoListByUser(userId,projectName,status,projectManager,
+                projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
+                realContractEndTime,offset,length);
     }
 
     private String createCodeForProject(){

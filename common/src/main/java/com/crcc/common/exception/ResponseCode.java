@@ -3,8 +3,6 @@ package com.crcc.common.exception;
 public enum ResponseCode {
 
     OK("200","success"),
-    //300-399 订单错误
-    NOT_FOUND_LOGISTICS_DETAILS("301","not found logistics traces"),
     //400-500
     AUTH_FAILED("401","User authentication failed"),
     PERMISSION_CHANGED("402","permission changed"),

@@ -16,6 +16,8 @@ public class ProjectInfo {
 
     private Integer status;
 
+    private String statusStr;
+
     private Integer mileageNumber;
 
     private BigDecimal totalPrice;
@@ -80,6 +82,56 @@ public class ProjectInfo {
 
     private Date createTime;
 
+    private Long createUser;
+
+    private Date updateTime;
+
+    private Long updateUser;
+
+    private String projectName;
+
+    private String code;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public Long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
+
     public Long getId() {
         return id;
     }
@@ -126,6 +178,24 @@ public class ProjectInfo {
 
     public void setStatus(Integer status) {
         this.status = status;
+        if (status != null){
+            switch (status){
+                case 0:
+                    setStatusStr("在建");
+                    break;
+                case 1:
+                    setStatusStr("完工未结算");
+                    break;
+                case 2:
+                    setStatusStr("完工以结算");
+                    break;
+                case 3:
+                    setStatusStr("停工");
+                    break;
+                default:
+                    break;
+            }
+        }
     }
 
     public Integer getMileageNumber() {
@@ -382,5 +452,13 @@ public class ProjectInfo {
 
     public void setCreateTime(Date createTime) {
         this.createTime = createTime;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 }
