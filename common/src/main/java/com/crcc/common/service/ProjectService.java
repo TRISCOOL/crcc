@@ -25,7 +25,7 @@ public interface ProjectService {
 
     ProjectInfo getInfo(Long projectInfoId);
 
-    List<ProjectInfo> listProjectInfoForUser(Long userId,String projectName,Integer status,String projectManager,
+    List<ProjectInfo> listProjectInfoForUser(Long projectId,String projectName,Integer status,String projectManager,
                                              String projectSecretary,String chiefEngineer,Date contractStartTime,
                                              Date contractEndTime,Date realContractStartTime,Date realContractEndTime,
                                              Integer offset,Integer length);

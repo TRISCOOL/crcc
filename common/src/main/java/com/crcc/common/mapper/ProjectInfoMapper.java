@@ -19,7 +19,7 @@ public interface ProjectInfoMapper {
 
     int updateByPrimaryKey(ProjectInfo record);
 
-    List<ProjectInfo> projectInfoListByUser(@Param("userId")Long userId,
+    List<ProjectInfo> projectInfoListByUser(@Param("projectId")Long projectId,
                                             @Param("projectName")String projectName, @Param("status")Integer status,
                                             @Param("projectManager")String projectManager,
                                             @Param("projectSecretary")String projectSecretary,

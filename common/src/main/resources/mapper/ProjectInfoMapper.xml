@@ -529,12 +529,10 @@
         FROM
           project_info info
         LEFT JOIN
-          user_project_rel rel ON info.project_id = rel.project_id
-        LEFT JOIN
-          project p ON rel.project_id = p.id
+          project p ON info.project_id = p.id
         WHERE 1=1
-        <if test="userId != null">
-            AND rel.user_id = #{userId}
+        <if test="projectId != null">
+            AND p.id = #{projectId}
         </if>
         <if test="projectName != null">
             AND p.name LIKE concat('%',#{projectName},'%')

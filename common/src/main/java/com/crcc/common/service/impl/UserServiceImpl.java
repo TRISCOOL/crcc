@@ -63,6 +63,7 @@ public class UserServiceImpl implements UserService{
             user.setToken(token);
             user.setId(existUser.getId());
             user.setName(existUser.getName());
+            user.setType(existUser.getType());
             List<Resouce> resouceList = listResourceForUser(existUser.getId());
             user.setResouces(resouceList);
             user.setPermissions(listPermissionForUser(resouceList));

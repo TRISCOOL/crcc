@@ -152,7 +152,15 @@
   </update>
 
   <select id="findProjectsByUserId" resultType="com.crcc.common.model.Project">
-    SELECT p.* FROM user_project_rel rel LEFT JOIN project p ON rel.project_id = p.id WHERE rel.user_id = #{userId}
+    SELECT
+      p.*
+    FROM
+      user_project_rel rel
+    LEFT JOIN
+      project p ON rel.project_id = p.id
+    <if test="userId != null">
+      WHERE rel.user_id = #{userId}
+    </if>
   </select>
 
   <select id="listProjectForPage" resultType="com.crcc.common.model.Project">

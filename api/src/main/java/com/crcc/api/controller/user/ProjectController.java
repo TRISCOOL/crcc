@@ -4,6 +4,7 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.config.Constance;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
+import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.Dict;
 import com.crcc.common.model.Project;
@@ -12,12 +13,16 @@ import com.crcc.common.model.User;
 import com.crcc.common.service.DictService;
 import com.crcc.common.service.ProjectService;
 import com.crcc.common.utils.ExcelUtils;
+import com.itextpdf.text.*;
+import com.itextpdf.text.pdf.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
@@ -35,6 +40,12 @@ public class ProjectController extends BaseController{
 
     @Autowired
     private DictService dictService;
+
+    @Value("${pdf.cache.address}")
+    private String pdfCacheAddress;
+
+    @Value("${pdf.market.address}")
+    private String pdfMarketAddress;
 
     /**
      * 新增一个项目
@@ -232,16 +243,69 @@ public class ProjectController extends BaseController{
                                       @RequestParam(value = "page",required = false)Integer page,
                                       @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                       HttpServletRequest request){
-        User user = curUser(request);
+        Long projectId = permissionProject(request);
 
         //TODO 项目部以上人员权限
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
-        List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(user.getId(),projectName,status,projectManager,
+        List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,projectManager,
                 projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,offset*pageSize,pageSize);
 
         return ResponseVo.ok(projectInfoList);
+
+    }
+
+    @GetMapping("/pdf/v1.1")
+    public void exportPdfForInfo(@RequestParam("projectInfoId")Long projectInfoId,
+                                 HttpServletResponse response,HttpServletRequest request) throws Exception{
+
+
+
+        ProjectInfo projectInfo = projectService.getInfo(projectInfoId);
+        if (projectInfo == null)
+            throw new CrccException(ResponseCode.PARAM_ILLEGAL);
+
+        String fileUrl = pdfCacheAddress+projectInfo.getProjectName()+System.currentTimeMillis()+".pdf";
+
+        // 告诉浏览器用什么软件可以打开此文件
+        response.setHeader("content-Type", "application/pdf");
+        // 下载文件的默认名称
+        response.setHeader("Content-Disposition", "attachment;filename="+new String((projectInfo.getProjectName()+"工程信息卡").getBytes("UTF-8"), "ISO8859-1")+".pdf");
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
+        document.open();
+        setContentForPDF(projectInfo,document);
+        document.close();
+
+        PdfReader reader = new PdfReader(fileUrl);
+        PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
+        Image img = Image.getInstance(pdfMarketAddress);
+        img.setAbsolutePosition(200, 400);
+        PdfContentByte under = stamper.getUnderContent(1);
+        under.addImage(img);
+        stamper.close();
+        reader.close();
+
+    }
+
+    private void setContentForPDF(ProjectInfo projectInfo,Document document) throws Exception{
+        if (document == null)
+            return;
+
+        BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
+        Font font = new Font(bfChinese, 12,Font.NORMAL);
+
+        Paragraph title = new Paragraph(projectInfo.getProjectName()+"工程项目信息卡",font);
+        title.setAlignment(Element.ALIGN_CENTER);
+        document.add(title);
+
+        Paragraph name = new Paragraph("项目名称："+projectInfo.getProjectName()+
+                "        工程类别："+projectInfo.getProjectType(),font);
+        document.add(name);
+
+        Paragraph address = new Paragraph("工程地点："+projectInfo.getAddress(),font);
+        document.add(address);
 
     }
 

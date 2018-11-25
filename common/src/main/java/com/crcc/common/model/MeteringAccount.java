@@ -12,7 +12,7 @@ public class MeteringAccount {
 
     private BigDecimal valuationAmountTax;
 
-    private String valuationAmountNotTax;
+    private BigDecimal valuationAmountNotTax;
 
     private BigDecimal tax;
 
@@ -35,6 +35,66 @@ public class MeteringAccount {
     private String annexUrl;
 
     private Long projectId;
+
+    private Date createTime;
+
+    private Long createUser;
+
+    private Date updateTime;
+
+    private Long updateUser;
+
+    private String projectName;
+
+    private BigDecimal productionValue;
+
+    public BigDecimal getProductionValue() {
+        return productionValue;
+    }
+
+    public void setProductionValue(BigDecimal productionValue) {
+        this.productionValue = productionValue;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public Date getCreateTime() {
+        return createTime;
+    }
+
+    public void setCreateTime(Date createTime) {
+        this.createTime = createTime;
+    }
+
+    public Long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
 
     public Long getId() {
         return id;
@@ -68,12 +128,12 @@ public class MeteringAccount {
         this.valuationAmountTax = valuationAmountTax;
     }
 
-    public String getValuationAmountNotTax() {
+    public BigDecimal getValuationAmountNotTax() {
         return valuationAmountNotTax;
     }
 
-    public void setValuationAmountNotTax(String valuationAmountNotTax) {
-        this.valuationAmountNotTax = valuationAmountNotTax == null ? null : valuationAmountNotTax.trim();
+    public void setValuationAmountNotTax(BigDecimal valuationAmountNotTax) {
+        this.valuationAmountNotTax = valuationAmountNotTax;
     }
 
     public BigDecimal getTax() {

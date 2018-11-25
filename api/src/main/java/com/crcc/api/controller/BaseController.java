@@ -3,8 +3,12 @@ package com.crcc.api.controller;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.Project;
+import com.crcc.common.model.Role;
 import com.crcc.common.model.User;
+import com.crcc.common.service.ProjectService;
 import com.crcc.common.service.RedisService;
+import com.crcc.common.service.RoleService;
 import com.crcc.common.utils.Utils;
 import com.google.gson.reflect.TypeToken;
 import org.slf4j.Logger;
@@ -16,6 +20,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RequestMapping("/base")
@@ -28,6 +33,9 @@ public class BaseController {
 
     @Autowired
     private RedisService redisService;
+
+    @Autowired
+    private ProjectService projectService;
 
     @ExceptionHandler
     @ResponseBody
@@ -82,6 +90,20 @@ public class BaseController {
             throw new CrccException(ResponseCode.AUTH_FAILED);
         }
         return user;
+    }
+
+    protected Long permissionProject(HttpServletRequest request){
+        User user = curUser(request);
+        if (user.getType() == 0){
+            return null;
+        }
+        List<Project> projectList = projectService.listProjectForProjectUser(user.getId());
+        if (projectList != null && projectList.size()>0){
+            return projectList.get(0).getId();
+        }
+
+        return 0L;
+
     }
 
 //    protected User curUser(HttpServletRequest request, boolean checkToken) throws LassException {
