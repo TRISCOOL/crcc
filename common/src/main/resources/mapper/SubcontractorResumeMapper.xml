@@ -6,23 +6,22 @@
     <result column="subcontractor_id" property="subcontractorId" jdbcType="BIGINT" />
     <result column="start_time" property="startTime" jdbcType="TIMESTAMP" />
     <result column="end_time" property="endTime" jdbcType="TIMESTAMP" />
-    <result column="real_start_time" property="realStartTime" jdbcType="TIMESTAMP" />
-    <result column="real_end_time" property="realEndTime" jdbcType="TIMESTAMP" />
-    <result column="org_id" property="orgId" jdbcType="BIGINT" />
-    <result column="contract_price" property="contractPrice" jdbcType="DECIMAL" />
-    <result column="real_price" property="realPrice" jdbcType="DECIMAL" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
     <result column="project_evaluation" property="projectEvaluation" jdbcType="VARCHAR" />
     <result column="project_description" property="projectDescription" jdbcType="VARCHAR" />
-    <result column="comany_evalution" property="comanyEvalution" jdbcType="VARCHAR" />
-    <result column="group_evalution" property="groupEvalution" jdbcType="VARCHAR" />
+    <result column="company_evaluation" property="comanyEvaluation" jdbcType="VARCHAR" />
+    <result column="group_evaluation" property="groupEvaluation" jdbcType="VARCHAR" />
     <result column="create_user" property="createUser" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="labor_account_id" property="laborAccountId" jdbcType="BIGINT" />
+    <result column="construction_scale" property="constructionScale" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, subcontractor_id, start_time, end_time, real_start_time, real_end_time, org_id, 
-    contract_price, real_price, project_evaluation, project_description, comany_evalution, 
-    group_evalution, create_user, update_time, update_user
+    id, subcontractor_id, start_time, end_time, project_id, project_evaluation, project_description, 
+    company_evaluation, group_evaluation, create_user, update_time, update_user, create_time,
+    labor_account_id, construction_scale
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -36,19 +35,19 @@
   </delete>
   <insert id="insert" parameterType="com.crcc.common.model.SubcontractorResume" >
     insert into subcontractor_resume (id, subcontractor_id, start_time, 
-      end_time, real_start_time, real_end_time, 
-      org_id, contract_price, real_price, 
-      project_evaluation, project_description, 
-      comany_evalution, group_evalution, create_user, 
-      update_time, update_user)
+      end_time, project_id, project_evaluation, 
+      project_description, company_evaluation, group_evaluation,
+      create_user, update_time, update_user, 
+      create_time, labor_account_id, construction_scale
+      )
     values (#{id,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, #{startTime,jdbcType=TIMESTAMP}, 
-      #{endTime,jdbcType=TIMESTAMP}, #{realStartTime,jdbcType=TIMESTAMP}, #{realEndTime,jdbcType=TIMESTAMP}, 
-      #{orgId,jdbcType=BIGINT}, #{contractPrice,jdbcType=DECIMAL}, #{realPrice,jdbcType=DECIMAL}, 
-      #{projectEvaluation,jdbcType=VARCHAR}, #{projectDescription,jdbcType=VARCHAR}, 
-      #{comanyEvalution,jdbcType=VARCHAR}, #{groupEvalution,jdbcType=VARCHAR}, #{createUser,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT})
+      #{endTime,jdbcType=TIMESTAMP}, #{projectId,jdbcType=BIGINT}, #{projectEvaluation,jdbcType=VARCHAR}, 
+      #{projectDescription,jdbcType=VARCHAR}, #{companyEvaluation,jdbcType=VARCHAR}, #{groupEvaluation,jdbcType=VARCHAR},
+      #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{laborAccountId,jdbcType=BIGINT}, #{constructionScale,jdbcType=VARCHAR}
+      )
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.SubcontractorResume" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.SubcontractorResume" keyProperty="id" useGeneratedKeys="true">
     insert into subcontractor_resume
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -63,20 +62,8 @@
       <if test="endTime != null" >
         end_time,
       </if>
-      <if test="realStartTime != null" >
-        real_start_time,
-      </if>
-      <if test="realEndTime != null" >
-        real_end_time,
-      </if>
-      <if test="orgId != null" >
-        org_id,
-      </if>
-      <if test="contractPrice != null" >
-        contract_price,
-      </if>
-      <if test="realPrice != null" >
-        real_price,
+      <if test="projectId != null" >
+        project_id,
       </if>
       <if test="projectEvaluation != null" >
         project_evaluation,
@@ -84,11 +71,11 @@
       <if test="projectDescription != null" >
         project_description,
       </if>
-      <if test="comanyEvalution != null" >
-        comany_evalution,
+      <if test="companyEvaluation != null" >
+        company_evaluation,
       </if>
-      <if test="groupEvalution != null" >
-        group_evalution,
+      <if test="groupEvaluation != null" >
+        group_evaluation,
       </if>
       <if test="createUser != null" >
         create_user,
@@ -98,6 +85,15 @@
       </if>
       <if test="updateUser != null" >
         update_user,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="laborAccountId != null" >
+        labor_account_id,
+      </if>
+      <if test="constructionScale != null" >
+        construction_scale,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -113,20 +109,8 @@
       <if test="endTime != null" >
         #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="realStartTime != null" >
-        #{realStartTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="realEndTime != null" >
-        #{realEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="orgId != null" >
-        #{orgId,jdbcType=BIGINT},
-      </if>
-      <if test="contractPrice != null" >
-        #{contractPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="realPrice != null" >
-        #{realPrice,jdbcType=DECIMAL},
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
       </if>
       <if test="projectEvaluation != null" >
         #{projectEvaluation,jdbcType=VARCHAR},
@@ -134,11 +118,11 @@
       <if test="projectDescription != null" >
         #{projectDescription,jdbcType=VARCHAR},
       </if>
-      <if test="comanyEvalution != null" >
-        #{comanyEvalution,jdbcType=VARCHAR},
+      <if test="companyEvaluation != null" >
+        #{companyEvaluation,jdbcType=VARCHAR},
       </if>
-      <if test="groupEvalution != null" >
-        #{groupEvalution,jdbcType=VARCHAR},
+      <if test="groupEvaluation != null" >
+        #{groupEvaluation,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null" >
         #{createUser,jdbcType=BIGINT},
@@ -148,6 +132,15 @@
       </if>
       <if test="updateUser != null" >
         #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="laborAccountId != null" >
+        #{laborAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="constructionScale != null" >
+        #{constructionScale,jdbcType=VARCHAR},
       </if>
     </trim>
   </insert>
@@ -163,20 +156,8 @@
       <if test="endTime != null" >
         end_time = #{endTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="realStartTime != null" >
-        real_start_time = #{realStartTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="realEndTime != null" >
-        real_end_time = #{realEndTime,jdbcType=TIMESTAMP},
-      </if>
-      <if test="orgId != null" >
-        org_id = #{orgId,jdbcType=BIGINT},
-      </if>
-      <if test="contractPrice != null" >
-        contract_price = #{contractPrice,jdbcType=DECIMAL},
-      </if>
-      <if test="realPrice != null" >
-        real_price = #{realPrice,jdbcType=DECIMAL},
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
       </if>
       <if test="projectEvaluation != null" >
         project_evaluation = #{projectEvaluation,jdbcType=VARCHAR},
@@ -184,11 +165,11 @@
       <if test="projectDescription != null" >
         project_description = #{projectDescription,jdbcType=VARCHAR},
       </if>
-      <if test="comanyEvalution != null" >
-        comany_evalution = #{comanyEvalution,jdbcType=VARCHAR},
+      <if test="companyEvaluation != null" >
+        company_evaluation = #{companyEvaluation,jdbcType=VARCHAR},
       </if>
-      <if test="groupEvalution != null" >
-        group_evalution = #{groupEvalution,jdbcType=VARCHAR},
+      <if test="groupEvaluation != null" >
+        group_evaluation = #{groupEvaluation,jdbcType=VARCHAR},
       </if>
       <if test="createUser != null" >
         create_user = #{createUser,jdbcType=BIGINT},
@@ -199,6 +180,15 @@
       <if test="updateUser != null" >
         update_user = #{updateUser,jdbcType=BIGINT},
       </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="laborAccountId != null" >
+        labor_account_id = #{laborAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="constructionScale != null" >
+        construction_scale = #{constructionScale,jdbcType=VARCHAR},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -207,18 +197,73 @@
     set subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
       start_time = #{startTime,jdbcType=TIMESTAMP},
       end_time = #{endTime,jdbcType=TIMESTAMP},
-      real_start_time = #{realStartTime,jdbcType=TIMESTAMP},
-      real_end_time = #{realEndTime,jdbcType=TIMESTAMP},
-      org_id = #{orgId,jdbcType=BIGINT},
-      contract_price = #{contractPrice,jdbcType=DECIMAL},
-      real_price = #{realPrice,jdbcType=DECIMAL},
+      project_id = #{projectId,jdbcType=BIGINT},
       project_evaluation = #{projectEvaluation,jdbcType=VARCHAR},
       project_description = #{projectDescription,jdbcType=VARCHAR},
-      comany_evalution = #{comanyEvalution,jdbcType=VARCHAR},
-      group_evalution = #{groupEvalution,jdbcType=VARCHAR},
+      company_evaluation = #{companyEvaluation,jdbcType=VARCHAR},
+      group_evaluation = #{groupEvaluation,jdbcType=VARCHAR},
       create_user = #{createUser,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=BIGINT}
+      update_user = #{updateUser,jdbcType=BIGINT},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      labor_account_id = #{laborAccountId,jdbcType=BIGINT},
+      construction_scale = #{constructionScale,jdbcType=VARCHAR}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listForPage" resultType="com.crcc.common.model.SubcontractorResume">
+    SELECT
+      sr.*,
+      la.team_name AS teamName,
+      p.name AS projectName,
+      s.name AS subcontractorName,
+      la.contract_person AS contractPerson,
+      la.phone,
+      la.estimated_contract_amount AS contractAmount,
+      la.settlement_amount AS settlementAmount
+    FROM
+      subcontractor_resume sr
+    LEFT JOIN
+      labor_account la ON sr.labor_account_id = la.id
+    LEFT JOIN
+      subcontractor s ON sr.subcontractor_id = s.id
+    LEFT JOIN
+      project p ON sr.project_id = p.id
+    WHERE 1=1
+    <if test="subcontractorName != null">
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="companyEvaluation != null">
+      AND sr.company_evaluation LIKE concat('%',#{companyEvaluation},'%')
+    </if>
+    <if test="constructionScale != null">
+      AND sr.construction_scale = #{constructionScale}
+    </if>
+    ORDER BY id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="getDetails" resultType="com.crcc.common.model.SubcontractorResume">
+    SELECT
+      sr.*,
+      la.team_name AS teamName,
+      p.name AS projectName,
+      s.name AS subcontractorName,
+      s.code AS subcontractorCode,
+      la.contract_person AS contractPerson,
+      la.phone,
+      la.estimated_contract_amount AS contractAmount,
+      la.settlement_amount AS settlementAmount
+    FROM
+      subcontractor_resume sr
+    LEFT JOIN
+      labor_account la ON sr.labor_account_id = la.id
+    LEFT JOIN
+      subcontractor s ON sr.subcontractor_id = s.id
+    LEFT JOIN
+      project p ON sr.project_id = p.id
+    WHERE sr.id = #{id}
+  </select>
 </mapper>

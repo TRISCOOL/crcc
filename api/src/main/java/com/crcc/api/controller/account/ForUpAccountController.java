@@ -1,4 +1,4 @@
-package com.crcc.api.controller.user;
+package com.crcc.api.controller.account;
 
 import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;

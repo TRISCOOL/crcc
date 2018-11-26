@@ -68,7 +68,61 @@ public class Subcontractor {
 
     private Long updateUser;
 
-    private String professionType;
+    private Long professionType;
+
+    private String shareEvaluation;
+
+    private String qualification;
+
+    private String shareRemark;
+
+    private String groupEvaluation;
+
+    private String groupRemark;
+
+    private String companyEvaluation;
+
+    private String companyGroupEvaluation;
+
+    private String name;
+
+    private String taxpayerTypeStr;
+
+    private String typeStr;
+
+    private String professionStr;
+
+    public String getTaxpayerTypeStr() {
+        return taxpayerTypeStr;
+    }
+
+    public void setTaxpayerTypeStr(String taxpayerTypeStr) {
+        this.taxpayerTypeStr = taxpayerTypeStr;
+    }
+
+    public String getTypeStr() {
+        return typeStr;
+    }
+
+    public void setTypeStr(String typeStr) {
+        this.typeStr = typeStr;
+    }
+
+    public String getProfessionStr() {
+        return professionStr;
+    }
+
+    public void setProfessionStr(String professionStr) {
+        this.professionStr = professionStr;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
 
     public Long getId() {
         return id;
@@ -326,11 +380,67 @@ public class Subcontractor {
         this.updateUser = updateUser;
     }
 
-    public String getProfessionType() {
+    public Long getProfessionType() {
         return professionType;
     }
 
-    public void setProfessionType(String professionType) {
-        this.professionType = professionType == null ? null : professionType.trim();
+    public void setProfessionType(Long professionType) {
+        this.professionType = professionType;
+    }
+
+    public String getShareEvaluation() {
+        return shareEvaluation;
+    }
+
+    public void setShareEvaluation(String shareEvaluation) {
+        this.shareEvaluation = shareEvaluation == null ? null : shareEvaluation.trim();
+    }
+
+    public String getQualification() {
+        return qualification;
+    }
+
+    public void setQualification(String qualification) {
+        this.qualification = qualification == null ? null : qualification.trim();
+    }
+
+    public String getShareRemark() {
+        return shareRemark;
+    }
+
+    public void setShareRemark(String shareRemark) {
+        this.shareRemark = shareRemark == null ? null : shareRemark.trim();
+    }
+
+    public String getGroupEvaluation() {
+        return groupEvaluation;
+    }
+
+    public void setGroupEvaluation(String groupEvaluation) {
+        this.groupEvaluation = groupEvaluation == null ? null : groupEvaluation.trim();
+    }
+
+    public String getGroupRemark() {
+        return groupRemark;
+    }
+
+    public void setGroupRemark(String groupRemark) {
+        this.groupRemark = groupRemark == null ? null : groupRemark.trim();
+    }
+
+    public String getCompanyEvaluation() {
+        return companyEvaluation;
+    }
+
+    public void setCompanyEvaluation(String companyEvaluation) {
+        this.companyEvaluation = companyEvaluation == null ? null : companyEvaluation.trim();
+    }
+
+    public String getCompanyGroupEvaluation() {
+        return companyGroupEvaluation;
+    }
+
+    public void setCompanyGroupEvaluation(String companyGroupEvaluation) {
+        this.companyGroupEvaluation = companyGroupEvaluation == null ? null : companyGroupEvaluation.trim();
     }
 }

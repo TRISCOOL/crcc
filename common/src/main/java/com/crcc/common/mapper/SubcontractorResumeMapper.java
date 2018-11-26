@@ -1,6 +1,9 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.SubcontractorResume;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface SubcontractorResumeMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,11 @@ public interface SubcontractorResumeMapper {
     int updateByPrimaryKeySelective(SubcontractorResume record);
 
     int updateByPrimaryKey(SubcontractorResume record);
+
+    SubcontractorResume getDetails(@Param("id")Long id);
+
+    List<SubcontractorResume> listForPage(@Param("subcontractorName")String subcontractorName,
+                                          @Param("companyEvaluation")String companyEvaluation,
+                                          @Param("constructionScale")String constructionScale,
+                                          @Param("offset")Integer offset,@Param("length")Integer length);
 }
