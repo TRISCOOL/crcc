@@ -62,6 +62,26 @@ public class LaborAccount {
 
     private Long updateUser;
 
+    private Integer contractType;
+
+    private Integer status;
+
+    public Integer getContractType() {
+        return contractType;
+    }
+
+    public void setContractType(Integer contractType) {
+        this.contractType = contractType;
+    }
+
+    public Integer getStatus() {
+        return status;
+    }
+
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
+
     public Long getId() {
         return id;
     }
