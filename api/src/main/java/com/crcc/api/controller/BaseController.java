@@ -94,6 +94,9 @@ public class BaseController {
 
     protected Long permissionProject(HttpServletRequest request){
         User user = curUser(request);
+        if (user == null)
+            return null;
+
         if (user.getType() == 0){
             return null;
         }

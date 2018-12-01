@@ -415,7 +415,7 @@
       project p ON la.project_id = p.id
     WHERE 1=1
     <if test="projectId != null">
-      la.projectId = #{projectId}
+      AND la.project_id = #{projectId}
     </if>
     <if test="projectName != null">
       AND p.name LIKE CONCAT('%',#{projectName}, '%')
@@ -431,7 +431,7 @@
     </if>
     ORDER BY la.id DESC
     <if test="offset != null and length != null">
-      limit #{offset},#{limit}
+      limit #{offset},#{length}
     </if>
   </select>
 </mapper>

@@ -36,13 +36,13 @@ public class LaborAccount {
 
     private Date teamTime;
 
-    private Byte teamQualification;
+    private Integer teamQualification;
 
     private String teamAnnex;
 
     private Date approvalTime;
 
-    private Byte approvalFiling;
+    private Integer approvalFiling;
 
     private String approvalAnnex;
 
@@ -52,7 +52,7 @@ public class LaborAccount {
 
     private BigDecimal settlementAmount;
 
-    private Byte settlementFiling;
+    private Integer settlementFiling;
 
     private Date createTime;
 
@@ -65,6 +65,16 @@ public class LaborAccount {
     private Integer contractType;
 
     private Integer status;
+
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Integer getContractType() {
         return contractType;
@@ -210,11 +220,11 @@ public class LaborAccount {
         this.teamTime = teamTime;
     }
 
-    public Byte getTeamQualification() {
+    public Integer getTeamQualification() {
         return teamQualification;
     }
 
-    public void setTeamQualification(Byte teamQualification) {
+    public void setTeamQualification(Integer teamQualification) {
         this.teamQualification = teamQualification;
     }
 
@@ -234,11 +244,11 @@ public class LaborAccount {
         this.approvalTime = approvalTime;
     }
 
-    public Byte getApprovalFiling() {
+    public Integer getApprovalFiling() {
         return approvalFiling;
     }
 
-    public void setApprovalFiling(Byte approvalFiling) {
+    public void setApprovalFiling(Integer approvalFiling) {
         this.approvalFiling = approvalFiling;
     }
 
@@ -274,11 +284,11 @@ public class LaborAccount {
         this.settlementAmount = settlementAmount;
     }
 
-    public Byte getSettlementFiling() {
+    public Integer getSettlementFiling() {
         return settlementFiling;
     }
 
-    public void setSettlementFiling(Byte settlementFiling) {
+    public void setSettlementFiling(Integer settlementFiling) {
         this.settlementFiling = settlementFiling;
     }
 

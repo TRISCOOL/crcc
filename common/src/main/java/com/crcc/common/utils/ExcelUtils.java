@@ -1,9 +1,6 @@
 package com.crcc.common.utils;
 
-import com.crcc.common.model.MeteringAccount;
-import com.crcc.common.model.ProjectInfo;
-import com.crcc.common.model.Subcontractor;
-import com.crcc.common.model.SubcontractorResume;
+import com.crcc.common.model.*;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -285,5 +282,141 @@ public class ExcelUtils {
 
         }
         return wb;
+    }
+
+    public static HSSFWorkbook getLaborAccountExcel(String sheetName,String[] title, List<LaborAccount> laborAccounts){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        //声明列对象
+        HSSFCell cell = null;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            if (i == 0){
+                cell.setCellValue("劳务队伍统计（项目部填写）");
+            }else if (i == 14) {
+                cell.setCellValue("备案情况（公司填写）");
+            }else {
+                cell.setCellValue("");
+            }
+            cell.setCellStyle(style);
+        }
+        CellRangeAddress address1 = new CellRangeAddress(0,0,0,13);
+        CellRangeAddress address2 = new CellRangeAddress(0,0,14,18);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+
+        num = num + 1;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            if (i == 8){
+                cell.setCellValue("履约保证金");
+            }else if (i == 10) {
+                cell.setCellValue("负责人");
+            }else if (i == 14){
+                cell.setCellValue("队伍选定");
+            }else if (i == 15){
+                cell.setCellValue("合同审批");
+            }else if (i == 17){
+                cell.setCellValue("结算审批");
+            }else {
+                cell.setCellValue("");
+            }
+            cell.setCellStyle(style);
+        }
+        CellRangeAddress address3 = new CellRangeAddress(1,1,8,9);
+        CellRangeAddress address4 = new CellRangeAddress(1,1,10,11);
+        CellRangeAddress address5 = new CellRangeAddress(1,1,15,16);
+        sheet.addMergedRegion(address3);
+        sheet.addMergedRegion(address4);
+        sheet.addMergedRegion(address5);
+
+
+        HSSFRow realRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = realRow.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(LaborAccount laborAccount : laborAccounts){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(laborAccount.getProjectName());
+            contentRow.createCell(1).setCellValue(laborAccount.getContractCode());
+            contentRow.createCell(2).setCellValue(laborAccount.getSubcontractorName());
+            contentRow.createCell(3).setCellValue(laborAccount.getTeamName());
+            contentRow.createCell(4).setCellValue(getTeamStatus(laborAccount.getStatus()));
+            contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getContractTime()));
+            contentRow.createCell(6).setCellValue(laborAccount.getEstimatedContractAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(7).setCellValue(laborAccount.getConstructionScope());
+            contentRow.createCell(8).setCellValue(laborAccount.getShouldAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(9).setCellValue(laborAccount.getRealAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(10).setCellValue(laborAccount.getContractPerson());
+            contentRow.createCell(11).setCellValue(laborAccount.getPhone());
+            contentRow.createCell(12).setCellValue(laborAccount.getSettlementAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(13).setCellValue(laborAccount.getRemark());
+            contentRow.createCell(14).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getTeamTime()));
+            contentRow.createCell(15).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getApprovalTime()));
+            contentRow.createCell(16).setCellValue(getApproval(laborAccount.getApprovalFiling()));
+            contentRow.createCell(17).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getSettlementTime()));
+            contentRow.createCell(18).setCellValue(laborAccount.getRemark());
+            num++;
+
+        }
+        return wb;
+    }
+
+    /**
+     * 0-未备案，1-备案
+     * @param approval
+     * @return
+     */
+    private static String getApproval(Integer approval){
+        if (approval == null)
+            return "";
+
+        if (approval == 0){
+            return "未备案";
+        }else if (approval == 1){
+            return "备案";
+        }else {
+            return "";
+        }
+    }
+
+    //队伍状态(0-正在施工，1-完工待结算，2-已结算)
+    private static String getTeamStatus(Integer status){
+        String result = "未定义的状态";
+        switch (status){
+            case 0:
+                result = "正在施工";
+                break;
+            case 1:
+                result = "完工待结算";
+                break;
+            case 2:
+                result = "已结算";
+                break;
+            default:
+                break;
+        }
+        return result;
     }
 }
