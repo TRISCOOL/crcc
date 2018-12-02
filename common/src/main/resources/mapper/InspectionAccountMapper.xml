@@ -10,7 +10,7 @@
     <result column="contract_price" property="contractPrice" jdbcType="DECIMAL" />
     <result column="valuation_period" property="valuationPeriod" jdbcType="INTEGER" />
     <result column="valuation_time" property="valuationTime" jdbcType="TIMESTAMP" />
-    <result column="valuation_type_id" property="valuationTypeId" jdbcType="BIGINT" />
+    <result column="valuation_type" property="valuationType" jdbcType="BIGINT" />
     <result column="valuation_person" property="valuationPerson" jdbcType="VARCHAR" />
     <result column="valuation_price" property="valuationPrice" jdbcType="DECIMAL" />
     <result column="valuation_price_reduce" property="valuationPriceReduce" jdbcType="DECIMAL" />
@@ -27,7 +27,7 @@
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, subcontractor_id, subcontractor_name, team_name, contract_price, 
-    valuation_period, valuation_time, valuation_type_id, valuation_person, valuation_price, 
+    valuation_period, valuation_time, valuation_type, valuation_person, valuation_price,
     valuation_price_reduce, warranty, performance_bond, compensation, should_amount, 
     remark, annex_url, create_time, create_user, update_time, update_user
   </sql>
@@ -44,7 +44,7 @@
   <insert id="insert" parameterType="com.crcc.common.model.InspectionAccount" >
     insert into inspection_account (id, project_id, subcontractor_id, 
       subcontractor_name, team_name, contract_price, 
-      valuation_period, valuation_time, valuation_type_id, 
+      valuation_period, valuation_time, valuation_type,
       valuation_person, valuation_price, valuation_price_reduce, 
       warranty, performance_bond, compensation, 
       should_amount, remark, annex_url, 
@@ -52,14 +52,14 @@
       update_user)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
       #{subcontractorName,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{contractPrice,jdbcType=DECIMAL}, 
-      #{valuationPeriod,jdbcType=INTEGER}, #{valuationTime,jdbcType=TIMESTAMP}, #{valuationTypeId,jdbcType=BIGINT}, 
+      #{valuationPeriod,jdbcType=INTEGER}, #{valuationTime,jdbcType=TIMESTAMP}, #{valuationType,jdbcType=BIGINT},
       #{valuationPerson,jdbcType=VARCHAR}, #{valuationPrice,jdbcType=DECIMAL}, #{valuationPriceReduce,jdbcType=DECIMAL}, 
       #{warranty,jdbcType=DECIMAL}, #{performanceBond,jdbcType=DECIMAL}, #{compensation,jdbcType=DECIMAL}, 
       #{shouldAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
       #{updateUser,jdbcType=BIGINT})
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.InspectionAccount" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.InspectionAccount" keyProperty="id" useGeneratedKeys="true">
     insert into inspection_account
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -86,8 +86,8 @@
       <if test="valuationTime != null" >
         valuation_time,
       </if>
-      <if test="valuationTypeId != null" >
-        valuation_type_id,
+      <if test="valuationType != null" >
+        valuation_type,
       </if>
       <if test="valuationPerson != null" >
         valuation_person,
@@ -154,8 +154,8 @@
       <if test="valuationTime != null" >
         #{valuationTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="valuationTypeId != null" >
-        #{valuationTypeId,jdbcType=BIGINT},
+      <if test="valuationType != null" >
+        #{valuationType,jdbcType=BIGINT},
       </if>
       <if test="valuationPerson != null" >
         #{valuationPerson,jdbcType=VARCHAR},
@@ -222,8 +222,8 @@
       <if test="valuationTime != null" >
         valuation_time = #{valuationTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="valuationTypeId != null" >
-        valuation_type_id = #{valuationTypeId,jdbcType=BIGINT},
+      <if test="valuationType != null" >
+        valuation_type = #{valuationType,jdbcType=BIGINT},
       </if>
       <if test="valuationPerson != null" >
         valuation_person = #{valuationPerson,jdbcType=VARCHAR},
@@ -276,7 +276,7 @@
       contract_price = #{contractPrice,jdbcType=DECIMAL},
       valuation_period = #{valuationPeriod,jdbcType=INTEGER},
       valuation_time = #{valuationTime,jdbcType=TIMESTAMP},
-      valuation_type_id = #{valuationTypeId,jdbcType=BIGINT},
+      valuation_type = #{valuationType,jdbcType=BIGINT},
       valuation_person = #{valuationPerson,jdbcType=VARCHAR},
       valuation_price = #{valuationPrice,jdbcType=DECIMAL},
       valuation_price_reduce = #{valuationPriceReduce,jdbcType=DECIMAL},
@@ -292,4 +292,39 @@
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="getDetails" resultType="com.crcc.common.model.InspectionAccount">
+     SELECT
+      ic.*,p.name AS projectName
+    FROM
+      inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    WHERE ic.id = #{inspectionAccountId}
+  </select>
+
+  <select id="listForPage" resultType="com.crcc.common.model.InspectionAccount">
+    SELECT
+      ic.*,p.name AS projectName
+    FROM
+      inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="subcontractorName != null">
+      AND ic.subcontractor_name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="valuationType != null">
+      AND ic.valuation_type = #{valuationType}
+    </if>
+    <if test="valuationTime != null">
+      AND ic.valuation_time = #{valuationTime}
+    </if>
+    ORDER BY ic.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
 </mapper>

@@ -41,4 +41,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval, Integer offset, Integer length) {
         return laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,offset,length);
     }
+
+    @Override
+    public List<LaborAccount> onlyLIst() {
+        return laborAccountMapper.onlyList();
+    }
 }

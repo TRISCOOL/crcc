@@ -383,6 +383,155 @@ public class ExcelUtils {
         return wb;
     }
 
+    public static HSSFWorkbook getHSSFWorkbookForInspectionAccount(String sheetName, String[] title,
+                                                                   List<InspectionAccount> inspectionAccounts){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        //声明列对象
+        HSSFCell cell = null;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            if (i == 7){
+                cell.setCellValue("计价金额（含税）");
+            }else {
+                cell.setCellValue("");
+            }
+            cell.setCellStyle(style);
+        }
+        CellRangeAddress addressPlane = new CellRangeAddress(0,0,7,13);
+        sheet.addMergedRegion(addressPlane);
+
+        //创建标题
+        num = num+1;
+        HSSFRow realRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = realRow.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(InspectionAccount inspectionAccount : inspectionAccounts){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
+            contentRow.createCell(1).setCellValue(inspectionAccount.getSubcontractorName());
+            contentRow.createCell(2).setCellValue(inspectionAccount.getTeamName());
+            contentRow.createCell(3).setCellValue(inspectionAccount.getContractPrice()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(4).setCellValue(inspectionAccount.getValuationPeriod());
+            contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(inspectionAccount.getValuationTime()));
+            contentRow.createCell(6).setCellValue(getValuationType(inspectionAccount.getValuationType()));
+            contentRow.createCell(7).setCellValue(inspectionAccount.getValuationPrice()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(8).setCellValue(inspectionAccount.getValuationPriceReduce()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(9).setCellValue(inspectionAccount.getWarranty()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(10).setCellValue(inspectionAccount.getPerformanceBond()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(11).setCellValue(inspectionAccount.getCompensation()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(12).setCellValue(inspectionAccount.getShouldAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(13).setCellValue("已完未计金额");
+            contentRow.createCell(14).setCellValue("对下计价率");
+            contentRow.createCell(15).setCellValue(inspectionAccount.getValuationPerson());
+            contentRow.createCell(16).setCellValue(inspectionAccount.getRemark());
+
+
+            num++;
+
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getPersonnelExcel(String sheetName,String[] title, List<Personnel> personnels){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        //声明列对象
+        HSSFCell cell = null;
+
+        HSSFRow realRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = realRow.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(Personnel personnel : personnels){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue("编码待定");
+            contentRow.createCell(1).setCellValue(personnel.getName());
+            contentRow.createCell(2).setCellValue(personnel.getSex());
+            contentRow.createCell(3).setCellValue(personnel.getStatus());
+            contentRow.createCell(4).setCellValue(personnel.getProjectName());
+            contentRow.createCell(5).setCellValue(personnel.getPosition());
+            contentRow.createCell(6).setCellValue(personnel.getJobTitle());
+            contentRow.createCell(7).setCellValue(personnel.getWorkTime());
+            contentRow.createCell(8).setCellValue(personnel.getEducation());
+            contentRow.createCell(9).setCellValue(personnel.getPhone());
+            contentRow.createCell(10).setCellValue(personnel.getQqNumber());
+            contentRow.createCell(11).setCellValue(personnel.getIdCard());
+            contentRow.createCell(12).setCellValue(personnel.getCertificate());
+            contentRow.createCell(13).setCellValue(personnel.getJiguan());
+            contentRow.createCell(14).setCellValue(personnel.getCreateTime());
+            num++;
+
+        }
+        return wb;
+    }
+
+    /**
+     * 计价类型（0-过程计价，1-中期结算，2-末次计算）
+     * @param type
+     * @return
+     */
+    private static String getValuationType(Integer type){
+        String result = "";
+        switch (type){
+            case 0:
+                result = "过程计价";
+                break;
+            case 1:
+                result = "中期结算";
+                break;
+            case 2:
+                result = "末次计算";
+                break;
+            default:
+                break;
+        }
+        return result;
+    }
+
     /**
      * 0-未备案，1-备案
      * @param approval

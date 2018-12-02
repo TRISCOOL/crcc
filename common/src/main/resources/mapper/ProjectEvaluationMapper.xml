@@ -1,0 +1,428 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.ProjectEvaluationMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.ProjectEvaluation" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="engineering_type" property="engineeringType" jdbcType="VARCHAR" />
+    <result column="evaluation_status" property="evaluationStatus" jdbcType="VARCHAR" />
+    <result column="project_status" property="projectStatus" jdbcType="VARCHAR" />
+    <result column="winning_bid" property="winningBid" jdbcType="DECIMAL" />
+    <result column="effective_income" property="effectiveIncome" jdbcType="DECIMAL" />
+    <result column="is_sign" property="isSign" jdbcType="VARCHAR" />
+    <result column="sign_time" property="signTime" jdbcType="TIMESTAMP" />
+    <result column="contract_start_time" property="contractStartTime" jdbcType="TIMESTAMP" />
+    <result column="contract_end_time" property="contractEndTime" jdbcType="TIMESTAMP" />
+    <result column="duration" property="duration" jdbcType="INTEGER" />
+    <result column="evaluation_time" property="evaluationTime" jdbcType="TIMESTAMP" />
+    <result column="evaluation_benefit" property="evaluationBenefit" jdbcType="DECIMAL" />
+    <result column="evaluation_cost" property="evaluationCost" jdbcType="DECIMAL" />
+    <result column="evaluation_code" property="evaluationCode" jdbcType="VARCHAR" />
+    <result column="evaluation_annex" property="evaluationAnnex" jdbcType="VARCHAR" />
+    <result column="joint_hearing_benefit" property="jointHearingBenefit" jdbcType="DECIMAL" />
+    <result column="joint_hearing_cost" property="jointHearingCost" jdbcType="DECIMAL" />
+    <result column="joint_hearing_time" property="jointHearingTime" jdbcType="TIMESTAMP" />
+    <result column="joint_hearing_annex" property="jointHearingAnnex" jdbcType="VARCHAR" />
+    <result column="responsibility_benefiy" property="responsibilityBenefiy" jdbcType="DECIMAL" />
+    <result column="responsibility_time" property="responsibilityTime" jdbcType="TIMESTAMP" />
+    <result column="responsibility_people" property="responsibilityPeople" jdbcType="VARCHAR" />
+    <result column="responsibility_secretary" property="responsibilitySecretary" jdbcType="VARCHAR" />
+    <result column="responsibility_annex" property="responsibilityAnnex" jdbcType="VARCHAR" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, engineering_type, evaluation_status, project_status, winning_bid, 
+    effective_income, is_sign, sign_time, contract_start_time, contract_end_time, duration, 
+    evaluation_time, evaluation_benefit, evaluation_cost, evaluation_code, evaluation_annex, 
+    joint_hearing_benefit, joint_hearing_cost, joint_hearing_time, joint_hearing_annex, 
+    responsibility_benefiy, responsibility_time, responsibility_people, responsibility_secretary, 
+    responsibility_annex,create_time,create_user,update_time,update_user
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from project_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from project_evaluation
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.ProjectEvaluation" >
+    insert into project_evaluation (id, project_id, engineering_type, 
+      evaluation_status, project_status, winning_bid, 
+      effective_income, is_sign, sign_time, 
+      contract_start_time, contract_end_time, 
+      duration, evaluation_time, evaluation_benefit, 
+      evaluation_cost, evaluation_code, evaluation_annex, 
+      joint_hearing_benefit, joint_hearing_cost, 
+      joint_hearing_time, joint_hearing_annex, 
+      responsibility_benefiy, responsibility_time, 
+      responsibility_people, responsibility_secretary, 
+      responsibility_annex,create_time,create_user,update_time,update_user)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{engineeringType,jdbcType=VARCHAR}, 
+      #{evaluationStatus,jdbcType=VARCHAR}, #{projectStatus,jdbcType=VARCHAR}, #{winningBid,jdbcType=DECIMAL}, 
+      #{effectiveIncome,jdbcType=DECIMAL}, #{isSign,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
+      #{contractStartTime,jdbcType=TIMESTAMP}, #{contractEndTime,jdbcType=TIMESTAMP}, 
+      #{duration,jdbcType=INTEGER}, #{evaluationTime,jdbcType=TIMESTAMP}, #{evaluationBenefit,jdbcType=DECIMAL}, 
+      #{evaluationCost,jdbcType=DECIMAL}, #{evaluationCode,jdbcType=VARCHAR}, #{evaluationAnnex,jdbcType=VARCHAR}, 
+      #{jointHearingBenefit,jdbcType=DECIMAL}, #{jointHearingCost,jdbcType=DECIMAL}, 
+      #{jointHearingTime,jdbcType=TIMESTAMP}, #{jointHearingAnnex,jdbcType=VARCHAR}, 
+      #{responsibilityBenefiy,jdbcType=DECIMAL}, #{responsibilityTime,jdbcType=TIMESTAMP}, 
+      #{responsibilityPeople,jdbcType=VARCHAR}, #{responsibilitySecretary,jdbcType=VARCHAR}, 
+      #{responsibilityAnnex,jdbcType=VARCHAR},#{createTime},#{createUser},#{updateTime},#{updateUser})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.ProjectEvaluation" keyProperty="id" useGeneratedKeys="true">
+    insert into project_evaluation
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="engineeringType != null" >
+        engineering_type,
+      </if>
+      <if test="evaluationStatus != null" >
+        evaluation_status,
+      </if>
+      <if test="projectStatus != null" >
+        project_status,
+      </if>
+      <if test="winningBid != null" >
+        winning_bid,
+      </if>
+      <if test="effectiveIncome != null" >
+        effective_income,
+      </if>
+      <if test="isSign != null" >
+        is_sign,
+      </if>
+      <if test="signTime != null" >
+        sign_time,
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time,
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time,
+      </if>
+      <if test="duration != null" >
+        duration,
+      </if>
+      <if test="evaluationTime != null" >
+        evaluation_time,
+      </if>
+      <if test="evaluationBenefit != null" >
+        evaluation_benefit,
+      </if>
+      <if test="evaluationCost != null" >
+        evaluation_cost,
+      </if>
+      <if test="evaluationCode != null" >
+        evaluation_code,
+      </if>
+      <if test="evaluationAnnex != null" >
+        evaluation_annex,
+      </if>
+      <if test="jointHearingBenefit != null" >
+        joint_hearing_benefit,
+      </if>
+      <if test="jointHearingCost != null" >
+        joint_hearing_cost,
+      </if>
+      <if test="jointHearingTime != null" >
+        joint_hearing_time,
+      </if>
+      <if test="jointHearingAnnex != null" >
+        joint_hearing_annex,
+      </if>
+      <if test="responsibilityBenefiy != null" >
+        responsibility_benefiy,
+      </if>
+      <if test="responsibilityTime != null" >
+        responsibility_time,
+      </if>
+      <if test="responsibilityPeople != null" >
+        responsibility_people,
+      </if>
+      <if test="responsibilitySecretary != null" >
+        responsibility_secretary,
+      </if>
+      <if test="responsibilityAnnex != null" >
+        responsibility_annex,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="engineeringType != null" >
+        #{engineeringType,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationStatus != null" >
+        #{evaluationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="projectStatus != null" >
+        #{projectStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="winningBid != null" >
+        #{winningBid,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveIncome != null" >
+        #{effectiveIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="isSign != null" >
+        #{isSign,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractStartTime != null" >
+        #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationTime != null" >
+        #{evaluationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluationBenefit != null" >
+        #{evaluationBenefit,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluationCost != null" >
+        #{evaluationCost,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluationCode != null" >
+        #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationAnnex != null" >
+        #{evaluationAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="jointHearingBenefit != null" >
+        #{jointHearingBenefit,jdbcType=DECIMAL},
+      </if>
+      <if test="jointHearingCost != null" >
+        #{jointHearingCost,jdbcType=DECIMAL},
+      </if>
+      <if test="jointHearingTime != null" >
+        #{jointHearingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jointHearingAnnex != null" >
+        #{jointHearingAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilityBenefiy != null" >
+        #{responsibilityBenefiy,jdbcType=DECIMAL},
+      </if>
+      <if test="responsibilityTime != null" >
+        #{responsibilityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responsibilityPeople != null" >
+        #{responsibilityPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilitySecretary != null" >
+        #{responsibilitySecretary,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilityAnnex != null" >
+        #{responsibilityAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="createUser != null">
+        #{createUser},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.ProjectEvaluation" >
+    update project_evaluation
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="engineeringType != null" >
+        engineering_type = #{engineeringType,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationStatus != null" >
+        evaluation_status = #{evaluationStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="projectStatus != null" >
+        project_status = #{projectStatus,jdbcType=VARCHAR},
+      </if>
+      <if test="winningBid != null" >
+        winning_bid = #{winningBid,jdbcType=DECIMAL},
+      </if>
+      <if test="effectiveIncome != null" >
+        effective_income = #{effectiveIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="isSign != null" >
+        is_sign = #{isSign,jdbcType=VARCHAR},
+      </if>
+      <if test="signTime != null" >
+        sign_time = #{signTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractStartTime != null" >
+        contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractEndTime != null" >
+        contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="duration != null" >
+        duration = #{duration,jdbcType=INTEGER},
+      </if>
+      <if test="evaluationTime != null" >
+        evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="evaluationBenefit != null" >
+        evaluation_benefit = #{evaluationBenefit,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluationCost != null" >
+        evaluation_cost = #{evaluationCost,jdbcType=DECIMAL},
+      </if>
+      <if test="evaluationCode != null" >
+        evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      </if>
+      <if test="evaluationAnnex != null" >
+        evaluation_annex = #{evaluationAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="jointHearingBenefit != null" >
+        joint_hearing_benefit = #{jointHearingBenefit,jdbcType=DECIMAL},
+      </if>
+      <if test="jointHearingCost != null" >
+        joint_hearing_cost = #{jointHearingCost,jdbcType=DECIMAL},
+      </if>
+      <if test="jointHearingTime != null" >
+        joint_hearing_time = #{jointHearingTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="jointHearingAnnex != null" >
+        joint_hearing_annex = #{jointHearingAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilityBenefiy != null" >
+        responsibility_benefiy = #{responsibilityBenefiy,jdbcType=DECIMAL},
+      </if>
+      <if test="responsibilityTime != null" >
+        responsibility_time = #{responsibilityTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="responsibilityPeople != null" >
+        responsibility_people = #{responsibilityPeople,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilitySecretary != null" >
+        responsibility_secretary = #{responsibilitySecretary,jdbcType=VARCHAR},
+      </if>
+      <if test="responsibilityAnnex != null" >
+        responsibility_annex = #{responsibilityAnnex,jdbcType=VARCHAR},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.ProjectEvaluation" >
+    update project_evaluation
+    set project_id = #{projectId,jdbcType=BIGINT},
+      engineering_type = #{engineeringType,jdbcType=VARCHAR},
+      evaluation_status = #{evaluationStatus,jdbcType=VARCHAR},
+      project_status = #{projectStatus,jdbcType=VARCHAR},
+      winning_bid = #{winningBid,jdbcType=DECIMAL},
+      effective_income = #{effectiveIncome,jdbcType=DECIMAL},
+      is_sign = #{isSign,jdbcType=VARCHAR},
+      sign_time = #{signTime,jdbcType=TIMESTAMP},
+      contract_start_time = #{contractStartTime,jdbcType=TIMESTAMP},
+      contract_end_time = #{contractEndTime,jdbcType=TIMESTAMP},
+      duration = #{duration,jdbcType=INTEGER},
+      evaluation_time = #{evaluationTime,jdbcType=TIMESTAMP},
+      evaluation_benefit = #{evaluationBenefit,jdbcType=DECIMAL},
+      evaluation_cost = #{evaluationCost,jdbcType=DECIMAL},
+      evaluation_code = #{evaluationCode,jdbcType=VARCHAR},
+      evaluation_annex = #{evaluationAnnex,jdbcType=VARCHAR},
+      joint_hearing_benefit = #{jointHearingBenefit,jdbcType=DECIMAL},
+      joint_hearing_cost = #{jointHearingCost,jdbcType=DECIMAL},
+      joint_hearing_time = #{jointHearingTime,jdbcType=TIMESTAMP},
+      joint_hearing_annex = #{jointHearingAnnex,jdbcType=VARCHAR},
+      responsibility_benefiy = #{responsibilityBenefiy,jdbcType=DECIMAL},
+      responsibility_time = #{responsibilityTime,jdbcType=TIMESTAMP},
+      responsibility_people = #{responsibilityPeople,jdbcType=VARCHAR},
+      responsibility_secretary = #{responsibilitySecretary,jdbcType=VARCHAR},
+      responsibility_annex = #{responsibilityAnnex,jdbcType=VARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getDetailsById" resultType="com.crcc.common.model.ProjectEvaluation">
+    SELECT
+      pe.*,p.name AS projectName
+    FROM
+      project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+    WHERE pe.id = #{id}
+  </select>
+
+  <select id="listForPage" resultType="com.crcc.common.model.ProjectEvaluation">
+    SELECT
+      pe.*,p.name AS projectName
+    FROM
+      project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND pe.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="evaluationStatus != null">
+      AND pe.evaluation_status = #{evaluationStatus}
+    </if>
+    <if test="projectStatus != null">
+      AND pe.project_status = #{projectStatus}
+    </if>
+    <if test="isSign != null">
+      AND pe.is_sign = #{isSign}
+    </if>
+    <if test="isResponsibility != null and isResponsibility == 1">
+      AND pe.responsibility_time IS NOT NULL
+    </if>
+    <if test="isResponsibility != null and isResponsibility == 0">
+      AND pe.responsibility_time IS NULL
+    </if>
+    ORDER BY pe.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+</mapper>

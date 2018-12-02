@@ -18,6 +18,7 @@ import com.itextpdf.text.pdf.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -236,10 +237,10 @@ public class ProjectController extends BaseController{
                                       @RequestParam(value = "projectManager",required = false) String projectManager,
                                       @RequestParam(value = "projectSecretary",required = false)String projectSecretary,
                                       @RequestParam(value = "chiefEngineer",required = false) String chiefEngineer,
-                                      @RequestParam(value = "contractStartTime",required = false) Date contractStartTime,
-                                      @RequestParam(value = "contractEndTime",required = false) Date contractEndTime,
-                                      @RequestParam(value = "realContractStartTime",required = false) Date realContractStartTime,
-                                      @RequestParam(value = "realContractEndTime",required = false) Date realContractEndTime,
+                                      @RequestParam(value = "contractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date contractStartTime,
+                                      @RequestParam(value = "contractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date contractEndTime,
+                                      @RequestParam(value = "realContractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date realContractStartTime,
+                                      @RequestParam(value = "realContractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date realContractEndTime,
                                       @RequestParam(value = "page",required = false)Integer page,
                                       @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                       HttpServletRequest request){

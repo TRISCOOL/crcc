@@ -25,4 +25,6 @@ public interface LaborAccountMapper {
                                    @Param("status") Integer status,
                                    @Param("approvalFiling") Integer approvalFiling,
                                    @Param("offset") Integer offset,@Param("length") Integer length);
+
+    List<LaborAccount> onlyList();
 }

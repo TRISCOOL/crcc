@@ -20,7 +20,7 @@ public class InspectionAccount {
 
     private Date valuationTime;
 
-    private Long valuationTypeId;
+    private Integer valuationType;
 
     private String valuationPerson;
 
@@ -47,6 +47,16 @@ public class InspectionAccount {
     private Date updateTime;
 
     private Long updateUser;
+
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
 
     public Long getId() {
         return id;
@@ -112,12 +122,12 @@ public class InspectionAccount {
         this.valuationTime = valuationTime;
     }
 
-    public Long getValuationTypeId() {
-        return valuationTypeId;
+    public Integer getValuationType() {
+        return valuationType;
     }
 
-    public void setValuationTypeId(Long valuationTypeId) {
-        this.valuationTypeId = valuationTypeId;
+    public void setValuationType(Integer valuationType) {
+        this.valuationType = valuationType;
     }
 
     public String getValuationPerson() {

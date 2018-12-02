@@ -406,6 +406,10 @@
     WHERE la.id = #{laborAccountId}
   </select>
 
+  <select id="onlyList" resultType="com.crcc.common.model.LaborAccount">
+    SELECT id,team_name FROM labor_account;
+  </select>
+
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
     SELECT
       la.*, p.name AS projectName

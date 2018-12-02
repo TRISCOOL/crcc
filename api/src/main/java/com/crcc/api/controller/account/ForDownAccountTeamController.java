@@ -134,5 +134,10 @@ public class ForDownAccountTeamController extends BaseController{
         }
     }
 
+    @GetMapping("/only_list/v1.1")
+    public ResponseVo onlyList(){
+        return ResponseVo.ok(laborAccountService.onlyLIst());
+    }
+
 
 }
