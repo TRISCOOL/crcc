@@ -1,6 +1,9 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.DocumentManagement;
+import org.apache.ibatis.annotations.Param;
+
+import java.util.List;
 
 public interface DocumentManagementMapper {
     int deleteByPrimaryKey(Long id);
@@ -14,4 +17,10 @@ public interface DocumentManagementMapper {
     int updateByPrimaryKeySelective(DocumentManagement record);
 
     int updateByPrimaryKey(DocumentManagement record);
+
+    List<DocumentManagement> listForReferences(@Param("fileName") String fileName,@Param("offset")Integer offset,
+                                               @Param("length")Integer length);
+
+    List<DocumentManagement> listForFile(@Param("fileName")String fileName,@Param("fileType")String fileType,
+                                         @Param("offset")Integer offset,@Param("length")Integer length);
 }

@@ -8,9 +8,13 @@
     <result column="remark" property="remark" jdbcType="VARCHAR" />
     <result column="type" property="type" jdbcType="TINYINT" />
     <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="file_type" property="fileType" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
-    id, name, annex_url, remark, type, create_time
+    id, name, annex_url, remark, `type`, create_time,create_user,update_time,update_user,file_type
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -24,13 +28,14 @@
   </delete>
   <insert id="insert" parameterType="com.crcc.common.model.DocumentManagement" >
     insert into document_management (id, name, annex_url, 
-      remark, type, create_time
+      remark, `type`, create_time,create_user,update_time,update_user,file_type
       )
     values (#{id,jdbcType=BIGINT}, #{name,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, 
-      #{remark,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}
+      #{remark,jdbcType=VARCHAR}, #{type,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP},
+      #{createTime},#{createUser},#{updateTime},#{updateUser},#{fileType}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.DocumentManagement" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.DocumentManagement" keyProperty="id" useGeneratedKeys="true">
     insert into document_management
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -50,6 +55,18 @@
       </if>
       <if test="createTime != null" >
         create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="updateTime != null">
+        update_time,
+      </if>
+      <if test="updateUser != null">
+        update_user,
+      </if>
+      <if test="fileType != null">
+        file_type,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -71,13 +88,25 @@
       <if test="createTime != null" >
         #{createTime,jdbcType=TIMESTAMP},
       </if>
+      <if test="createUser != null">
+        #{createUser},
+      </if>
+      <if test="updateTime != null">
+        #{updateTime},
+      </if>
+      <if test="updateUser != null">
+        #{updateUser},
+      </if>
+      <if test="fileType != null">
+        #{fileType},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.DocumentManagement" >
     update document_management
     <set >
       <if test="name != null" >
-        name = #{name,jdbcType=VARCHAR},
+        `name` = #{name,jdbcType=VARCHAR},
       </if>
       <if test="annexUrl != null" >
         annex_url = #{annexUrl,jdbcType=VARCHAR},
@@ -86,10 +115,22 @@
         remark = #{remark,jdbcType=VARCHAR},
       </if>
       <if test="type != null" >
-        type = #{type,jdbcType=TINYINT},
+        `type` = #{type,jdbcType=TINYINT},
       </if>
       <if test="createTime != null" >
         create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser},
+      </if>
+      <if test="updateTime != null">
+        update_time = #{updateTime},
+      </if>
+      <if test="updateUser != null">
+        update_user = #{updateUser},
+      </if>
+      <if test="fileType != null">
+        file_type = #{fileType},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -103,4 +144,39 @@
       create_time = #{createTime,jdbcType=TIMESTAMP}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listForFile" resultType="com.crcc.common.model.DocumentManagement">
+    SELECT
+      *
+    FROM
+      document_management
+    WHERE `type` = 1
+    <if test="fileName != null">
+      AND `name` LIKE concat('%',#{fileName},'%')
+    </if>
+    <if test="fileType != null">
+      AND file_type = #{fileType}
+    </if>
+    AND file_type IS NOT NULL
+    ORDER BY id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listForReferences" resultType="com.crcc.common.model.DocumentManagement">
+    SELECT
+      *
+    FROM
+      document_management
+    WHERE `type` = 0
+    <if test="fileName != null">
+      AND `name` LIKE concat('%',#{fileName},'%')
+    </if>
+    AND file_type IS NULL
+    ORDER BY id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
 </mapper>

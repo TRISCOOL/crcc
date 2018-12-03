@@ -11,9 +11,49 @@ public class DocumentManagement {
 
     private String remark;
 
-    private Byte type;
+    private Integer type;
 
     private Date createTime;
+
+    private String fileType;
+
+    private Long createUser;
+
+    private Date updateTime;
+
+    private Long updateUser;
+
+    public Long getCreateUser() {
+        return createUser;
+    }
+
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
+    }
+
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public String getFileType() {
+        return fileType;
+    }
+
+    public void setFileType(String fileType) {
+        this.fileType = fileType;
+    }
 
     public Long getId() {
         return id;
@@ -47,11 +87,11 @@ public class DocumentManagement {
         this.remark = remark == null ? null : remark.trim();
     }
 
-    public Byte getType() {
+    public Integer getType() {
         return type;
     }
 
-    public void setType(Byte type) {
+    public void setType(Integer type) {
         this.type = type;
     }
 
