@@ -130,7 +130,9 @@ public class UserController extends BaseController {
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<User> users = userService.listUser(code,projectName,status,offset*pageSize,pageSize);
-        return ResponseVo.ok(users);
+
+        Integer total = userService.listUserSize(code,projectName,status);
+        return ResponseVo.ok(total,page,pageSize,users);
     }
 
 }

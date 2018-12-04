@@ -39,6 +39,11 @@ public class SubcontractorResumeServiceImpl implements SubcontractorResumeServic
     }
 
     @Override
+    public Integer listSubcontractorResumeForPageSize(String subcontractorName, String projectEvaluation, String gm) {
+        return subcontractorResumeMapper.listForPageSize(subcontractorName,projectEvaluation,gm);
+    }
+
+    @Override
     public SubcontractorResume getDetails(Long subcontractorResumeId) {
         return subcontractorResumeMapper.getDetails(subcontractorResumeId);
     }

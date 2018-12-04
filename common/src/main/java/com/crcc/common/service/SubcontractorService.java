@@ -15,6 +15,9 @@ public interface SubcontractorService {
                                           String shareEvaluation,String groupEvaluation,String companyEvaluation,
                                           Integer offset,Integer length);
 
+    Integer listSubcontractorSize(String name,Long typeId,Long professionType,Integer minAmount,Integer maxAmount,
+                                  String shareEvaluation,String groupEvaluation,String companyEvaluation);
+
 
 
 }

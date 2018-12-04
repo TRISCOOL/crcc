@@ -102,7 +102,10 @@ public class FileController extends BaseController{
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<DocumentManagement> documentManagementList = documentService.listFile(fileName,fileType,
                 offset*pageSize,pageSize);
-        return ResponseVo.ok(documentManagementList);
+
+        Integer total = documentService.listFileSize(fileName,fileType);
+
+        return ResponseVo.ok(total,page,pageSize,documentManagementList);
     }
 
     /**
@@ -117,6 +120,9 @@ public class FileController extends BaseController{
                                         @RequestParam("page")Integer page,@RequestParam("pageSize")Integer pageSize){
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<DocumentManagement> documentManagements = documentService.listReferences(fileName,offset*pageSize,pageSize);
-        return ResponseVo.ok(documentManagements);
+
+        Integer total= documentService.listReferencesSize(fileName);
+
+        return ResponseVo.ok(total,page,pageSize,documentManagements);
     }
 }

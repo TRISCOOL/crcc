@@ -14,9 +14,7 @@ import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @SuppressWarnings("ALL")
 @Service
@@ -67,6 +65,7 @@ public class UserServiceImpl implements UserService{
             List<Resouce> resouceList = listResourceForUser(existUser.getId());
             user.setResouces(resouceList);
             user.setPermissions(listPermissionForUser(resouceList));
+            user.setPermissionsMap(mapPermission(resouceList));
             redisService.setStr(token,Utils.toJson(user));
             return user;
         }
@@ -181,6 +180,11 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
+    public Integer listUserSize(String projectCode, String projectName, Integer disable) {
+        return userMapper.listUserSize(projectCode,projectName,disable);
+    }
+
+    @Override
     public List<Resouce> listResourceForUser(Long userId) {
 
         Role role = roleService.findRoleByUserId(userId);
@@ -190,6 +194,31 @@ public class UserServiceImpl implements UserService{
         }
 
         return null;
+    }
+
+    private Map<String,List<String>> mapPermission(List<Resouce> resouces){
+        if (resouces == null)
+            return null;
+
+        if (resouces.size() <= 0){
+            return null;
+        }
+
+        //enum('menu','button')
+        Map<String,List<String>> result = new HashMap<String, List<String>>();
+        List<String> menu = new ArrayList<String>();
+        List<String> button = new ArrayList<String>();
+        for (Resouce resouce : resouces){
+            if (resouce.getType().equals("menu")){
+                menu.add(resouce.getPermission());
+            }else if (resouce.getType().equals("button")) {
+                button.add(resouce.getPermission());
+            }
+        }
+        result.put("menu",menu);
+        result.put("button",button);
+
+        return result;
     }
 
     @Override

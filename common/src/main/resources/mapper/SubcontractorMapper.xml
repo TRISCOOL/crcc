@@ -571,4 +571,39 @@
       limit #{offset},#{length}
     </if>
   </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+     COUNT(*)
+    FROM
+    subcontractor s
+    LEFT JOIN
+    dict d1 ON s.taxpayer_type_id = d1.id
+    LEFT JOIN
+    dict d2 on s.type_id = d2.id
+    LEFT JOIN
+    dict d3 on s.profession_type = d3.id
+    WHERE 1=1
+    <if test="name != null">
+      AND s.name LIKE concat('%',#{name},'%')
+    </if>
+    <if test="typeId != null">
+      AND s.type_id = #{typeId}
+    </if>
+    <if test="professionType != null">
+      AND s.profession_type = #{professionType}
+    </if>
+    <if test="minAmount != null and maxAmount != null">
+      AND s.registered_capital &lt;= #{maxAmount} AND s.registered_capital &gt;= #{minAmount}
+    </if>
+    <if test="shareEvaluation != null">
+      AND s.share_evaluation = #{shareEvaluation}
+    </if>
+    <if test="groupEvaluation != null">
+      AND s.group_evaluation = #{groupEvaluation}
+    </if>
+    <if test="companyEvaluation != null">
+      AND s.company_evaluation = #{companyEvaluation}
+    </if>
+  </select>
 </mapper>

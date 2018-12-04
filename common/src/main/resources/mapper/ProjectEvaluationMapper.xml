@@ -425,4 +425,33 @@
       limit #{offset},#{length}
     </if>
   </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+     COUNT(*)
+    FROM
+    project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND pe.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="evaluationStatus != null">
+      AND pe.evaluation_status = #{evaluationStatus}
+    </if>
+    <if test="projectStatus != null">
+      AND pe.project_status = #{projectStatus}
+    </if>
+    <if test="isSign != null">
+      AND pe.is_sign = #{isSign}
+    </if>
+    <if test="isResponsibility != null and isResponsibility == 1">
+      AND pe.responsibility_time IS NOT NULL
+    </if>
+    <if test="isResponsibility != null and isResponsibility == 0">
+      AND pe.responsibility_time IS NULL
+    </if>
+  </select>
 </mapper>

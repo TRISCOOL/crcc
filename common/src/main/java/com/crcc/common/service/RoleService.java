@@ -20,5 +20,7 @@ public interface RoleService {
 
     List<Role> listAllRole(String name,Integer offset,Integer length);
 
+    Integer listAllRoleSize(String name);
+
     Role findRoleByUserId(Long userId);
 }

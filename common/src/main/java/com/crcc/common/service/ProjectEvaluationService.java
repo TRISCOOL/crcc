@@ -13,5 +13,8 @@ public interface ProjectEvaluationService {
     List<ProjectEvaluation> listForPage(Long projectId,String projectName,String evaluationStatus,String projectStatus,String isSign,
                                         Integer isResponsibility,Integer offset,Integer length);
 
+    Integer listForPageSize(Long projectId,String projectName,String evaluationStatus,String projectStatus,String isSign,
+                            Integer isResponsibility);
+
     ProjectEvaluation getDetails(Long id);
 }

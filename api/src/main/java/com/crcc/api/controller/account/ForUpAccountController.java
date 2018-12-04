@@ -99,7 +99,10 @@ public class ForUpAccountController extends BaseController{
         List<MeteringAccount> meteringAccounts = forUpAccountService.listForPage(projectId,projectName,meteringTime,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(meteringAccounts);
+        Integer total = forUpAccountService.listForPageSize(projectId,projectName,meteringTime,
+                minPayProportion,maxPayProportion,minProductionValue,maxProductionValue);
+
+        return ResponseVo.ok(total,page,pageSize,meteringAccounts);
 
     }
 

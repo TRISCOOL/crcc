@@ -18,4 +18,8 @@ public interface ForUpAccountService {
                                       Double minProductionValue,Double maxProductionValue,
                                       Integer offset,Integer length);
 
+    Integer listForPageSize(Long projectId,String projectName,Date meteringNum,
+                        Double minPayProportion,Double maxPayProportion,
+                        Double minProductionValue,Double maxProductionValue);
+
 }

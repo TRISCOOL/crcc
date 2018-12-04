@@ -2,6 +2,7 @@ package com.crcc.common.model;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class User {
     private Long id;
@@ -54,6 +55,16 @@ public class User {
 
     private String roleName;
     private String roleDescription;
+
+    private Map<String,List<String>> permissionsMap;
+
+    public Map<String, List<String>> getPermissionsMap() {
+        return permissionsMap;
+    }
+
+    public void setPermissionsMap(Map<String, List<String>> permissionsMap) {
+        this.permissionsMap = permissionsMap;
+    }
 
     public String getRoleName() {
         return roleName;

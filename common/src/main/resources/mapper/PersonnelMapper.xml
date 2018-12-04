@@ -504,4 +504,20 @@
       limit #{offset},#{length}
     </if>
   </select>
+
+  <select id="listForPageSize" resultType="com.crcc.common.model.Personnel">
+    SELECT COUNT(*) FROM personnel WHERE 1=1
+    <if test="name != null">
+      AND `name` LIKE concat('%',#{name},'%')
+    </if>
+    <if test="projectName != null">
+      AND project_name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="position != null">
+      AND `position` LIKE concat('%',#{position},'%')
+    </if>
+    <if test="workTime != null">
+      AND work_time = #{workTime},
+    </if>
+  </select>
 </mapper>

@@ -85,7 +85,10 @@ public class ManagerPeopleController extends BaseController{
         Integer offset = page - 1<0 ? 0:page-1;
 
         List<Personnel> personnels = personnelService.listForPage(name,projectName,position,workTime,offset*pageSize,pageSize);
-        return ResponseVo.ok(personnels);
+
+        Integer total = personnelService.listForPageSize(name,projectName,position,workTime);
+
+        return ResponseVo.ok(total,page,pageSize,personnels);
     }
 
     /**

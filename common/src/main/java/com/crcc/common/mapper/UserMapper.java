@@ -25,4 +25,7 @@ public interface UserMapper {
     List<User> listUser(@Param("code")String code,@Param("projectName")String projectName,
                         @Param("disable")Integer disable,@Param("offset")Integer offset,
                         @Param("length")Integer length);
+
+    Integer listUserSize(@Param("code")String code,@Param("projectName")String projectName,
+                         @Param("disable")Integer disable);
 }

@@ -20,5 +20,7 @@ public interface RoleMapper {
 
     List<Role> listRoleForPage(@Param("name")String name,@Param("offset")Integer offset,@Param("length")Integer length);
 
+    Integer listRoleForPageSize(@Param("name")String name);
+
     Role findRoleByUserId(@Param("userId")Long userId);
 }

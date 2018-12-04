@@ -128,6 +128,11 @@ public class RoleServiceImpl implements RoleService{
     }
 
     @Override
+    public Integer listAllRoleSize(String name) {
+        return roleMapper.listRoleForPageSize(name);
+    }
+
+    @Override
     public Role findRoleByUserId(Long userId) {
         return roleMapper.findRoleByUserId(userId);
     }

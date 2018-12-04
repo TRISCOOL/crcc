@@ -45,4 +45,10 @@ public class SubcontractorServiceImpl implements SubcontractorService{
         return subcontractorMapper.listForPage(name,typeId,professionType,minAmount,maxAmount,shareEvaluation,
                 groupEvaluation,companyEvaluation,offset,length);
     }
+
+    @Override
+    public Integer listSubcontractorSize(String name, Long typeId, Long professionType, Integer minAmount, Integer maxAmount, String shareEvaluation, String groupEvaluation, String companyEvaluation) {
+        return subcontractorMapper.listForPageSize(name,typeId,professionType,minAmount,maxAmount,shareEvaluation,
+                groupEvaluation,companyEvaluation);
+    }
 }

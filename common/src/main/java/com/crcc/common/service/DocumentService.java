@@ -13,6 +13,10 @@ public interface DocumentService {
 
     List<DocumentManagement> listFile(String fileName,String fileType,Integer offset,Integer length);
 
+    Integer listFileSize(String fileName,String fileType);
+
+    Integer listReferencesSize(String fileName);
+
     List<DocumentManagement> listReferences(String fileName,Integer offset,Integer length);
 
 }

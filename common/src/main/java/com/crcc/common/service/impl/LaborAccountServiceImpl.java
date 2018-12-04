@@ -43,6 +43,11 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
+    public Integer listLaborAccountSize(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval) {
+        return laborAccountMapper.listForPageSize(projectId,projectName,subcontractorName,status,approval);
+    }
+
+    @Override
     public List<LaborAccount> onlyLIst() {
         return laborAccountMapper.onlyList();
     }

@@ -55,6 +55,12 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,offset,length);
     }
 
+    @Override
+    public Integer listForPageSize(Long projectId, String projectName, Date meteringNum, Double minPayProportion, Double maxPayProportion, Double minProductionValue, Double maxProductionValue) {
+        return meteringAccountMapper.listMeteringAccountForPageSize(projectId,projectName,meteringNum,
+                minPayProportion,maxPayProportion,minProductionValue,maxProductionValue);
+    }
+
     private void supplement(MeteringAccount meteringAccount){
         if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getTax() != null){
             meteringAccount.setValuationAmountNotTax(computerNotTax(meteringAccount.getValuationAmountTax(),

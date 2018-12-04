@@ -327,4 +327,27 @@
       limit #{offset},#{length}
     </if>
   </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+     COUNT(*)
+    FROM
+    inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="subcontractorName != null">
+      AND ic.subcontractor_name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="valuationType != null">
+      AND ic.valuation_type = #{valuationType}
+    </if>
+    <if test="valuationTime != null">
+      AND ic.valuation_time = #{valuationTime}
+    </if>
+  </select>
 </mapper>

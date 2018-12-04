@@ -26,5 +26,10 @@ public interface LaborAccountMapper {
                                    @Param("approvalFiling") Integer approvalFiling,
                                    @Param("offset") Integer offset,@Param("length") Integer length);
 
+    Integer listForPageSize(@Param("projectId")Long projectId, @Param("projectName") String projectName,
+                            @Param("subcontractorName") String subcontractorName,
+                            @Param("status") Integer status,
+                            @Param("approvalFiling") Integer approvalFiling);
+
     List<LaborAccount> onlyList();
 }

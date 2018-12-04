@@ -13,5 +13,8 @@ public interface SubcontractorResumeService {
     List<SubcontractorResume> listSubcontractorResumeForPage(String subcontractorName,String projectEvaluation,
                                                              String gm,Integer offset,Integer length);
 
+    Integer listSubcontractorResumeForPageSize(String subcontractorName,String projectEvaluation,
+                                           String gm);
+
     SubcontractorResume getDetails(Long subcontractorResumeId);
 }

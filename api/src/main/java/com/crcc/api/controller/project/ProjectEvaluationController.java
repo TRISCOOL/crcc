@@ -89,7 +89,10 @@ public class ProjectEvaluationController extends BaseController{
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
                 projectStatus,isSign,isResponsibility,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(projectEvaluations);
+        Integer total = projectEvaluationService.listForPageSize(projectId,projectName,evaluationStatus,
+                projectStatus,isSign,isResponsibility);
+
+        return ResponseVo.ok(total,page,pageSize,projectEvaluations);
     }
 
     /**

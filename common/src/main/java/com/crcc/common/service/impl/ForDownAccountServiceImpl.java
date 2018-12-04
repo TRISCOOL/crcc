@@ -38,6 +38,11 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     }
 
     @Override
+    public Integer listForPageSize(Long projectId, String projectName, String subcontractorName, Integer valuationType, Date valuationTime) {
+        return inspectionAccountMapper.listForPageSize(projectId,projectName,subcontractorName,valuationType,valuationTime);
+    }
+
+    @Override
     public InspectionAccount getDetails(Long inspectionAccountId) {
         return inspectionAccountMapper.getDetails(inspectionAccountId);
     }

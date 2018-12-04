@@ -21,6 +21,8 @@ public interface UserService {
 
     List<User> listUser(String projectCode,String projectName,Integer disable,Integer offset,Integer length);
 
+    Integer listUserSize(String projectCode,String projectName,Integer disable);
+
     List<Resouce> listResourceForUser(Long userId);
 
     List<String> listPermissionForUser(List<Resouce> list);

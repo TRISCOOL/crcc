@@ -43,6 +43,16 @@ public class DocumentServiceImpl implements DocumentService{
     }
 
     @Override
+    public Integer listFileSize(String fileName, String fileType) {
+        return documentManagementMapper.listForFileSize(fileName,fileType);
+    }
+
+    @Override
+    public Integer listReferencesSize(String fileName) {
+        return documentManagementMapper.listForReferencesSize(fileName);
+    }
+
+    @Override
     public List<DocumentManagement> listReferences(String fileName, Integer offset, Integer length) {
         return documentManagementMapper.listForReferences(fileName,offset,length);
     }

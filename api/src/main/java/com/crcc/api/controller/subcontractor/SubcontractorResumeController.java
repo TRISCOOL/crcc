@@ -88,7 +88,10 @@ public class SubcontractorResumeController extends BaseController{
 
         List<SubcontractorResume> resumeList = subcontractorResumeService.listSubcontractorResumeForPage(
                 subcontractorName,projectEvaluation,gm,offset*pageSize,pageSize);
-        return ResponseVo.ok(resumeList);
+
+        Integer total = subcontractorResumeService.listSubcontractorResumeForPageSize(subcontractorName,projectEvaluation,gm);
+
+        return ResponseVo.ok(total,page,pageSize,resumeList);
     }
 
     /**

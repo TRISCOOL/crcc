@@ -41,6 +41,11 @@ public class ProjectEvaluationServiceImpl implements ProjectEvaluationService{
     }
 
     @Override
+    public Integer listForPageSize(Long projectId, String projectName, String evaluationStatus, String projectStatus, String isSign, Integer isResponsibility) {
+        return projectEvaluationMapper.listForPageSize(projectId,projectName,evaluationStatus,projectStatus,isSign,isResponsibility);
+    }
+
+    @Override
     public ProjectEvaluation getDetails(Long id) {
         return projectEvaluationMapper.getDetailsById(id);
     }

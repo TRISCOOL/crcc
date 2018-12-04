@@ -14,5 +14,8 @@ public interface ForDownAccountService {
     List<InspectionAccount> listForPage(Long projectId,String projectName, String subcontractorName, Integer valuationType,
                                         Date valuationTime,Integer offset,Integer length);
 
+    Integer listForPageSize(Long projectId,String projectName, String subcontractorName, Integer valuationType,
+                            Date valuationTime);
+
     InspectionAccount getDetails(Long inspectionAccountId);
 }

@@ -24,5 +24,8 @@ public interface ProjectMapper {
                                      @Param("status")Integer status,@Param("dictId")Long dictId,
                                      @Param("projectName")String projectName,@Param("code")String code);
 
+    Integer listProjectForPageSize(@Param("status")Integer status,@Param("dictId")Long dictId,
+                                   @Param("projectName")String projectName,@Param("code")String code);
+
     Project getDetails(@Param("projectId")Long projectId);
 }

@@ -27,4 +27,11 @@ public interface SubcontractorMapper {
                                     @Param("groupEvaluation") String groupEvaluation,
                                     @Param("companyEvaluation") String companyEvaluation,
                                     @Param("offset") Integer offset,@Param("length") Integer length);
+
+    Integer listForPageSize(@Param("name") String name,@Param("typeId") Long typeId,
+                            @Param("professionType") Long professionType,@Param("minAmount") Integer minAmount,
+                            @Param("maxAmount") Integer maxAmount,
+                            @Param("shareEvaluation") String shareEvaluation,
+                            @Param("groupEvaluation") String groupEvaluation,
+                            @Param("companyEvaluation") String companyEvaluation);
 }

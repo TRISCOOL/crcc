@@ -245,6 +245,30 @@
     </if>
   </select>
 
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    subcontractor_resume sr
+    LEFT JOIN
+    labor_account la ON sr.labor_account_id = la.id
+    LEFT JOIN
+    subcontractor s ON sr.subcontractor_id = s.id
+    LEFT JOIN
+    project p ON sr.project_id = p.id
+    WHERE 1=1
+    <if test="subcontractorName != null">
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="companyEvaluation != null">
+      AND sr.company_evaluation LIKE concat('%',#{companyEvaluation},'%')
+    </if>
+    <if test="constructionScale != null">
+      AND sr.construction_scale = #{constructionScale}
+    </if>
+  </select>
+
+
   <select id="getDetails" resultType="com.crcc.common.model.SubcontractorResume">
     SELECT
       sr.*,

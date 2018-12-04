@@ -438,4 +438,29 @@
       limit #{offset},#{length}
     </if>
   </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    labor_account la
+    LEFT JOIN
+    project p ON la.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND la.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE CONCAT('%',#{projectName}, '%')
+    </if>
+    <if test="subcontractorName != null">
+      AND la.subcontractor_name LIKE CONCAT('%',#{subcontractorName}, '%')
+    </if>
+    <if test="status != null">
+      AND la.status = #{status}
+    </if>
+    <if test="approvalFiling != null">
+      AND la.approval_filing = #{approvalFiling}
+    </if>
+  </select>
 </mapper>

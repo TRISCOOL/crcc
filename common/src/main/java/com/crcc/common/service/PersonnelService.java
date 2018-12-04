@@ -12,5 +12,7 @@ public interface PersonnelService {
     List<Personnel> listForPage(String name,String projectName,String position,Integer workTime,
                                 Integer offset,Integer length);
 
+    Integer listForPageSize(String name,String projectName,String position,Integer workTime);
+
     Personnel getDetails(Long personnelId);
 }

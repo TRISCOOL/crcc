@@ -38,6 +38,11 @@ public class PersonnelServiceImpl implements PersonnelService{
     }
 
     @Override
+    public Integer listForPageSize(String name, String projectName, String position, Integer workTime) {
+        return personnelMapper.listForPageSize(name,projectName,position,workTime);
+    }
+
+    @Override
     public Personnel getDetails(Long personnelId) {
         return personnelMapper.selectByPrimaryKey(personnelId);
     }

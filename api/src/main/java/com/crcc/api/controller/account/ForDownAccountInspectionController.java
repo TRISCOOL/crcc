@@ -92,7 +92,10 @@ public class ForDownAccountInspectionController extends BaseController{
         List<InspectionAccount> inspectionAccounts = forDownAccountService.listForPage(projectId,projectName,subcontractorName,
                 valuationType,valuationTime,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(inspectionAccounts);
+        Integer total = forDownAccountService.listForPageSize(projectId,projectName,subcontractorName,
+                valuationType,valuationTime);
+
+        return ResponseVo.ok(total,page,pageSize,inspectionAccounts);
     }
 
     /**

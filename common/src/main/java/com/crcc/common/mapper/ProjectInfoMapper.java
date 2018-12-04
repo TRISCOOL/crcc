@@ -30,5 +30,15 @@ public interface ProjectInfoMapper {
                                             @Param("realContractEndTime")Date realContractEndTime,
                                             @Param("offset")Integer offset,@Param("length")Integer length);
 
+    Integer projectInfoListByUserSize(@Param("projectId")Long projectId,
+                                      @Param("projectName")String projectName, @Param("status")Integer status,
+                                      @Param("projectManager")String projectManager,
+                                      @Param("projectSecretary")String projectSecretary,
+                                      @Param("chiefEngineer")String chiefEngineer,
+                                      @Param("contractStartTime")Date contractStartTime,
+                                      @Param("contractEndTime")Date contractEndTime,
+                                      @Param("realContractStartTime")Date realContractStartTime,
+                                      @Param("realContractEndTime")Date realContractEndTime);
+
     ProjectInfo getDetails(@Param("projectInfoId")Long projectInfoId);
 }

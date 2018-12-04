@@ -21,6 +21,10 @@ public interface DocumentManagementMapper {
     List<DocumentManagement> listForReferences(@Param("fileName") String fileName,@Param("offset")Integer offset,
                                                @Param("length")Integer length);
 
+    Integer listForReferencesSize(@Param("fileName") String fileName);
+
     List<DocumentManagement> listForFile(@Param("fileName")String fileName,@Param("fileType")String fileType,
                                          @Param("offset")Integer offset,@Param("length")Integer length);
+
+    Integer listForFileSize(@Param("fileName")String fileName,@Param("fileType")String fileType);
 }

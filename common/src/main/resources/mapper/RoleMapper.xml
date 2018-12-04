@@ -151,6 +151,16 @@
     </if>
   </select>
 
+  <select id="listRoleForPageSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    role
+    <if test="name != null">
+      WHERE `name` LIKE CONCAT('%', #{name}, '%')
+    </if>
+  </select>
+
   <select id="findRoleByUserId" resultType="com.crcc.common.model.Role">
     SELECT *FROM user_role_rel rel LEFT JOIN role r ON rel.role_id = r.id WHERE rel.user_id = #{userId}
   </select>

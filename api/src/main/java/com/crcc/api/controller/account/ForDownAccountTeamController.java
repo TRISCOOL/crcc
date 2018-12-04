@@ -97,7 +97,10 @@ public class ForDownAccountTeamController extends BaseController{
         List<LaborAccount> laborAccounts = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
                 status,approval,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(laborAccounts);
+        Integer total = laborAccountService.listLaborAccountSize(projectId,projectName,subcontractorName,
+                status,approval);
+
+        return ResponseVo.ok(total,page,pageSize,laborAccounts);
     }
 
     /**

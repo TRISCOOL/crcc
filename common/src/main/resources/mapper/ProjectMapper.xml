@@ -163,6 +163,28 @@
     </if>
   </select>
 
+  <select id="listProjectForPageSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+      project p
+    LEFT JOIN
+      dict d ON p.dict_id = d.id
+    WHERE 1=1
+    <if test="projectName != null">
+      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="code != null">
+      AND p.code LIKE CONCAT('%', #{code}, '%')
+    </if>
+    <if test="dictId != null">
+      AND d.id = #{dictId}
+    </if>
+    <if test="status != null">
+      AND p.status = #{status}
+    </if>
+  </select>
+
   <select id="listProjectForPage" resultType="com.crcc.common.model.Project">
     SELECT
       p.*, d.id AS dictId, d.value AS projectType

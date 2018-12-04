@@ -164,6 +164,21 @@
     </if>
   </select>
 
+  <select id="listForFileSize" resultType="java.lang.Integer">
+    SELECT
+     count(*)
+    FROM
+    document_management
+    WHERE `type` = 1
+    <if test="fileName != null">
+      AND `name` LIKE concat('%',#{fileName},'%')
+    </if>
+    <if test="fileType != null">
+      AND file_type = #{fileType}
+    </if>
+    AND file_type IS NOT NULL
+  </select>
+
   <select id="listForReferences" resultType="com.crcc.common.model.DocumentManagement">
     SELECT
       *
@@ -178,5 +193,17 @@
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>
+  </select>
+
+  <select id="listForReferencesSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    document_management
+    WHERE `type` = 0
+    <if test="fileName != null">
+      AND `name` LIKE concat('%',#{fileName},'%')
+    </if>
+    AND file_type IS NULL
   </select>
 </mapper>

@@ -65,7 +65,10 @@ public class RoleController extends BaseController{
         Integer offset = page-1 < 0?0:page-1;
 
         List<Role> roles = roleService.listAllRole(name,offset*pageSize,pageSize);
-        return ResponseVo.ok(roles);
+
+        Integer total = roleService.listAllRoleSize(name);
+
+        return ResponseVo.ok(total,page,pageSize,roles);
     }
 
     /**

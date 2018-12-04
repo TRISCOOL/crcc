@@ -15,5 +15,7 @@ public interface LaborAccountService {
     List<LaborAccount> listLaborAccount(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval,
                                         Integer offset,Integer length);
 
+    Integer listLaborAccountSize(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval);
+
     List<LaborAccount> onlyLIst();
 }

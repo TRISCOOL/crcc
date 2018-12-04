@@ -8,10 +8,45 @@ public class ResponseVo {
     private boolean status;
     private Object entity;
 
+    private PageVo pagination;
+    private Object list;
+
+    public PageVo getPagination() {
+        return pagination;
+    }
+
+    public void setPagination(PageVo pagination) {
+        this.pagination = pagination;
+    }
+
+    public Object getList() {
+        return list;
+    }
+
+    public void setList(Object list) {
+        this.list = list;
+    }
+
     public static ResponseVo ok(){
         ResponseVo responseVo = new ResponseVo();
         responseVo.setCode("200");
         responseVo.setStatus(true);
+        return responseVo;
+    }
+
+    public static ResponseVo ok(Integer total,Integer current,Integer pageSize,Object object){
+        ResponseVo responseVo = new ResponseVo();
+        PageVo page = new PageVo();
+        page.setCurrent(current);
+        page.setPageSize(pageSize);
+        page.setTotal(total);
+
+        responseVo.setStatus(true);
+        responseVo.setCode(ResponseCode.OK.getCode());
+        responseVo.setList(object);
+        responseVo.setPagination(page);
+        responseVo.setMessage(ResponseCode.OK.getMessage());
+
         return responseVo;
     }
 

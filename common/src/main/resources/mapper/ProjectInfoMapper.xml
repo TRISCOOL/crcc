@@ -523,6 +523,40 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="projectInfoListByUserSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+      project_info info
+    LEFT JOIN
+      project p ON info.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND p.id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="status != null">
+      AND info.status = #{status}
+    </if>
+    <if test="projectManager != null">
+      AND info.project_manager = #{projectManager}
+    </if>
+    <if test="projectSecretary != null">
+      AND info.project_secretary = #{projectSecretary}
+    </if>
+    <if test="chiefEngineer != null">
+      AND info.chief_engineer = #{chiefEngineer}
+    </if>
+    <if test="contractStartTime != null and contractEndTime">
+      AND info.contract_start_time &lt;= #{contractStartTime} AND info.contract_start_time &gt;= #{contractEndTime}
+    </if>
+    <if test="realContractStartTime != null and realContractEndTime != null">
+      AND info.real_contract_start_time &lt;= #{realContractStartTime} AND info.real_contract_end_time &gt;= #{realContractEndTime}
+    </if>
+  </select>
+
     <select id="projectInfoListByUser" resultType="com.crcc.common.model.ProjectInfo">
         SELECT
           info.*,p.name as projectName,p.code

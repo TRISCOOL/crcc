@@ -95,7 +95,10 @@ public class SubcontractorController extends BaseController{
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,typeId,professionType,minAmount,
                 maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(subcontractors);
+        Integer total = subcontractorService.listSubcontractorSize(name,typeId,professionType,minAmount,
+                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation);
+
+        return ResponseVo.ok(total,page,pageSize,subcontractors);
 
     }
 

@@ -62,6 +62,11 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
+    public Integer listProjectForPageSize(String code, String name, Long dictId, Integer status) {
+        return projectMapper.listProjectForPageSize(status,dictId,name,code);
+    }
+
+    @Override
     public List<Project> listProjectForProjectUser(Long userId) {
         return projectMapper.findProjectsByUserId(userId);
     }
@@ -102,10 +107,17 @@ public class ProjectServiceImpl implements ProjectService{
     }
 
     @Override
-    public List<ProjectInfo> listProjectInfoForUser(Long userId, String projectName, Integer status, String projectManager, String projectSecretary, String chiefEngineer, Date contractStartTime, Date contractEndTime, Date realContractStartTime, Date realContractEndTime, Integer offset, Integer length) {
-        return projectInfoMapper.projectInfoListByUser(userId,projectName,status,projectManager,
+    public List<ProjectInfo> listProjectInfoForUser(Long projectId, String projectName, Integer status, String projectManager, String projectSecretary, String chiefEngineer, Date contractStartTime, Date contractEndTime, Date realContractStartTime, Date realContractEndTime, Integer offset, Integer length) {
+        return projectInfoMapper.projectInfoListByUser(projectId,projectName,status,projectManager,
                 projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,offset,length);
+    }
+
+    @Override
+    public Integer listProjectInfoForUserSize(Long projectId, String projectName, Integer status, String projectManager, String projectSecretary, String chiefEngineer, Date contractStartTime, Date contractEndTime, Date realContractStartTime, Date realContractEndTime) {
+        return projectInfoMapper.projectInfoListByUserSize(projectId,projectName,status,projectManager,
+                projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
+                realContractEndTime);
     }
 
     private String createCodeForProject(){

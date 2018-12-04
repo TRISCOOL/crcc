@@ -122,7 +122,9 @@ public class ProjectController extends BaseController{
         List<Project> projectList = projectService.listProjectForPage(code,projectName, projectType,status,
                 offset*pageSize,pageSize);
 
-        return ResponseVo.ok(projectList);
+        Integer total = projectService.listProjectForPageSize(code,projectName, projectType,status);
+
+        return ResponseVo.ok(total,page,pageSize,projectList);
     }
 
     /**
@@ -253,7 +255,11 @@ public class ProjectController extends BaseController{
                 projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,offset*pageSize,pageSize);
 
-        return ResponseVo.ok(projectInfoList);
+        Integer total = projectService.listProjectInfoForUserSize(projectId,projectName,status,projectManager,
+                projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
+                realContractEndTime);
+
+        return ResponseVo.ok(total,page,pageSize,projectInfoList);
 
     }
 
