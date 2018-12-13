@@ -387,17 +387,27 @@
 
   <select id="getDetailsById" resultType="com.crcc.common.model.ProjectEvaluation">
     SELECT
-      pe.*,p.name AS projectName
+      pe.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
-      project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+      project_evaluation pe
+    LEFT JOIN
+      project p ON pe.project_id = p.id
+    LEFT JOIN
+      `user` cu ON pe.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON pe.update_user = uu.id
     WHERE pe.id = #{id}
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.ProjectEvaluation">
     SELECT
-      pe.*,p.name AS projectName
+      pe.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+    LEFT JOIN
+      `user` cu ON pe.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON pe.update_user = uu.id
     WHERE 1=1
     <if test="projectId != null">
       AND pe.project_id = #{projectId}

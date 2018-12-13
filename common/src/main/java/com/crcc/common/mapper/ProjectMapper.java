@@ -20,6 +20,8 @@ public interface ProjectMapper {
 
     List<Project> findProjectsByUserId(@Param("userId")Long userId);
 
+    List<Project> onlyList();
+
     List<Project> listProjectForPage(@Param("offset")Integer offset,@Param("length")Integer length,
                                      @Param("status")Integer status,@Param("dictId")Long dictId,
                                      @Param("projectName")String projectName,@Param("code")String code);

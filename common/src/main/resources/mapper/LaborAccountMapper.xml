@@ -400,9 +400,13 @@
 
   <select id="getDetailsById" resultType="com.crcc.common.model.LaborAccount">
     SELECT
-      la.*,p.name AS projectName
+      la.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       labor_account la LEFT JOIN project p ON la.project_id = p.id
+    LEFT JOIN
+      `user` cu ON la.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON la.update_user = uu.id
     WHERE la.id = #{laborAccountId}
   </select>
 
@@ -412,11 +416,15 @@
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
     SELECT
-      la.*, p.name AS projectName
+      la.*, p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       labor_account la
     LEFT JOIN
       project p ON la.project_id = p.id
+    LEFT JOIN
+      `user` cu ON la.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON la.update_user = uu.id
     WHERE 1=1
     <if test="projectId != null">
       AND la.project_id = #{projectId}

@@ -24,6 +24,25 @@ public class Role {
 
     private List<Resouce> resouces;
 
+    private String createUserStr;
+    private String updateUserStr;
+
+    public String getCreateUserStr() {
+        return createUserStr;
+    }
+
+    public void setCreateUserStr(String createUserStr) {
+        this.createUserStr = createUserStr;
+    }
+
+    public String getUpdateUserStr() {
+        return updateUserStr;
+    }
+
+    public void setUpdateUserStr(String updateUserStr) {
+        this.updateUserStr = updateUserStr;
+    }
+
     public List<Resouce> getResouces() {
         return resouces;
     }

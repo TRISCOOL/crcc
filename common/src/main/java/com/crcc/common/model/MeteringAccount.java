@@ -48,6 +48,35 @@ public class MeteringAccount {
 
     private BigDecimal productionValue;
 
+    private String createUserStr;
+    private String updateUserStr;
+
+    private BigDecimal prepaymentAmount;
+
+    public BigDecimal getPrepaymentAmount() {
+        return prepaymentAmount;
+    }
+
+    public void setPrepaymentAmount(BigDecimal prepaymentAmount) {
+        this.prepaymentAmount = prepaymentAmount;
+    }
+
+    public String getCreateUserStr() {
+        return createUserStr;
+    }
+
+    public void setCreateUserStr(String createUserStr) {
+        this.createUserStr = createUserStr;
+    }
+
+    public String getUpdateUserStr() {
+        return updateUserStr;
+    }
+
+    public void setUpdateUserStr(String updateUserStr) {
+        this.updateUserStr = updateUserStr;
+    }
+
     public BigDecimal getProductionValue() {
         return productionValue;
     }

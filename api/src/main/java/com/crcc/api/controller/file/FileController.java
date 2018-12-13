@@ -7,7 +7,9 @@ import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.DocumentManagement;
 import com.crcc.common.model.User;
 import com.crcc.common.service.DocumentService;
+import com.qiniu.util.Auth;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
@@ -21,6 +23,20 @@ public class FileController extends BaseController{
 
     @Autowired
     private DocumentService documentService;
+
+    @Value("${file.qiniu.ACCESS_KEY}")
+    String accessKey;
+
+    @Value("${file.qiniu.SECRET_KEY}")
+    String secretKey;
+
+    @Value("${file.qiniu.FILE_URL}")
+    String fileUrl;
+    @Value("${file.qiniu.UP_HOST}")
+    String upHost;
+
+    private static final String BUCKET = "crcc-cb";//7niu文件夹的名字
+
 
     /**
      * 新增文件预览
@@ -124,5 +140,15 @@ public class FileController extends BaseController{
         Integer total= documentService.listReferencesSize(fileName);
 
         return ResponseVo.ok(total,page,pageSize,documentManagements);
+    }
+
+    @GetMapping("/qiniu_auth/v1.1")
+    public ResponseVo getQiNiuToken(){
+
+        Auth auth = Auth.create(accessKey,secretKey);
+        String token = auth.uploadToken(BUCKET);
+        Map<String,String> result = new HashMap<String, String>();
+        result.put("token",token);
+        return ResponseVo.ok(result);
     }
 }

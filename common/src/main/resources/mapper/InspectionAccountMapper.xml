@@ -295,17 +295,25 @@
 
   <select id="getDetails" resultType="com.crcc.common.model.InspectionAccount">
      SELECT
-      ic.*,p.name AS projectName
+      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    LEFT JOIN
+      `user` cu ON ic.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON ic.update_user = uu.id
     WHERE ic.id = #{inspectionAccountId}
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.InspectionAccount">
     SELECT
-      ic.*,p.name AS projectName
+      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    LEFT JOIN
+      `user` cu ON ic.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON ic.update_user = uu.id
     WHERE 1=1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}

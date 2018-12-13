@@ -92,6 +92,25 @@ public class Subcontractor {
 
     private String professionStr;
 
+    private String createUserStr;
+    private String updateUserStr;
+
+    public String getCreateUserStr() {
+        return createUserStr;
+    }
+
+    public void setCreateUserStr(String createUserStr) {
+        this.createUserStr = createUserStr;
+    }
+
+    public String getUpdateUserStr() {
+        return updateUserStr;
+    }
+
+    public void setUpdateUserStr(String updateUserStr) {
+        this.updateUserStr = updateUserStr;
+    }
+
     public String getTaxpayerTypeStr() {
         return taxpayerTypeStr;
     }

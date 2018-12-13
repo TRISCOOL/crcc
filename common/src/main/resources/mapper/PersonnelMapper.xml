@@ -486,20 +486,28 @@
   </update>
 
   <select id="listForPage" resultType="com.crcc.common.model.Personnel">
-    SELECT *FROM personnel WHERE 1=1
+    SELECT
+     p.*,cu.name AS createUserStr,uu.name AS updateUserStr
+    FROM
+      personnel p
+    LEFT JOIN
+      `user` cu ON p.create_user = p.id
+    LEFT JOIN
+      `user` uu ON p.update_user = uu.id
+    WHERE 1=1
     <if test="name != null">
-      AND `name` LIKE concat('%',#{name},'%')
+      AND p.`name` LIKE concat('%',#{name},'%')
     </if>
     <if test="projectName != null">
-      AND project_name LIKE concat('%',#{projectName},'%')
+      AND p.project_name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="position != null">
-      AND `position` LIKE concat('%',#{position},'%')
+      AND p.`position` LIKE concat('%',#{position},'%')
     </if>
     <if test="workTime != null">
-      AND work_time = #{workTime},
+      AND p.work_time = #{workTime},
     </if>
-    ORDER BY id DESC
+    ORDER BY p.id DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>

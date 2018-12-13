@@ -61,6 +61,25 @@ public class ProjectEvaluation {
     private Date updateTime;
     private Long updateUser;
 
+    private String createUserStr;
+    private String updateUserStr;
+
+    public String getCreateUserStr() {
+        return createUserStr;
+    }
+
+    public void setCreateUserStr(String createUserStr) {
+        this.createUserStr = createUserStr;
+    }
+
+    public String getUpdateUserStr() {
+        return updateUserStr;
+    }
+
+    public void setUpdateUserStr(String updateUserStr) {
+        this.updateUserStr = updateUserStr;
+    }
+
     public Date getCreateTime() {
         return createTime;
     }

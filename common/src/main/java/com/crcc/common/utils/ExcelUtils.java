@@ -77,7 +77,7 @@ public class ExcelUtils {
             contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(info.getRealContractStartTime()));
             contentRow.createCell(6).setCellValue(DateTimeUtil.getYYYYMMDD(info.getRealContractEndTime()));
             contentRow.createCell(7).setCellValue(info.getTotalPrice().setScale(2, BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(8).setCellValue(info.getTotalPrice().setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(8).setCellValue(info.getTemporarilyPrice().setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
             contentRow.createCell(9).setCellValue(info.getProjectManager());
             contentRow.createCell(10).setCellValue(info.getProjectSecretary());
             contentRow.createCell(11).setCellValue(info.getChiefEngineer());

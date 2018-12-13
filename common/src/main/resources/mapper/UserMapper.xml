@@ -267,13 +267,17 @@
 
   <select id="listUser" resultType="com.crcc.common.model.User">
     SELECT
-      u.*,p.name AS projectName,p.code AS projectCode,p.id AS projectId
+      u.*,p.name AS projectName,p.code AS projectCode,p.id AS projectId,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       `user` u
     LEFT JOIN
       user_project_rel rel ON u.id = rel.user_id
     LEFT JOIN
       project p ON p.id = rel.project_id
+    LEFT JOIN
+      `user` cu ON u.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON u.update_user = uu.id
     WHERE 1=1
     <if test="code != null">
       AND p.code LIKE CONCAT('%', #{code}, '%')

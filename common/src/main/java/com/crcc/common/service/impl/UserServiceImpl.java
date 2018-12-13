@@ -66,6 +66,7 @@ public class UserServiceImpl implements UserService{
             user.setResouces(resouceList);
             user.setPermissions(listPermissionForUser(resouceList));
             user.setPermissionsMap(mapPermission(resouceList));
+            user.setAccount(existUser.getAccount());
             redisService.setStr(token,Utils.toJson(user));
             return user;
         }
@@ -119,7 +120,7 @@ public class UserServiceImpl implements UserService{
             throw new CrccException(ResponseCode.PARAM_ILLEGAL);
 
         if (user.getUpdateUser() == null)
-            throw new CrccException(ResponseCode.PARAM_ILLEGAL);
+            throw new CrccException(ResponseCode.AUTH_FAILED);
 
         user.setUpdateTime(new Date());
         int result = userMapper.updateByPrimaryKeySelective(user);
@@ -167,9 +168,11 @@ public class UserServiceImpl implements UserService{
 
             //填充角色
             Role role = userRoleRelMapper.findRoleByUser(userId);
-            user.setRoleId(role.getId());
-            user.setRoleDescription(role.getDescription());
-            user.setRoleName(role.getName());
+            if (role != null){
+                user.setRoleId(role.getId());
+                user.setRoleDescription(role.getDescription());
+                user.setRoleName(role.getName());
+            }
         }
         return user;
     }
@@ -190,7 +193,8 @@ public class UserServiceImpl implements UserService{
         Role role = roleService.findRoleByUserId(userId);
         if (role != null){
             Role result = roleService.getDetailsForRole(role.getId());
-            return result.getResouces();
+            if (result != null)
+                return result.getResouces();
         }
 
         return null;

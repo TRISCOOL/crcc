@@ -7,7 +7,7 @@ import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
-public class ProjectInfo {
+public class ProjectInfoPojo {
     private Long id;
 
     private Long projectId;
@@ -98,99 +98,32 @@ public class ProjectInfo {
 
     private BigDecimal temporarilyPrice;
 
-    private String manager;
-    private String secretary;
-    private String engineer;
+    private List<ProjectInfoPeople> manager;
+    private List<ProjectInfoPeople> secretary;
+    private List<ProjectInfoPeople> engineer;
 
-    private String createUserStr;
-    private String updateUserStr;
-
-    public String getCreateUserStr() {
-        return createUserStr;
-    }
-
-    public void setCreateUserStr(String createUserStr) {
-        this.createUserStr = createUserStr;
-    }
-
-    public String getUpdateUserStr() {
-        return updateUserStr;
-    }
-
-    public void setUpdateUserStr(String updateUserStr) {
-        this.updateUserStr = updateUserStr;
-    }
-
-    public String getManager() {
+    public List<ProjectInfoPeople> getManager() {
         return manager;
     }
 
-    public void setManager(String manager) {
+    public void setManager(List<ProjectInfoPeople> manager) {
         this.manager = manager;
     }
 
-    public String getSecretary() {
+    public List<ProjectInfoPeople> getSecretary() {
         return secretary;
     }
 
-    public void setSecretary(String secretary) {
+    public void setSecretary(List<ProjectInfoPeople> secretary) {
         this.secretary = secretary;
     }
 
-    public String getEngineer() {
+    public List<ProjectInfoPeople> getEngineer() {
         return engineer;
     }
 
-    public void setEngineer(String engineer) {
+    public void setEngineer(List<ProjectInfoPeople> engineer) {
         this.engineer = engineer;
-    }
-
-    public BigDecimal getTemporarilyPrice() {
-        return temporarilyPrice;
-    }
-
-    public void setTemporarilyPrice(BigDecimal temporarilyPrice) {
-        this.temporarilyPrice = temporarilyPrice;
-    }
-
-    public String getProjectName() {
-        return projectName;
-    }
-
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
-    }
-
-    public String getCode() {
-        return code;
-    }
-
-    public void setCode(String code) {
-        this.code = code;
-    }
-
-    public Long getCreateUser() {
-        return createUser;
-    }
-
-    public void setCreateUser(Long createUser) {
-        this.createUser = createUser;
-    }
-
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
-    public Long getUpdateUser() {
-        return updateUser;
-    }
-
-    public void setUpdateUser(Long updateUser) {
-        this.updateUser = updateUser;
     }
 
     public Long getId() {
@@ -214,7 +147,7 @@ public class ProjectInfo {
     }
 
     public void setProjectType(String projectType) {
-        this.projectType = projectType == null ? null : projectType.trim();
+        this.projectType = projectType;
     }
 
     public String getAddress() {
@@ -222,7 +155,7 @@ public class ProjectInfo {
     }
 
     public void setAddress(String address) {
-        this.address = address == null ? null : address.trim();
+        this.address = address;
     }
 
     public String getOrgAddress() {
@@ -230,7 +163,7 @@ public class ProjectInfo {
     }
 
     public void setOrgAddress(String orgAddress) {
-        this.orgAddress = orgAddress == null ? null : orgAddress.trim();
+        this.orgAddress = orgAddress;
     }
 
     public Integer getStatus() {
@@ -239,24 +172,14 @@ public class ProjectInfo {
 
     public void setStatus(Integer status) {
         this.status = status;
-        if (status != null){
-            switch (status){
-                case 0:
-                    setStatusStr("在建");
-                    break;
-                case 1:
-                    setStatusStr("完工未结算");
-                    break;
-                case 2:
-                    setStatusStr("完工以结算");
-                    break;
-                case 3:
-                    setStatusStr("停工");
-                    break;
-                default:
-                    break;
-            }
-        }
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
     }
 
     public Integer getMileageNumber() {
@@ -280,7 +203,7 @@ public class ProjectInfo {
     }
 
     public void setContractNumber(String contractNumber) {
-        this.contractNumber = contractNumber == null ? null : contractNumber.trim();
+        this.contractNumber = contractNumber;
     }
 
     public Integer getContractDay() {
@@ -336,7 +259,7 @@ public class ProjectInfo {
     }
 
     public void setProprietorCompany(String proprietorCompany) {
-        this.proprietorCompany = proprietorCompany == null ? null : proprietorCompany.trim();
+        this.proprietorCompany = proprietorCompany;
     }
 
     public String getProprietorAddress() {
@@ -344,7 +267,7 @@ public class ProjectInfo {
     }
 
     public void setProprietorAddress(String proprietorAddress) {
-        this.proprietorAddress = proprietorAddress == null ? null : proprietorAddress.trim();
+        this.proprietorAddress = proprietorAddress;
     }
 
     public String getProprietorPhone() {
@@ -352,7 +275,7 @@ public class ProjectInfo {
     }
 
     public void setProprietorPhone(String proprietorPhone) {
-        this.proprietorPhone = proprietorPhone == null ? null : proprietorPhone.trim();
+        this.proprietorPhone = proprietorPhone;
     }
 
     public String getSupervisionCompany() {
@@ -360,7 +283,7 @@ public class ProjectInfo {
     }
 
     public void setSupervisionCompany(String supervisionCompany) {
-        this.supervisionCompany = supervisionCompany == null ? null : supervisionCompany.trim();
+        this.supervisionCompany = supervisionCompany;
     }
 
     public String getSupervisionAddress() {
@@ -368,7 +291,7 @@ public class ProjectInfo {
     }
 
     public void setSupervisionAddress(String supervisionAddress) {
-        this.supervisionAddress = supervisionAddress == null ? null : supervisionAddress.trim();
+        this.supervisionAddress = supervisionAddress;
     }
 
     public String getSupervisionPhone() {
@@ -376,7 +299,7 @@ public class ProjectInfo {
     }
 
     public void setSupervisionPhone(String supervisionPhone) {
-        this.supervisionPhone = supervisionPhone == null ? null : supervisionPhone.trim();
+        this.supervisionPhone = supervisionPhone;
     }
 
     public String getProjectManager() {
@@ -384,7 +307,7 @@ public class ProjectInfo {
     }
 
     public void setProjectManager(String projectManager) {
-        this.projectManager = projectManager == null ? null : projectManager.trim();
+        this.projectManager = projectManager;
     }
 
     public Long getProjectManagerPositionId() {
@@ -400,7 +323,7 @@ public class ProjectInfo {
     }
 
     public void setProjectManagerPhone(String projectManagerPhone) {
-        this.projectManagerPhone = projectManagerPhone == null ? null : projectManagerPhone.trim();
+        this.projectManagerPhone = projectManagerPhone;
     }
 
     public Date getProjectManagerTime() {
@@ -416,7 +339,7 @@ public class ProjectInfo {
     }
 
     public void setProjectSecretary(String projectSecretary) {
-        this.projectSecretary = projectSecretary == null ? null : projectSecretary.trim();
+        this.projectSecretary = projectSecretary;
     }
 
     public Long getProjectSecretaryPositionId() {
@@ -432,7 +355,7 @@ public class ProjectInfo {
     }
 
     public void setProjectSecretaryPhone(String projectSecretaryPhone) {
-        this.projectSecretaryPhone = projectSecretaryPhone == null ? null : projectSecretaryPhone.trim();
+        this.projectSecretaryPhone = projectSecretaryPhone;
     }
 
     public Date getProjectSecretaryTime() {
@@ -448,7 +371,7 @@ public class ProjectInfo {
     }
 
     public void setChiefEngineer(String chiefEngineer) {
-        this.chiefEngineer = chiefEngineer == null ? null : chiefEngineer.trim();
+        this.chiefEngineer = chiefEngineer;
     }
 
     public Long getChiefEngineerPositionId() {
@@ -472,7 +395,7 @@ public class ProjectInfo {
     }
 
     public void setChiefEngineerPhone(String chiefEngineerPhone) {
-        this.chiefEngineerPhone = chiefEngineerPhone == null ? null : chiefEngineerPhone.trim();
+        this.chiefEngineerPhone = chiefEngineerPhone;
     }
 
     public Integer getInputPerson() {
@@ -504,7 +427,7 @@ public class ProjectInfo {
     }
 
     public void setDescription(String description) {
-        this.description = description == null ? null : description.trim();
+        this.description = description;
     }
 
     public Date getCreateTime() {
@@ -515,55 +438,95 @@ public class ProjectInfo {
         this.createTime = createTime;
     }
 
-    public String getStatusStr() {
-        return statusStr;
+    public Long getCreateUser() {
+        return createUser;
     }
 
-    public void setStatusStr(String statusStr) {
-        this.statusStr = statusStr;
+    public void setCreateUser(Long createUser) {
+        this.createUser = createUser;
     }
 
-    public static ProjectInfo getInfoByPojo(ProjectInfoPojo pojo){
-        if (pojo == null)
+    public Date getUpdateTime() {
+        return updateTime;
+    }
+
+    public void setUpdateTime(Date updateTime) {
+        this.updateTime = updateTime;
+    }
+
+    public Long getUpdateUser() {
+        return updateUser;
+    }
+
+    public void setUpdateUser(Long updateUser) {
+        this.updateUser = updateUser;
+    }
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
+    public BigDecimal getTemporarilyPrice() {
+        return temporarilyPrice;
+    }
+
+    public void setTemporarilyPrice(BigDecimal temporarilyPrice) {
+        this.temporarilyPrice = temporarilyPrice;
+    }
+
+    public static ProjectInfoPojo getPojoByInfo(ProjectInfo info){
+        if (info == null)
             return null;
 
-        ProjectInfo info = new ProjectInfo();
-        info.setManager(pojo.getManager() == null?null:Utils.toJson(pojo.getManager()));
-        info.setEngineer(pojo.getEngineer() == null?null:Utils.toJson(pojo.getEngineer()));
-        info.setSecretary(pojo.getSecretary() == null?null:Utils.toJson(pojo.getSecretary()));
-        info.setStatusStr(pojo.getStatusStr());
-        info.setStatus(pojo.getStatus());
-        info.setUpdateUser(pojo.getUpdateUser());
-        info.setCreateUser(pojo.getCreateUser());
-        info.setUpdateTime(pojo.getUpdateTime());
-        info.setCreateTime(pojo.getCreateTime());
-        info.setAddress(pojo.getAddress());
-        info.setCode(pojo.getCode());
-        info.setContractDay(pojo.getContractDay());
-        info.setContractEndTime(pojo.getContractEndTime());
-        info.setContractStartTime(pojo.getContractStartTime());
-        info.setContractNumber(pojo.getContractNumber());
-        info.setDescription(pojo.getDescription());
-        info.setExternalEmployee(pojo.getExternalEmployee());
-        info.setFormalEmployee(pojo.getFormalEmployee());
-        info.setId(pojo.getId());
-        info.setInputPerson(pojo.getInputPerson());
-        info.setMileageNumber(pojo.getMileageNumber());
-        info.setOrgAddress(pojo.getOrgAddress());
-        info.setProjectId(pojo.getProjectId());
-        info.setProjectName(pojo.getProjectName());
-        info.setProjectType(pojo.getProjectType());
-        info.setProprietorAddress(pojo.getProprietorAddress());
-        info.setProprietorCompany(pojo.getProprietorCompany());
-        info.setProprietorPhone(pojo.getProprietorPhone());
-        info.setTotalPrice(pojo.getTotalPrice());
-        info.setTemporarilyPrice(pojo.getTemporarilyPrice());
-        info.setSupervisionPhone(pojo.getSupervisionPhone());
-        info.setSupervisionCompany(pojo.getSupervisionCompany());
-        info.setSupervisionAddress(pojo.getSupervisionAddress());
-        info.setRealContractStartTime(pojo.getRealContractStartTime());
-        info.setRealContractEndTime(pojo.getRealContractEndTime());
-        info.setRealContractDay(pojo.getRealContractDay());
-        return info;
+        ProjectInfoPojo pojo = new ProjectInfoPojo();
+        pojo.setManager(info.getManager() == null?null:Utils.fromJson(info.getManager(),new TypeToken<List<ProjectInfoPeople>>(){}));
+        pojo.setEngineer(info.getEngineer() == null?null:Utils.fromJson(info.getEngineer(),new TypeToken<List<ProjectInfoPeople>>(){}));
+        pojo.setSecretary(info.getSecretary() == null?null:Utils.fromJson(info.getSecretary(),new TypeToken<List<ProjectInfoPeople>>(){}));
+        pojo.setStatusStr(info.getStatusStr());
+        pojo.setStatus(info.getStatus());
+        pojo.setUpdateUser(info.getUpdateUser());
+        pojo.setCreateUser(info.getCreateUser());
+        pojo.setUpdateTime(info.getUpdateTime());
+        pojo.setCreateTime(info.getCreateTime());
+        pojo.setAddress(info.getAddress());
+        pojo.setCode(info.getCode());
+        pojo.setContractDay(info.getContractDay());
+        pojo.setContractEndTime(info.getContractEndTime());
+        pojo.setContractStartTime(info.getContractStartTime());
+        pojo.setContractNumber(info.getContractNumber());
+        pojo.setDescription(info.getDescription());
+        pojo.setExternalEmployee(info.getExternalEmployee());
+        pojo.setFormalEmployee(info.getFormalEmployee());
+        pojo.setId(info.getId());
+        pojo.setInputPerson(info.getInputPerson());
+        pojo.setMileageNumber(info.getMileageNumber());
+        pojo.setOrgAddress(info.getOrgAddress());
+        pojo.setProjectId(info.getProjectId());
+        pojo.setProjectName(info.getProjectName());
+        pojo.setProjectType(info.getProjectType());
+        pojo.setProprietorAddress(info.getProprietorAddress());
+        pojo.setProprietorCompany(info.getProprietorCompany());
+        pojo.setProprietorPhone(info.getProprietorPhone());
+        pojo.setTotalPrice(info.getTotalPrice());
+        pojo.setTemporarilyPrice(info.getTemporarilyPrice());
+        pojo.setSupervisionPhone(info.getSupervisionPhone());
+        pojo.setSupervisionCompany(info.getSupervisionCompany());
+        pojo.setSupervisionAddress(info.getSupervisionAddress());
+        pojo.setRealContractStartTime(info.getRealContractStartTime());
+        pojo.setRealContractEndTime(info.getRealContractEndTime());
+        pojo.setRealContractDay(info.getRealContractDay());
+        return pojo;
     }
 }

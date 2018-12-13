@@ -4,8 +4,10 @@ import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.ProjectInfoMapper;
 import com.crcc.common.mapper.ProjectMapper;
+import com.crcc.common.mapper.UserMapper;
 import com.crcc.common.model.Project;
 import com.crcc.common.model.ProjectInfo;
+import com.crcc.common.model.User;
 import com.crcc.common.service.ProjectService;
 import com.crcc.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Autowired
     private ProjectInfoMapper projectInfoMapper;
+
+    @Autowired
+    private UserMapper userMapper;
 
     @Override
     public Long addProject(Project project) {
@@ -68,6 +73,10 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public List<Project> listProjectForProjectUser(Long userId) {
+        User user = userMapper.selectByPrimaryKey(userId);
+        if (user != null && user.getType() == 0){
+            return projectMapper.onlyList();
+        }
         return projectMapper.findProjectsByUserId(userId);
     }
 

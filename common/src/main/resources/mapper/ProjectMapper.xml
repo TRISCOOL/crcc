@@ -153,14 +153,21 @@
 
   <select id="findProjectsByUserId" resultType="com.crcc.common.model.Project">
     SELECT
-      p.*
+      p.*,cu.name AS createUserStr,uu.name AS updateUserStr,d.value AS projectType
     FROM
       user_project_rel rel
     LEFT JOIN
       project p ON rel.project_id = p.id
+    LEFT JOIN
+      dict d ON d.id = p.dict_id
+    LEFT JOIN
+      `user` cu ON p.create_user_id = cu.id
+    LEFT JOIN
+      `user` uu ON p.update_user_id = uu.id
     <if test="userId != null">
       WHERE rel.user_id = #{userId}
     </if>
+    GROUP BY p.id
   </select>
 
   <select id="listProjectForPageSize" resultType="java.lang.Integer">
@@ -187,11 +194,15 @@
 
   <select id="listProjectForPage" resultType="com.crcc.common.model.Project">
     SELECT
-      p.*, d.id AS dictId, d.value AS projectType
+      p.*, d.id AS dictId, d.value AS projectType,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       project p
     LEFT JOIN
       dict d ON p.dict_id = d.id
+    LEFT JOIN
+      `user` cu ON p.create_user_id = cu.id
+    LEFT JOIN
+      `user` uu ON p.update_user_id = uu.id
     WHERE
       1=1
     <if test="projectName != null">
@@ -214,9 +225,26 @@
 
   <select id="getDetails" resultType="com.crcc.common.model.Project">
     SELECT
-      p.*, d.id AS dictId, d.value AS projectType
+      p.*, d.id AS dictId, d.value AS projectType,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       project p LEFT JOIN dict d ON p.dict_id = d.id
+    LEFT JOIN
+      `user` cu ON p.create_user_id = cu.id
+    LEFT JOIN
+      `user` uu ON p.update_user_id = uu.id
     WHERE p.id = #{projectId}
+  </select>
+
+  <select id="onlyList" resultType="com.crcc.common.model.Project">
+    SELECT
+      p.*,cu.name AS createUserStr,uu.name AS updateUserStr,d.value AS projectType
+    FROM
+      project p
+    LEFT JOIN
+      `user` cu ON p.create_user_id = cu.id
+    LEFT JOIN
+      `user` uu ON p.update_user_id = uu.id
+    LEFT JOIN
+      dict d ON d.id = p.dict_id
   </select>
 </mapper>

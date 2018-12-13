@@ -23,12 +23,13 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
     <result column="production_value" property="productionValue" jdbcType="DECIMAL" />
+    <result column="prepayment_amount" property="prepaymentAmount" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, metering_num, metering_time, valuation_amount_tax, valuation_amount_not_tax, 
     tax, real_amount_tax, real_amount, already_paid_amount, unpaid_amount, pay_proportion,
     extra_amount, not_calculated_amount, remark, annex_url, project_id, create_time, create_user, update_time,
-    update_user,production_value
+    update_user,production_value,prepayment_amount
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -46,14 +47,14 @@
       tax, real_amount_tax, real_amount, 
       already_paid_amount, unpaid_amount,pay_proportion,
       extra_amount, not_calculated_amount, remark, 
-      annex_url, project_id,create_time,create_user,update_time,update_user,production_value)
+      annex_url, project_id,create_time,create_user,update_time,update_user,production_value,prepayment_amount)
     values (#{id,jdbcType=BIGINT}, #{meteringNum,jdbcType=INTEGER}, #{meteringTime,jdbcType=TIMESTAMP}, 
       #{valuationAmountTax,jdbcType=DECIMAL}, #{valuationAmountNotTax,jdbcType=VARCHAR}, 
       #{tax,jdbcType=DECIMAL}, #{realAmountTax,jdbcType=DECIMAL}, #{realAmount,jdbcType=DECIMAL}, 
       #{alreadyPaidAmount,jdbcType=DECIMAL}, #{unpaidAmount,jdbcType=DECIMAL}, #{payProportion,jdbcType=DECIMAL},
       #{extraAmount,jdbcType=DECIMAL}, #{notCalculatedAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{annexUrl,jdbcType=VARCHAR}, #{projectId,jdbcType=BIGINT},#{createTime},#{createUser},#{updateTime},
-      #{updateUser},#{productionValue})
+      #{updateUser},#{productionValue},#{prepaymentAmount})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.MeteringAccount" keyProperty="id" useGeneratedKeys="true">
     insert into metering_account
@@ -121,6 +122,9 @@
       <if test="productionValue != null">
         production_value,
       </if>
+      <if test="prepaymentAmount != null">
+        prepayment_amount,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -185,6 +189,9 @@
       </if>
       <if test="productionValue != null">
         #{productionValue},
+      </if>
+      <if test="prepaymentAmount != null">
+        #{prepaymentAmount}
       </if>
     </trim>
   </insert>
@@ -251,6 +258,9 @@
       <if test="productionValue != null">
         production_value = #{productionValue},
       </if>
+      <if test="prepaymentAmount != null">
+        prepayment_amount = #{prepaymentAmount},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -275,24 +285,33 @@
       create_user = #{createUser},
       update_time = #{updateTime},
       update_user = #{updateUser},
-      production_value = #{productionValue}
+      production_value = #{productionValue},
+      prepayment_amount = #{prepaymentAmount}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
   <select id="getDetailsById" resultType="com.crcc.common.model.MeteringAccount">
     SELECT
-      mc.*,p.name AS projectName
+      mc.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
-      metering_account mc LEFT JOIN project p ON mc.project_id = p.id
+      metering_account mc
+    LEFT JOIN
+      project p ON mc.project_id = p.id
+    LEFT JOIN
+      `user` cu ON mc.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON mc.update_user = uu.id
     WHERE mc.id = #{mcId}
   </select>
 
   <select id="listMeteringAccountForPage" resultType="com.crcc.common.model.MeteringAccount">
     SELECT
-      mc.*,p.name AS projectName
+      mc.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
     FROM
       metering_account mc
     LEFT JOIN project p ON mc.project_id = p.id
+    LEFT JOIN `user` cu ON mc.create_user = cu.id
+    LEFT JOIN `user` uu ON mc.update_user = uu.id
     WHERE 1=1
     <if test="projectId != null">
       AND p.id = #{projectId}

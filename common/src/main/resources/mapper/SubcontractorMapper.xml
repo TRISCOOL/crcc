@@ -521,9 +521,13 @@
 
   <select id="findDetailsById" resultType="com.crcc.common.model.Subcontractor">
     SELECT
-      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr
+      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr,cu.name AS createUserStr,cu.name AS updateUserStr
     FROM
       subcontractor s
+    LEFT JOIN
+      `user` cu ON s.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON s.update_user = uu.id
     LEFT JOIN
       dict d1 ON s.taxpayer_type_id = d1.id
     LEFT JOIN
@@ -535,9 +539,13 @@
 
   <select id="listForPage" resultType="com.crcc.common.model.Subcontractor">
     SELECT
-      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr
+      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr,cu.name AS createUserStr,cu.name AS updateUserStr
     FROM
       subcontractor s
+    LEFT JOIN
+      `user` cu ON s.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON s.update_user = uu.id
     LEFT JOIN
       dict d1 ON s.taxpayer_type_id = d1.id
     LEFT JOIN

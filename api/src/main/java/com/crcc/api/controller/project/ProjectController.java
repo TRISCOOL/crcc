@@ -6,10 +6,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
-import com.crcc.common.model.Dict;
-import com.crcc.common.model.Project;
-import com.crcc.common.model.ProjectInfo;
-import com.crcc.common.model.User;
+import com.crcc.common.model.*;
 import com.crcc.common.service.DictService;
 import com.crcc.common.service.ProjectService;
 import com.crcc.common.utils.ExcelUtils;
@@ -27,10 +24,9 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.HashMap;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/project")
@@ -152,14 +148,16 @@ public class ProjectController extends BaseController{
 
     /**
      * 添加信息卡
-     * @param projectInfo
+     * @param pojo
      * @return
      */
     @PostMapping("/add_info/v1.1")
     @AuthRequire
-    public ResponseVo addProjectInfo(@RequestBody ProjectInfo projectInfo,HttpServletRequest request){
+    public ResponseVo addProjectInfo(@RequestBody ProjectInfoPojo pojo, HttpServletRequest request){
         User user = curUser(request);
-        projectInfo.setCreateUser(user.getId());
+
+        pojo.setCreateUser(user.getId());
+        ProjectInfo projectInfo = ProjectInfo.getInfoByPojo(pojo);
         Long infoId = projectService.addProjectInfo(projectInfo);
         if (infoId != null){
             Map<String,Long> result = new HashMap<String, Long>();
@@ -172,15 +170,17 @@ public class ProjectController extends BaseController{
 
     /**
      * 更新工程信息卡
-     * @param projectInfo
+     * @param pojo
      * @param request
      * @return
      */
     @PostMapping("/update_info/v1.1")
     @AuthRequire
-    public ResponseVo updateProjectInfo(@RequestBody ProjectInfo projectInfo,HttpServletRequest request){
+    public ResponseVo updateProjectInfo(@RequestBody ProjectInfoPojo pojo,HttpServletRequest request){
         User user = curUser(request);
-        projectInfo.setUpdateUser(user.getId());
+        pojo.setUpdateUser(user.getId());
+
+        ProjectInfo projectInfo = ProjectInfo.getInfoByPojo(pojo);
         boolean result = projectService.updateProjectInfo(projectInfo);
         if (result){
             return ResponseVo.ok();
@@ -197,7 +197,8 @@ public class ProjectController extends BaseController{
     @GetMapping("/details_info/v1.1")
     public ResponseVo getInfo(@RequestParam(value = "projectInfoId")Long projectInfoId){
         ProjectInfo projectInfo = projectService.getInfo(projectInfoId);
-        return ResponseVo.ok(projectInfo);
+        ProjectInfoPojo pojo = ProjectInfoPojo.getPojoByInfo(projectInfo);
+        return ResponseVo.ok(pojo);
     }
 
     /**
@@ -259,7 +260,12 @@ public class ProjectController extends BaseController{
                 projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime);
 
-        return ResponseVo.ok(total,page,pageSize,projectInfoList);
+        List<ProjectInfoPojo> pojos = projectInfoList.stream().map(projectInfo -> {
+            ProjectInfoPojo pojo = ProjectInfoPojo.getPojoByInfo(projectInfo);
+            return pojo;
+        }).collect(Collectors.toList());
+
+        return ResponseVo.ok(total,page,pageSize,pojos);
 
     }
 

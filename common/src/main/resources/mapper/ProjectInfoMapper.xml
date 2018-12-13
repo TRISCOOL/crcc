@@ -43,6 +43,10 @@
     <result column="create_user" property="createUser" jdbcType="BIGINT" />
       <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
       <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="temporarily_price" property="temporarilyPrice" jdbcType="DECIMAL" />
+    <result column="manager" property="manager" jdbcType="VARCHAR" />
+    <result column="secretary" property="secretary"  jdbcType="VARCHAR" />
+    <result column="engineer" property="engineer" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, project_type, address, org_address, status, mileage_number, total_price, 
@@ -52,7 +56,8 @@
     project_manager, project_manager_position_id, project_manager_phone, project_manager_time, 
     project_secretary, project_secretary_position_id, project_secretary_phone, project_secretary_time, 
     chief_engineer, chief_engineer_position_id, chief_engineer_time, chief_engineer_phone, 
-    input_person, formal_employee, external_employee, description, create_time,create_user,update_time,update_user
+    input_person, formal_employee, external_employee, description, create_time,create_user,update_time,update_user,temporarily_price,
+    manager,secretary,engineer
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -79,7 +84,8 @@
       project_secretary_time, chief_engineer, 
       chief_engineer_position_id, chief_engineer_time, 
       chief_engineer_phone, input_person, formal_employee, 
-      external_employee, description, create_time,create_user,update_time,update_user
+      external_employee, description, create_time,create_user,update_time,update_user,temporarily_price,manager,
+      secretary,engineer
       )
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{projectType,jdbcType=VARCHAR}, 
       #{address,jdbcType=VARCHAR}, #{orgAddress,jdbcType=VARCHAR}, #{status,jdbcType=INTEGER}, 
@@ -96,7 +102,7 @@
       #{chiefEngineerPositionId,jdbcType=BIGINT}, #{chiefEngineerTime,jdbcType=TIMESTAMP}, 
       #{chiefEngineerPhone,jdbcType=VARCHAR}, #{inputPerson,jdbcType=INTEGER}, #{formalEmployee,jdbcType=INTEGER}, 
       #{externalEmployee,jdbcType=INTEGER}, #{description,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP},
-      #{createUser},#{updateTime},#{updateUser}
+      #{createUser},#{updateTime},#{updateUser},#{temporarilyPrice},#{manager},#{secretary},#{engineer}
       )
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.ProjectInfo" keyProperty="id" useGeneratedKeys="true">
@@ -225,6 +231,18 @@
         <if test="updateUser != null">
             update_user,
         </if>
+      <if test="temporarilyPrice != null">
+        temporarily_price,
+      </if>
+      <if test="manager != null">
+        manager,
+      </if>
+      <if test="secretary != null">
+        secretary,
+      </if>
+      <if test="engineer != null">
+        engineer,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -350,6 +368,18 @@
         <if test="updateUser != null">
             #{updateUser},
         </if>
+      <if test="temporarilyPrice != null">
+        #{temporarilyPrice},
+      </if>
+      <if test="manager != null">
+        #{manager},
+      </if>
+      <if test="secretary != null">
+        #{secretary},
+      </if>
+      <if test="engineer != null">
+        #{engineer},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.ProjectInfo" >
@@ -475,6 +505,18 @@
         <if test="updateUser != null">
             update_user = #{updateUser},
         </if>
+      <if test="temporarilyPrice != null">
+        temporarily_price = #{temporarilyPrice},
+      </if>
+      <if test="manager != null">
+        #{manager},
+      </if>
+      <if test="secretary != null">
+        #{secretary},
+      </if>
+      <if test="engineer != null">
+        #{engineer},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -559,11 +601,15 @@
 
     <select id="projectInfoListByUser" resultType="com.crcc.common.model.ProjectInfo">
         SELECT
-          info.*,p.name as projectName,p.code
+          info.*,p.name as projectName,p.code,cu.name AS createUserStr,uu.name AS updateUserStr
         FROM
           project_info info
         LEFT JOIN
           project p ON info.project_id = p.id
+        LEFT JOIN
+           `user` cu ON info.create_user = cu.id
+        LEFT JOIN
+           `user` uu ON info.update_user = uu.id
         WHERE 1=1
         <if test="projectId != null">
             AND p.id = #{projectId}
@@ -597,9 +643,13 @@
 
     <select id="getDetails" resultType="com.crcc.common.model.ProjectInfo">
         SELECT
-          info.*,p.name AS projectName,p.code
+          info.*,p.name AS projectName,p.code,cu.name AS createUserStr,uu.name AS updateUserStr
         FROM
           project_info info LEFT JOIN project p ON info.project_id = p.id
+        LEFT JOIN
+           `user` cu ON info.create_user = cu.id
+        LEFT JOIN
+           `user` uu ON info.update_user = uu.id
         WHERE info.id = #{projectInfoId}
     </select>
 </mapper>

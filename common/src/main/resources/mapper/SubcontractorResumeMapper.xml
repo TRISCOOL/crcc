@@ -220,7 +220,9 @@
       la.contract_person AS contractPerson,
       la.phone,
       la.estimated_contract_amount AS contractAmount,
-      la.settlement_amount AS settlementAmount
+      la.settlement_amount AS settlementAmount,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr
     FROM
       subcontractor_resume sr
     LEFT JOIN
@@ -229,6 +231,10 @@
       subcontractor s ON sr.subcontractor_id = s.id
     LEFT JOIN
       project p ON sr.project_id = p.id
+    LEFT JOIN
+      `user` cu ON sr.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON sr.update_user = uu.id
     WHERE 1=1
     <if test="subcontractorName != null">
       AND s.name LIKE concat('%',#{subcontractorName},'%')
@@ -279,7 +285,9 @@
       la.contract_person AS contractPerson,
       la.phone,
       la.estimated_contract_amount AS contractAmount,
-      la.settlement_amount AS settlementAmount
+      la.settlement_amount AS settlementAmount,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr
     FROM
       subcontractor_resume sr
     LEFT JOIN
@@ -288,6 +296,10 @@
       subcontractor s ON sr.subcontractor_id = s.id
     LEFT JOIN
       project p ON sr.project_id = p.id
+    LEFT JOIN
+      `user` cu ON sr.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON sr.update_user = uu.id
     WHERE sr.id = #{id}
   </select>
 </mapper>
