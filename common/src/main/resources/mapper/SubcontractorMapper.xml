@@ -4,9 +4,9 @@
   <resultMap id="BaseResultMap" type="com.crcc.common.model.Subcontractor">
     <id column="id" jdbcType="BIGINT" property="id" />
     <result column="set_up_time" jdbcType="TIMESTAMP" property="setUpTime" />
-    <result column="taxpayer_type_id" jdbcType="BIGINT" property="taxpayerTypeId" />
+    <result column="taxpayer_type" jdbcType="VARCHAR" property="taxpayerType" />
     <result column="registered_capital" jdbcType="DECIMAL" property="registeredCapital" />
-    <result column="type_id" jdbcType="BIGINT" property="typeId" />
+    <result column="type" jdbcType="VARCHAR" property="type" />
     <result column="phone" jdbcType="VARCHAR" property="phone" />
     <result column="email" jdbcType="VARCHAR" property="email" />
     <result column="address" jdbcType="VARCHAR" property="address" />
@@ -34,7 +34,7 @@
     <result column="create_user" jdbcType="BIGINT" property="createUser" />
     <result column="update_time" jdbcType="TIMESTAMP" property="updateTime" />
     <result column="update_user" jdbcType="BIGINT" property="updateUser" />
-    <result column="profession_type" jdbcType="BIGINT" property="professionType" />
+    <result column="profession_type" jdbcType="VARCHAR" property="professionType" />
     <result column="share_evaluation" jdbcType="CHAR" property="shareEvaluation" />
     <result column="qualification" jdbcType="CHAR" property="qualification" />
     <result column="share_remark" jdbcType="VARCHAR" property="shareRemark" />
@@ -45,7 +45,7 @@
     <result column="name" property="name" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
-    id, set_up_time, taxpayer_type_id, registered_capital, type_id, phone, email, address, 
+    id, set_up_time, taxpayer_type, registered_capital, `type`, phone, email, address,
     code, zip_code, legal_person_name, legal_person_position, legal_person_card, legal_person_phone, 
     legal_person_address, business_license_code, business_license_validity_period, business_license_from, 
     qualification_code, qualification_validity_period, qualification_from, safety_code, 
@@ -64,8 +64,8 @@
     where id = #{id,jdbcType=BIGINT}
   </delete>
   <insert id="insert" parameterType="com.crcc.common.model.Subcontractor" keyProperty="id" useGeneratedKeys="true">
-    insert into subcontractor (id, set_up_time, taxpayer_type_id, 
-      registered_capital, type_id, phone, 
+    insert into subcontractor (id, set_up_time, taxpayer_type,
+      registered_capital, `type`, phone,
       email, address, code, 
       zip_code, legal_person_name, legal_person_position, 
       legal_person_card, legal_person_phone, legal_person_address, 
@@ -79,8 +79,8 @@
       share_evaluation, qualification, share_remark, 
       group_evaluation, group_remark, company_evaluation,`name`
       company_group_evaluation)
-    values (#{id,jdbcType=BIGINT}, #{setUpTime,jdbcType=TIMESTAMP}, #{taxpayerTypeId,jdbcType=BIGINT}, 
-      #{registeredCapital,jdbcType=DECIMAL}, #{typeId,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR}, 
+    values (#{id,jdbcType=BIGINT}, #{setUpTime,jdbcType=TIMESTAMP}, #{taxpayerType,jdbcType=BIGINT},
+      #{registeredCapital,jdbcType=DECIMAL}, #{type,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR},
       #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
       #{zipCode,jdbcType=VARCHAR}, #{legalPersonName,jdbcType=VARCHAR}, #{legalPersonPosition,jdbcType=VARCHAR}, 
       #{legalPersonCard,jdbcType=VARCHAR}, #{legalPersonPhone,jdbcType=VARCHAR}, #{legalPersonAddress,jdbcType=VARCHAR}, 
@@ -90,7 +90,7 @@
       #{safetyCode,jdbcType=VARCHAR}, #{safetyValidityPeriod,jdbcType=TIMESTAMP}, #{safetyFrom,jdbcType=VARCHAR}, 
       #{bank,jdbcType=VARCHAR}, #{bankAccount,jdbcType=VARCHAR}, #{bankFrom,jdbcType=VARCHAR}, 
       #{annex,jdbcType=VARCHAR}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{professionType,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{professionType},
       #{shareEvaluation,jdbcType=CHAR}, #{qualification,jdbcType=CHAR}, #{shareRemark,jdbcType=VARCHAR}, 
       #{groupEvaluation,jdbcType=CHAR}, #{groupRemark,jdbcType=VARCHAR}, #{companyEvaluation,jdbcType=CHAR}, 
       #{companyGroupEvaluation,jdbcType=CHAR},#{name})
@@ -104,14 +104,14 @@
       <if test="setUpTime != null">
         set_up_time,
       </if>
-      <if test="taxpayerTypeId != null">
-        taxpayer_type_id,
+      <if test="taxpayerType != null">
+        taxpayer_type,
       </if>
       <if test="registeredCapital != null">
         registered_capital,
       </if>
-      <if test="typeId != null">
-        type_id,
+      <if test="type != null">
+        `type`,
       </if>
       <if test="phone != null">
         phone,
@@ -229,14 +229,14 @@
       <if test="setUpTime != null">
         #{setUpTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="taxpayerTypeId != null">
-        #{taxpayerTypeId,jdbcType=BIGINT},
+      <if test="taxpayerType != null">
+        #{taxpayerType},
       </if>
       <if test="registeredCapital != null">
         #{registeredCapital,jdbcType=DECIMAL},
       </if>
-      <if test="typeId != null">
-        #{typeId,jdbcType=BIGINT},
+      <if test="type != null">
+        #{type},
       </if>
       <if test="phone != null">
         #{phone,jdbcType=VARCHAR},
@@ -320,7 +320,7 @@
         #{updateUser,jdbcType=BIGINT},
       </if>
       <if test="professionType != null">
-        #{professionType,jdbcType=BIGINT},
+        #{professionType},
       </if>
       <if test="shareEvaluation != null">
         #{shareEvaluation,jdbcType=CHAR},
@@ -354,14 +354,14 @@
       <if test="setUpTime != null">
         set_up_time = #{setUpTime,jdbcType=TIMESTAMP},
       </if>
-      <if test="taxpayerTypeId != null">
-        taxpayer_type_id = #{taxpayerTypeId,jdbcType=BIGINT},
+      <if test="taxpayerType != null">
+        taxpayer_type = #{taxpayerType},
       </if>
       <if test="registeredCapital != null">
         registered_capital = #{registeredCapital,jdbcType=DECIMAL},
       </if>
-      <if test="typeId != null">
-        type_id = #{typeId,jdbcType=BIGINT},
+      <if test="type != null">
+        `type` = #{type},
       </if>
       <if test="phone != null">
         phone = #{phone,jdbcType=VARCHAR},
@@ -445,7 +445,7 @@
         update_user = #{updateUser,jdbcType=BIGINT},
       </if>
       <if test="professionType != null">
-        profession_type = #{professionType,jdbcType=BIGINT},
+        profession_type = #{professionType},
       </if>
       <if test="shareEvaluation != null">
         share_evaluation = #{shareEvaluation,jdbcType=CHAR},
@@ -477,9 +477,9 @@
   <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.Subcontractor">
     update subcontractor
     set set_up_time = #{setUpTime,jdbcType=TIMESTAMP},
-      taxpayer_type_id = #{taxpayerTypeId,jdbcType=BIGINT},
+      taxpayer_type = #{taxpayerType},
       registered_capital = #{registeredCapital,jdbcType=DECIMAL},
-      type_id = #{typeId,jdbcType=BIGINT},
+      `type` = #{type},
       phone = #{phone,jdbcType=VARCHAR},
       email = #{email,jdbcType=VARCHAR},
       address = #{address,jdbcType=VARCHAR},
@@ -507,7 +507,7 @@
       create_user = #{createUser,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
       update_user = #{updateUser,jdbcType=BIGINT},
-      profession_type = #{professionType,jdbcType=BIGINT},
+      profession_type = #{professionType},
       share_evaluation = #{shareEvaluation,jdbcType=CHAR},
       qualification = #{qualification,jdbcType=CHAR},
       share_remark = #{shareRemark,jdbcType=VARCHAR},
@@ -521,43 +521,31 @@
 
   <select id="findDetailsById" resultType="com.crcc.common.model.Subcontractor">
     SELECT
-      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr,cu.name AS createUserStr,cu.name AS updateUserStr
+      s.*,cu.name AS createUserStr,cu.name AS updateUserStr
     FROM
       subcontractor s
     LEFT JOIN
       `user` cu ON s.create_user = cu.id
     LEFT JOIN
       `user` uu ON s.update_user = uu.id
-    LEFT JOIN
-      dict d1 ON s.taxpayer_type_id = d1.id
-    LEFT JOIN
-	  dict d2 on s.type_id = d2.id
-    LEFT JOIN
-	  dict d3 on s.profession_type = d3.id
 	WHERE s.id = #{subcontractorId}
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.Subcontractor">
     SELECT
-      s.*,d1.value as taxpayerTypeStr,d2.value as typeStr,d3.value as professionStr,cu.name AS createUserStr,cu.name AS updateUserStr
+      s.*,cu.name AS createUserStr,cu.name AS updateUserStr
     FROM
       subcontractor s
     LEFT JOIN
       `user` cu ON s.create_user = cu.id
     LEFT JOIN
       `user` uu ON s.update_user = uu.id
-    LEFT JOIN
-      dict d1 ON s.taxpayer_type_id = d1.id
-    LEFT JOIN
-	  dict d2 on s.type_id = d2.id
-    LEFT JOIN
-	  dict d3 on s.profession_type = d3.id
 	WHERE 1=1
     <if test="name != null">
       AND s.name LIKE concat('%',#{name},'%')
     </if>
-    <if test="typeId != null">
-      AND s.type_id = #{typeId}
+    <if test="type != null">
+      AND s.type = #{type}
     </if>
     <if test="professionType != null">
       AND s.profession_type = #{professionType}
@@ -584,19 +572,13 @@
     SELECT
      COUNT(*)
     FROM
-    subcontractor s
-    LEFT JOIN
-    dict d1 ON s.taxpayer_type_id = d1.id
-    LEFT JOIN
-    dict d2 on s.type_id = d2.id
-    LEFT JOIN
-    dict d3 on s.profession_type = d3.id
+      subcontractor s
     WHERE 1=1
     <if test="name != null">
       AND s.name LIKE concat('%',#{name},'%')
     </if>
-    <if test="typeId != null">
-      AND s.type_id = #{typeId}
+    <if test="type != null">
+      AND s.type = #{type}
     </if>
     <if test="professionType != null">
       AND s.profession_type = #{professionType}

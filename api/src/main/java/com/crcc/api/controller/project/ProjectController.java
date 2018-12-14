@@ -9,7 +9,10 @@ import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.*;
 import com.crcc.common.service.DictService;
 import com.crcc.common.service.ProjectService;
+import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
+import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -240,16 +243,20 @@ public class ProjectController extends BaseController{
                                       @RequestParam(value = "projectManager",required = false) String projectManager,
                                       @RequestParam(value = "projectSecretary",required = false)String projectSecretary,
                                       @RequestParam(value = "chiefEngineer",required = false) String chiefEngineer,
-                                      @RequestParam(value = "contractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date contractStartTime,
-                                      @RequestParam(value = "contractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date contractEndTime,
-                                      @RequestParam(value = "realContractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date realContractStartTime,
-                                      @RequestParam(value = "realContractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss") Date realContractEndTime,
+                                      @RequestParam(value = "contractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date contractStartTime,
+                                      @RequestParam(value = "contractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date contractEndTime,
+                                      @RequestParam(value = "realContractStartTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date realContractStartTime,
+                                      @RequestParam(value = "realContractEndTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd") Date realContractEndTime,
                                       @RequestParam(value = "page",required = false)Integer page,
                                       @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                       HttpServletRequest request){
+        //TODO 项目部以上人员权限
         Long projectId = permissionProject(request);
 
-        //TODO 项目部以上人员权限
+        projectName = replaceNull(projectName);
+        projectManager = replaceNull(projectManager);
+        projectSecretary = replaceNull(projectSecretary);
+        chiefEngineer = replaceNull(chiefEngineer);
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,projectManager,
@@ -286,9 +293,9 @@ public class ProjectController extends BaseController{
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename="+new String((projectInfo.getProjectName()+"工程信息卡").getBytes("UTF-8"), "ISO8859-1")+".pdf");
         Document document = new Document();
-        PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
+        PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
         document.open();
-        setContentForPDF(projectInfo,document);
+        setContentForPDF(projectInfo,document,writer);
         document.close();
 
         PdfReader reader = new PdfReader(fileUrl);
@@ -302,24 +309,147 @@ public class ProjectController extends BaseController{
 
     }
 
-    private void setContentForPDF(ProjectInfo projectInfo,Document document) throws Exception{
+    private void setContentForPDF(ProjectInfo projectInfo,Document document,PdfWriter writer) throws Exception{
         if (document == null)
             return;
 
         BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
         Font font = new Font(bfChinese, 12,Font.NORMAL);
 
+        PdfContentByte canvas = writer.getDirectContent();
+
         Paragraph title = new Paragraph(projectInfo.getProjectName()+"工程项目信息卡",font);
         title.setAlignment(Element.ALIGN_CENTER);
         document.add(title);
 
-        Paragraph name = new Paragraph("项目名称："+projectInfo.getProjectName()+
-                "        工程类别："+projectInfo.getProjectType(),font);
-        document.add(name);
+        Paragraph name = new Paragraph("项目名称："+projectInfo.getProjectName(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,name,20, 700, 0);
+
+
+        Paragraph type = new Paragraph("工程类别："+projectInfo.getProjectType(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,type,400, 700, 0);
+
 
         Paragraph address = new Paragraph("工程地点："+projectInfo.getAddress(),font);
-        document.add(address);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,address,20,680,0);
 
+        Paragraph status = new Paragraph("工程状态："+projectInfo.getStatusStr(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,status,400,680,0);
+
+        Paragraph projectAddress = new Paragraph("项目部地址："+projectInfo.getOrgAddress(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,projectAddress,20,660,0);
+
+        Paragraph mile = new Paragraph("里程桩号："+projectInfo.getMileageNumber(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,mile,400,660,0);
+
+        Paragraph line41 = new Paragraph("暂估合同金额："+projectInfo.getTemporarilyPrice() +"万元",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line41,20,640,0);
+
+        Paragraph line42 = new Paragraph("有效合同额："+projectInfo.getTotalPrice()+" 万元",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line42,400,640,0);
+
+        Paragraph line5 = new Paragraph("合同编码："+projectInfo.getContractNumber(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line5,20,620,0);
+
+        Paragraph line61 = new Paragraph("合同工期："+projectInfo.getContractDay(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line61,20,600,0);
+
+        Paragraph line62 = new Paragraph("合同开工日期："+ DateTimeUtil.getYYYYMMDD(projectInfo.getContractStartTime()),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line62,220,600,0);
+
+
+        Paragraph line63 = new Paragraph("合同竣工日期："+ DateTimeUtil.getYYYYMMDD(projectInfo.getContractEndTime()),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line63,420,600,0);
+
+        Paragraph line71 = new Paragraph("实际工期："+projectInfo.getRealContractDay(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line71,20,580,0);
+
+        Paragraph line72 = new Paragraph("实际开工日期："+DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractStartTime()),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line72,220,580,0);
+
+        Paragraph line73 = new Paragraph("实际完工日期："+DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractEndTime()),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line73,420,580,0);
+
+        Paragraph line81 = new Paragraph("业主单位："+projectInfo.getProprietorCompany(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line81,20,560,0);
+
+        Paragraph line82 = new Paragraph("业主地址："+projectInfo.getProprietorAddress(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line82,220,560,0);
+
+        Paragraph line83 = new Paragraph("联系电话："+projectInfo.getProprietorPhone(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line83,420,560,0);
+
+        Paragraph line91 = new Paragraph("监理单位："+projectInfo.getSupervisionCompany(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line91,20,540,0);
+
+        Paragraph line92 = new Paragraph("监理地址："+projectInfo.getSupervisionAddress(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line92,220,540,0);
+
+        Paragraph line93 = new Paragraph("联系电话："+projectInfo.getSupervisionPhone(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line93,420,540,0);
+
+        Paragraph line10Title = new Paragraph("项目经理",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line10Title,20,510,0);
+        List<ProjectInfoPeople> managers = getProjectInfoPeoples(projectInfo.getManager());
+        Integer y = createParagrap(managers,document,font,canvas,510);
+
+        Paragraph line11Title = new Paragraph("项目书记",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line11Title,20,y-30,0);
+        List<ProjectInfoPeople> secretary = getProjectInfoPeoples(projectInfo.getSecretary());
+        Integer y2 = createParagrap(secretary,document,font,canvas,y-30);
+
+        Paragraph line12Title = new Paragraph("总工程师",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line12Title,20,y2-30,0);
+        List<ProjectInfoPeople> chiefEngineer = getProjectInfoPeoples(projectInfo.getChiefEngineer());
+        Integer y3 = createParagrap(chiefEngineer,document,font,canvas,y2-30);
+
+        Paragraph line13Title = new Paragraph("统计",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line13Title,20,y3-30,0);
+
+        Paragraph line141 = new Paragraph("投入人员："+projectInfo.getInputPerson()+" 人",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line141,20,y3-50,0);
+
+
+        Paragraph line142 = new Paragraph("正式职工："+projectInfo.getFormalEmployee()+" 人",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line142,220,y3-50,0);
+
+
+        Paragraph line143 = new Paragraph("外聘："+projectInfo.getExternalEmployee()+" 人",font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line143,420,y3-50,0);
+
+        Paragraph line15 = new Paragraph("工程概况："+projectInfo.getDescription(),font);
+        ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,line15,20,y3-70,0);
+
+    }
+
+    private Integer createParagrap(List<ProjectInfoPeople> projectInfoPeople,Document document,Font font,PdfContentByte canvas,Integer y) throws Exception{
+        if (projectInfoPeople == null)
+            return y;
+
+        if (projectInfoPeople.size() <= 0)
+            return y;
+
+        for (ProjectInfoPeople people : projectInfoPeople){
+            y = y-20;
+            Paragraph name = new Paragraph("姓名："+people.getName(),font);
+            ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,name,20,y,0);
+            Paragraph time = new Paragraph("任职时间："+people.getTime(),font);
+            ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,time,220,y,0);
+            Paragraph phone = new Paragraph("联系电话："+people.getPhone(),font);
+            ColumnText.showTextAligned(canvas,Element.ALIGN_LEFT,phone,420,y,0);
+        }
+
+        return y;
+    }
+
+    private List<ProjectInfoPeople> getProjectInfoPeoples(String str){
+        if (str == null)
+            return null;
+        if ("".equals(str))
+            return null;
+
+        List<ProjectInfoPeople> projectInfoPeople = Utils.fromJson(str,new TypeToken<List<ProjectInfoPeople>>(){});
+        return projectInfoPeople;
     }
 
     /**
@@ -368,6 +498,13 @@ public class ProjectController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String replaceNull(String str){
+        if (str != null && "null".equals(str)){
+            return null;
+        }
+        return str;
     }
 
 

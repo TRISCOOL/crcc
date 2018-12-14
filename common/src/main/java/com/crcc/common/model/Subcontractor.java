@@ -8,11 +8,11 @@ public class Subcontractor {
 
     private Date setUpTime;
 
-    private Long taxpayerTypeId;
+    private String taxpayerType;
 
     private BigDecimal registeredCapital;
 
-    private Long typeId;
+    private String type;
 
     private String phone;
 
@@ -68,7 +68,7 @@ public class Subcontractor {
 
     private Long updateUser;
 
-    private Long professionType;
+    private String professionType;
 
     private String shareEvaluation;
 
@@ -159,13 +159,6 @@ public class Subcontractor {
         this.setUpTime = setUpTime;
     }
 
-    public Long getTaxpayerTypeId() {
-        return taxpayerTypeId;
-    }
-
-    public void setTaxpayerTypeId(Long taxpayerTypeId) {
-        this.taxpayerTypeId = taxpayerTypeId;
-    }
 
     public BigDecimal getRegisteredCapital() {
         return registeredCapital;
@@ -173,14 +166,6 @@ public class Subcontractor {
 
     public void setRegisteredCapital(BigDecimal registeredCapital) {
         this.registeredCapital = registeredCapital;
-    }
-
-    public Long getTypeId() {
-        return typeId;
-    }
-
-    public void setTypeId(Long typeId) {
-        this.typeId = typeId;
     }
 
     public String getPhone() {
@@ -399,14 +384,6 @@ public class Subcontractor {
         this.updateUser = updateUser;
     }
 
-    public Long getProfessionType() {
-        return professionType;
-    }
-
-    public void setProfessionType(Long professionType) {
-        this.professionType = professionType;
-    }
-
     public String getShareEvaluation() {
         return shareEvaluation;
     }
@@ -461,5 +438,29 @@ public class Subcontractor {
 
     public void setCompanyGroupEvaluation(String companyGroupEvaluation) {
         this.companyGroupEvaluation = companyGroupEvaluation == null ? null : companyGroupEvaluation.trim();
+    }
+
+    public String getTaxpayerType() {
+        return taxpayerType;
+    }
+
+    public void setTaxpayerType(String taxpayerType) {
+        this.taxpayerType = taxpayerType;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public String getProfessionType() {
+        return professionType;
+    }
+
+    public void setProfessionType(String professionType) {
+        this.professionType = professionType;
     }
 }

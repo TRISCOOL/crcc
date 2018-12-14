@@ -83,7 +83,7 @@ public class ForDownAccountInspectionController extends BaseController{
     public ResponseVo listForPage(@RequestParam(value = "projectName",required = false)String projectName,
                                   @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
                                   @RequestParam(value = "valuationType",required = false)Integer valuationType,
-                                  @RequestParam(value = "valuationTime",required = false)@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")Date valuationTime,
+                                  @RequestParam(value = "valuationTime",required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date valuationTime,
                                   @RequestParam(value = "page")Integer page,
                                   @RequestParam(value = "pageSize")Integer pageSize,HttpServletRequest request){
 

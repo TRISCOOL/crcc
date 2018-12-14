@@ -143,9 +143,9 @@
     FROM
       role r
     LEFT JOIN
-      `user` cu ON r.create_user = cu.id
+      `user` cu ON r.create_user_id = cu.id
     LEFT JOIN
-      `user` uu ON r.update_user = uu.id
+      `user` uu ON r.update_user_id = uu.id
     <if test="name != null">
       WHERE r.`name` LIKE CONCAT('%', #{name}, '%')
     </if>

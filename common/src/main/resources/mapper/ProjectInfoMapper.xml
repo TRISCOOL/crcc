@@ -509,13 +509,13 @@
         temporarily_price = #{temporarilyPrice},
       </if>
       <if test="manager != null">
-        #{manager},
+        manager = #{manager},
       </if>
       <if test="secretary != null">
-        #{secretary},
+        secretary = #{secretary},
       </if>
       <if test="engineer != null">
-        #{engineer},
+        engineer = #{engineer},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -583,13 +583,13 @@
       AND info.status = #{status}
     </if>
     <if test="projectManager != null">
-      AND info.project_manager = #{projectManager}
+      AND JSON_EXTRACT(info.manager, "$[*].name") LIKE CONCAT('%',#{projectManager},'%')
     </if>
     <if test="projectSecretary != null">
-      AND info.project_secretary = #{projectSecretary}
+      AND JSON_EXTRACT(info.secretary, "$[*].name") LIKE CONCAT('%',#{projectSecretary},'%')
     </if>
     <if test="chiefEngineer != null">
-      AND info.chief_engineer = #{chiefEngineer}
+      AND JSON_EXTRACT(info.engineer, "$[*].name") LIKE CONCAT('%',#{chiefEngineer},'%')
     </if>
     <if test="contractStartTime != null and contractEndTime">
       AND info.contract_start_time &lt;= #{contractStartTime} AND info.contract_start_time &gt;= #{contractEndTime}
@@ -621,13 +621,13 @@
             AND info.status = #{status}
         </if>
         <if test="projectManager != null">
-            AND info.project_manager = #{projectManager}
+            AND JSON_EXTRACT(info.manager, "$[*].name") LIKE CONCAT('%',#{projectManager},'%')
         </if>
         <if test="projectSecretary != null">
-            AND info.project_secretary = #{projectSecretary}
+            AND JSON_EXTRACT(info.secretary, "$[*].name") LIKE CONCAT('%',#{projectSecretary},'%')
         </if>
         <if test="chiefEngineer != null">
-            AND info.chief_engineer = #{chiefEngineer}
+            AND JSON_EXTRACT(info.engineer, "$[*].name") LIKE CONCAT('%',#{chiefEngineer},'%')
         </if>
         <if test="contractStartTime != null and contractEndTime">
             AND info.contract_start_time &lt;= #{contractStartTime} AND info.contract_start_time &gt;= #{contractEndTime}

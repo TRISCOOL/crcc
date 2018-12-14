@@ -20,7 +20,7 @@ public interface SubcontractorMapper {
 
     Subcontractor findDetailsById(@Param("subcontractorId")Long SubcontractorId);
 
-    List<Subcontractor> listForPage(@Param("name") String name,@Param("typeId") Long typeId,
+    List<Subcontractor> listForPage(@Param("name") String name,@Param("type") String type,
                                     @Param("professionType") Long professionType,@Param("minAmount") Integer minAmount,
                                     @Param("maxAmount") Integer maxAmount,
                                     @Param("shareEvaluation") String shareEvaluation,
@@ -28,7 +28,7 @@ public interface SubcontractorMapper {
                                     @Param("companyEvaluation") String companyEvaluation,
                                     @Param("offset") Integer offset,@Param("length") Integer length);
 
-    Integer listForPageSize(@Param("name") String name,@Param("typeId") Long typeId,
+    Integer listForPageSize(@Param("name") String name,@Param("type") String type,
                             @Param("professionType") Long professionType,@Param("minAmount") Integer minAmount,
                             @Param("maxAmount") Integer maxAmount,
                             @Param("shareEvaluation") String shareEvaluation,

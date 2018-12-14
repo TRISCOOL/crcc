@@ -79,6 +79,15 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
         if (meteringAccount.getAlreadyPaidAmount() != null && meteringAccount.getRealAmountTax() != null){
             meteringAccount.setpayProportion(meteringAccount.getRealAmountTax().divide(meteringAccount.getAlreadyPaidAmount()));
         }
+
+        if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getExtraAmount() != null
+                && meteringAccount.getNotCalculatedAmount() != null){
+            meteringAccount.setProductionValue(meteringAccount.getValuationAmountTax()
+                    .divide(
+                            meteringAccount.getExtraAmount()
+                                    .add(meteringAccount.getNotCalculatedAmount())
+                                    .add(meteringAccount.getValuationAmountTax()),2,BigDecimal.ROUND_HALF_DOWN));
+        }
     }
 
     private BigDecimal computerNotTax(BigDecimal amount,BigDecimal tax){
