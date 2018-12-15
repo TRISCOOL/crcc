@@ -53,6 +53,26 @@ public class InspectionAccount {
     private String createUserStr;
     private String updateUserStr;
 
+    private BigDecimal endedPrice;
+
+    private BigDecimal underRate;
+
+    public BigDecimal getEndedPrice() {
+        return endedPrice;
+    }
+
+    public void setEndedPrice(BigDecimal endedPrice) {
+        this.endedPrice = endedPrice;
+    }
+
+    public BigDecimal getUnderRate() {
+        return underRate;
+    }
+
+    public void setUnderRate(BigDecimal underRate) {
+        this.underRate = underRate;
+    }
+
     public String getCreateUserStr() {
         return createUserStr;
     }

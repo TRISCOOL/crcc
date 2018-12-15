@@ -24,12 +24,14 @@
     <result column="create_user" property="createUser" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="ended_price" property="endedPrice" jdbcType="DECIMAL" />
+    <result column="under_rate" property="underRate" jdbcType="DECIMAL" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, subcontractor_id, subcontractor_name, team_name, contract_price, 
     valuation_period, valuation_time, valuation_type, valuation_person, valuation_price,
     valuation_price_reduce, warranty, performance_bond, compensation, should_amount, 
-    remark, annex_url, create_time, create_user, update_time, update_user
+    remark, annex_url, create_time, create_user, update_time, update_user,ended_price,under_rate
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -48,7 +50,7 @@
       valuation_person, valuation_price, valuation_price_reduce, 
       warranty, performance_bond, compensation, 
       should_amount, remark, annex_url, 
-      create_time, create_user, update_time, 
+      create_time, create_user, update_time, ended_price,under_rate
       update_user)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
       #{subcontractorName,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{contractPrice,jdbcType=DECIMAL}, 
@@ -57,7 +59,7 @@
       #{warranty,jdbcType=DECIMAL}, #{performanceBond,jdbcType=DECIMAL}, #{compensation,jdbcType=DECIMAL}, 
       #{shouldAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=BIGINT})
+      #{updateUser,jdbcType=BIGINT},#{endedPrice},#{underRate})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.InspectionAccount" keyProperty="id" useGeneratedKeys="true">
     insert into inspection_account
@@ -128,6 +130,12 @@
       <if test="updateUser != null" >
         update_user,
       </if>
+      <if test="endedPrice != null">
+        ended_price,
+      </if>
+      <if test="underRate != null">
+        under_rate,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -195,6 +203,12 @@
       </if>
       <if test="updateUser != null" >
         #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="endedPrice != null">
+        #{endedPrice},
+      </if>
+      <if test="underRate != null">
+        #{underRate},
       </if>
     </trim>
   </insert>
@@ -264,6 +278,12 @@
       <if test="updateUser != null" >
         update_user = #{updateUser,jdbcType=BIGINT},
       </if>
+      <if test="endedPrice != null">
+        ended_price = #{endedPrice},
+      </if>
+      <if test="underRate != null">
+        under_rate = #{underRate},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -330,6 +350,9 @@
     <if test="valuationTime != null">
       AND ic.valuation_time = #{valuationTime}
     </if>
+    <if test="minUnderRate != null and maxUnderRate != null">
+      AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
+    </if>
     ORDER BY ic.id DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
@@ -356,6 +379,9 @@
     </if>
     <if test="valuationTime != null">
       AND ic.valuation_time = #{valuationTime}
+    </if>
+    <if test="minUnderRate != null and maxUnderRate != null">
+      AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
     </if>
   </select>
 </mapper>

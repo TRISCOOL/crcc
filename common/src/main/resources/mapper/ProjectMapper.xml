@@ -153,7 +153,12 @@
 
   <select id="findProjectsByUserId" resultType="com.crcc.common.model.Project">
     SELECT
-      p.*,cu.name AS createUserStr,uu.name AS updateUserStr,d.value AS projectType
+      p.*,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr,
+      d.value AS projectType,
+      info.contract_start_time AS contractStartTime,
+      info.contract_end_time AS contractEndTime
     FROM
       user_project_rel rel
     LEFT JOIN
@@ -164,6 +169,8 @@
       `user` cu ON p.create_user_id = cu.id
     LEFT JOIN
       `user` uu ON p.update_user_id = uu.id
+    LEFT JOIN
+      project_info info ON p.id = info.project_id
     <if test="userId != null">
       WHERE rel.user_id = #{userId}
     </if>
@@ -237,7 +244,12 @@
 
   <select id="onlyList" resultType="com.crcc.common.model.Project">
     SELECT
-      p.*,cu.name AS createUserStr,uu.name AS updateUserStr,d.value AS projectType
+      p.*,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr,
+      d.value AS projectType,
+      info.contract_start_time AS contractStartTime,
+      info.contract_end_time AS contractEndTime
     FROM
       project p
     LEFT JOIN
@@ -246,5 +258,8 @@
       `user` uu ON p.update_user_id = uu.id
     LEFT JOIN
       dict d ON d.id = p.dict_id
+    LEFT JOIN
+      project_info info ON p.id = info.project_id
+    GROUP BY p.id
   </select>
 </mapper>

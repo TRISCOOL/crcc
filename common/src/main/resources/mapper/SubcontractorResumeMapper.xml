@@ -222,7 +222,8 @@
       la.estimated_contract_amount AS contractAmount,
       la.settlement_amount AS settlementAmount,
       cu.name AS createUserStr,
-      uu.name AS updateUserStr
+      uu.name AS updateUserStr,
+      la.settlement_amount AS settlementAmount
     FROM
       subcontractor_resume sr
     LEFT JOIN
@@ -239,8 +240,8 @@
     <if test="subcontractorName != null">
       AND s.name LIKE concat('%',#{subcontractorName},'%')
     </if>
-    <if test="companyEvaluation != null">
-      AND sr.company_evaluation LIKE concat('%',#{companyEvaluation},'%')
+    <if test="projectEvaluation != null">
+      AND sr.project_evaluation LIKE concat('%',#{projectEvaluation},'%')
     </if>
     <if test="constructionScale != null">
       AND sr.construction_scale = #{constructionScale}
@@ -266,8 +267,8 @@
     <if test="subcontractorName != null">
       AND s.name LIKE concat('%',#{subcontractorName},'%')
     </if>
-    <if test="companyEvaluation != null">
-      AND sr.company_evaluation LIKE concat('%',#{companyEvaluation},'%')
+    <if test="projectEvaluation != null">
+      AND sr.project_evaluation LIKE concat('%',#{projectEvaluation},'%')
     </if>
     <if test="constructionScale != null">
       AND sr.construction_scale = #{constructionScale}

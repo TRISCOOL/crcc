@@ -21,11 +21,11 @@ public interface SubcontractorResumeMapper {
     SubcontractorResume getDetails(@Param("id")Long id);
 
     List<SubcontractorResume> listForPage(@Param("subcontractorName")String subcontractorName,
-                                          @Param("companyEvaluation")String companyEvaluation,
+                                          @Param("projectEvaluation")String projectEvaluation,
                                           @Param("constructionScale")String constructionScale,
                                           @Param("offset")Integer offset,@Param("length")Integer length);
 
     Integer listForPageSize(@Param("subcontractorName")String subcontractorName,
-                            @Param("companyEvaluation")String companyEvaluation,
+                            @Param("projectEvaluation")String projectEvaluation,
                             @Param("constructionScale")String constructionScale);
 }

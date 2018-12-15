@@ -23,11 +23,15 @@ public interface InspectionAccountMapper {
                                         @Param("subcontractorName") String subcontractorName,
                                         @Param("valuationType") Integer valuationType,
                                         @Param("valuationTime") Date valuationTime,
+                                        @Param("minUnderRate") Double minUnderRate,
+                                        @Param("maxUnderRate") Double maxUnderRate,
                                         @Param("offset") Integer offset, @Param("length") Integer length);
 
     Integer listForPageSize(@Param("projectId")Long projectId,@Param("projectName") String projectName,
                             @Param("subcontractorName") String subcontractorName,
                             @Param("valuationType") Integer valuationType,
+                            @Param("minUnderRate") Double minUnderRate,
+                            @Param("maxUnderRate") Double maxUnderRate,
                             @Param("valuationTime") Date valuationTime);
 
     InspectionAccount getDetails(@Param("inspectionAccountId")Long inspectionAccountId);

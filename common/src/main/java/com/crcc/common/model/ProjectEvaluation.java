@@ -64,6 +64,16 @@ public class ProjectEvaluation {
     private String createUserStr;
     private String updateUserStr;
 
+    public Double getSettlementAmount() {
+        return settlementAmount;
+    }
+
+    public void setSettlementAmount(Double settlementAmount) {
+        this.settlementAmount = settlementAmount;
+    }
+
+    private Double settlementAmount;
+
     public String getCreateUserStr() {
         return createUserStr;
     }

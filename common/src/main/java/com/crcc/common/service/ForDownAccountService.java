@@ -12,10 +12,11 @@ public interface ForDownAccountService {
     boolean update(InspectionAccount inspectionAccount);
 
     List<InspectionAccount> listForPage(Long projectId,String projectName, String subcontractorName, Integer valuationType,
-                                        Date valuationTime,Integer offset,Integer length);
+                                        Date valuationTime,Integer offset,Integer length,Double maxUnderRate,
+                                        Double minUnderRate);
 
     Integer listForPageSize(Long projectId,String projectName, String subcontractorName, Integer valuationType,
-                            Date valuationTime);
+                            Date valuationTime,Double maxUnderRate,Double minUnderRate);
 
     InspectionAccount getDetails(Long inspectionAccountId);
 }

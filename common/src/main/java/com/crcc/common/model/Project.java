@@ -28,6 +28,44 @@ public class Project {
     private String createUserStr;
     private String updateUserStr;
 
+    private Date contractStartTime;
+    private Date contractEndTime;
+    private String statusStr;
+
+    public Integer getDistanceTime() {
+        return distanceTime;
+    }
+
+    public void setDistanceTime(Integer distanceTime) {
+        this.distanceTime = distanceTime;
+    }
+
+    private Integer distanceTime;
+
+    public Date getContractStartTime() {
+        return contractStartTime;
+    }
+
+    public void setContractStartTime(Date contractStartTime) {
+        this.contractStartTime = contractStartTime;
+    }
+
+    public Date getContractEndTime() {
+        return contractEndTime;
+    }
+
+    public void setContractEndTime(Date contractEndTime) {
+        this.contractEndTime = contractEndTime;
+    }
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
     public String getCreateUserStr() {
         return createUserStr;
     }
@@ -90,6 +128,13 @@ public class Project {
 
     public void setStatus(Integer status) {
         this.status = status;
+        if (status != null){
+            if (status == 0){
+                setStatusStr("启用");
+            }else {
+                setStatusStr("禁用");
+            }
+        }
     }
 
     public Date getCreateTime() {

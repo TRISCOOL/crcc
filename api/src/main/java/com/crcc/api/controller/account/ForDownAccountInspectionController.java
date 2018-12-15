@@ -85,15 +85,17 @@ public class ForDownAccountInspectionController extends BaseController{
                                   @RequestParam(value = "valuationType",required = false)Integer valuationType,
                                   @RequestParam(value = "valuationTime",required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date valuationTime,
                                   @RequestParam(value = "page")Integer page,
+                                  @RequestParam(value = "maxUnderRate",required = false) Double maxUnderRate,
+                                  @RequestParam(value = "minUnderRate",required = false) Double minUnderRate,
                                   @RequestParam(value = "pageSize")Integer pageSize,HttpServletRequest request){
 
         Long projectId = permissionProject(request);
         Integer offset = page - 1<0?0:page-1;
         List<InspectionAccount> inspectionAccounts = forDownAccountService.listForPage(projectId,projectName,subcontractorName,
-                valuationType,valuationTime,offset*pageSize,pageSize);
+                valuationType,valuationTime,offset*pageSize,pageSize,maxUnderRate,minUnderRate);
 
         Integer total = forDownAccountService.listForPageSize(projectId,projectName,subcontractorName,
-                valuationType,valuationTime);
+                valuationType,valuationTime,maxUnderRate,minUnderRate);
 
         return ResponseVo.ok(total,page,pageSize,inspectionAccounts);
     }
@@ -123,11 +125,13 @@ public class ForDownAccountInspectionController extends BaseController{
                        @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
                        @RequestParam(value = "valuationType",required = false)Integer valuationType,
                        @RequestParam(value = "valuationTime",required = false)Date valuationTime,
+                       @RequestParam(value = "maxUnderRate",required = false) Double maxUnderRate,
+                       @RequestParam(value = "minUnderRate",required = false) Double minUnderRate,
                        HttpServletRequest request, HttpServletResponse response){
         Long projectId = permissionProject(request);
 
         List<InspectionAccount> inspectionAccounts = forDownAccountService.listForPage(projectId,projectName,
-                subcontractorName,valuationType,valuationTime,null,null);
+                subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate);
         String[] title = {"项目名称","分包商名称","队伍名称","合同金额","计价期数","计价日期","计价类型","计价总金额","扣款",
                 "扣除质保金","扣除履约保证金","计日工及补偿费用","应支付金额","已完未计","对下计价率","计价负责人","备注"};
         HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForInspectionAccount("对下验工计价台账",title,inspectionAccounts);
