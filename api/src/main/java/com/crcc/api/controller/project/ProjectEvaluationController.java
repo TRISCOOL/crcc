@@ -107,7 +107,7 @@ public class ProjectEvaluationController extends BaseController{
                        @RequestParam(value = "projectStatus",required = false) String projectStatus,
                        @RequestParam(value = "isSign",required = false) String isSign,
                        @RequestParam(value = "isResponsibility",required = false) Integer isResponsibility,
-                       @RequestParam("toke")String token,
+                       @RequestParam("token")String token,
                        HttpServletResponse response){
 
         Long projectId = permissionProjectOnlyToken(token);
