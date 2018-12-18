@@ -6,6 +6,7 @@ import com.crcc.common.service.ForDownAccountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +20,13 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     @Override
     public Long addInsepectionAccount(InspectionAccount inspectionAccount) {
         inspectionAccount.setCreateTime(new Date());
+        if (inspectionAccount.getValuationPrice() != null && inspectionAccount.getEndedPrice() != null){
+            BigDecimal midValue = inspectionAccount.getValuationPrice().add(inspectionAccount.getEndedPrice());
+            if (midValue.doubleValue() != 0d){
+                inspectionAccount.setUnderRate(inspectionAccount.getValuationPrice().divide(midValue));
+            }
+        }
+
         inspectionAccountMapper.insertSelective(inspectionAccount);
         return inspectionAccount.getId();
     }

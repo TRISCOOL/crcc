@@ -126,7 +126,7 @@ public class ForUpAccountController extends BaseController{
      * @param maxPayProportion
      * @param minProductionValue
      * @param maxProductionValue
-     * @param request
+     * @param token
      * @param response
      */
     @GetMapping("/export/v1.1")
@@ -136,8 +136,8 @@ public class ForUpAccountController extends BaseController{
                                   @RequestParam(value = "maxPayProportion",required = false)Double maxPayProportion,
                                   @RequestParam(value = "minProductionValue",required = false)Double minProductionValue,
                                   @RequestParam(value = "maxProductionValue",required = false)Double maxProductionValue,
-                                  HttpServletRequest request, HttpServletResponse response){
-        Long projectId = permissionProject(request);
+                                  @RequestParam("token")String token,HttpServletResponse response){
+        Long projectId = permissionProjectOnlyToken(token);
 
         List<MeteringAccount> meteringAccounts = forUpAccountService.listForPage(projectId,projectName,meteringTime,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,null,null);

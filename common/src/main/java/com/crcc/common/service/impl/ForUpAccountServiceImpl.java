@@ -77,25 +77,35 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
         }
 
         if (meteringAccount.getAlreadyPaidAmount() != null && meteringAccount.getRealAmountTax() != null){
-            meteringAccount.setpayProportion(meteringAccount.getRealAmountTax().divide(meteringAccount.getAlreadyPaidAmount()));
+            meteringAccount.setpayProportion(computerDivide(meteringAccount.getAlreadyPaidAmount(),meteringAccount.getRealAmountTax()));
         }
 
         if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getExtraAmount() != null
                 && meteringAccount.getNotCalculatedAmount() != null){
-            meteringAccount.setProductionValue(meteringAccount.getValuationAmountTax()
-                    .divide(
-                            meteringAccount.getExtraAmount()
-                                    .add(meteringAccount.getNotCalculatedAmount())
-                                    .add(meteringAccount.getValuationAmountTax()),2,BigDecimal.ROUND_HALF_DOWN));
+            BigDecimal midValue = add(meteringAccount.getExtraAmount(),
+                    meteringAccount.getNotCalculatedAmount(),
+                    meteringAccount.getValuationAmountTax());
+            meteringAccount.setProductionValue(computerDivide(meteringAccount.getValuationAmountTax(),midValue));
         }
     }
 
     private BigDecimal computerNotTax(BigDecimal amount,BigDecimal tax){
         BigDecimal realTax = tax.add(new BigDecimal(1));
-        return realTax.divide(amount,2,BigDecimal.ROUND_HALF_DOWN);
+        return amount.divide(realTax,2,BigDecimal.ROUND_HALF_DOWN);
     }
 
     private BigDecimal computerReduce(BigDecimal first,BigDecimal second){
-        return second.subtract(first);
+        return first.subtract(second);
+    }
+
+    private BigDecimal computerDivide(BigDecimal bcs,BigDecimal cs){
+        return bcs.divide(cs);
+    }
+
+    private BigDecimal add(BigDecimal first,BigDecimal second,BigDecimal third){
+        if (first != null && second != null && third != null){
+            return first.add(second).add(third);
+        }
+        return null;
     }
 }

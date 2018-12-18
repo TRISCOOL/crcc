@@ -84,6 +84,34 @@ public class BaseController {
         return user;
     }
 
+    protected Long permissionProjectOnlyToken(String token){
+        if (token == null){
+            throw new CrccException(ResponseCode.AUTH_FAILED);
+        }
+
+        User user = null;
+        if (!StringUtils.isEmpty(token)) {
+            String userStr = redisService.getStr(token);
+            if (!StringUtils.isEmpty(userStr)) {
+                user = Utils.fromJson(userStr, new TypeToken<User>() {
+                });
+            }
+        }
+
+        if (user.getType() == null)
+            throw new CrccException(ResponseCode.AUTH_FAILED);
+
+        if (user.getType() == 0){
+            return null;
+        }
+        List<Project> projectList = projectService.listProjectForProjectUser(user.getId());
+        if (projectList != null && projectList.size()>0){
+            return projectList.get(0).getId();
+        }
+
+        return 0L;
+    }
+
     protected User curUser(HttpServletRequest request, boolean checkToken) throws CrccException {
         User user = curUser(request);
         if (user == null && checkToken) {
@@ -96,6 +124,9 @@ public class BaseController {
         User user = curUser(request);
         if (user == null)
             return null;
+
+        if (user.getType() == null)
+            throw new CrccException(ResponseCode.AUTH_FAILED);
 
         if (user.getType() == 0){
             return null;

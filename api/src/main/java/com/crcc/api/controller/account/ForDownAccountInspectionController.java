@@ -116,7 +116,7 @@ public class ForDownAccountInspectionController extends BaseController{
      * @param subcontractorName
      * @param valuationType
      * @param valuationTime
-     * @param request
+     * @param token
      * @param response
      */
     @GetMapping("/export/v1.1")
@@ -127,8 +127,8 @@ public class ForDownAccountInspectionController extends BaseController{
                        @RequestParam(value = "valuationTime",required = false)Date valuationTime,
                        @RequestParam(value = "maxUnderRate",required = false) Double maxUnderRate,
                        @RequestParam(value = "minUnderRate",required = false) Double minUnderRate,
-                       HttpServletRequest request, HttpServletResponse response){
-        Long projectId = permissionProject(request);
+                       @RequestParam("token")String token,HttpServletResponse response){
+        Long projectId = permissionProjectOnlyToken(token);
 
         List<InspectionAccount> inspectionAccounts = forDownAccountService.listForPage(projectId,projectName,
                 subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate);

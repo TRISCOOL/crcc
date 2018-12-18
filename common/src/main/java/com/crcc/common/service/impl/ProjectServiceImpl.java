@@ -87,6 +87,12 @@ public class ProjectServiceImpl implements ProjectService{
 
     @Override
     public Long addProjectInfo(ProjectInfo projectInfo) {
+
+        ProjectInfo exisit = projectInfoMapper.getInfoByProjectId(projectInfo.getProjectId());
+        if (exisit != null){
+            throw new CrccException(ResponseCode.PROJECT_INFO_EXIST);
+        }
+
         projectInfo.setCreateTime(new Date());
         projectInfoMapper.insertSelective(projectInfo);
         return projectInfo.getId();

@@ -10,7 +10,8 @@ public enum ResponseCode {
     NOT_FOUND_USER("421","not found this user"),
     PASSWORD_ERROR("422","password is error"),
     //500-600
-    SERVER_ERROR("500","server error");
+    SERVER_ERROR("500","server error"),
+    PROJECT_INFO_EXIST("600","this project had projectInfo");
 
     private String code;
     private String message;

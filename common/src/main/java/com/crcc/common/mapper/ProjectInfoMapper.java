@@ -1,5 +1,6 @@
 package com.crcc.common.mapper;
 
+import com.crcc.common.model.Project;
 import com.crcc.common.model.ProjectInfo;
 import org.apache.ibatis.annotations.Param;
 
@@ -41,4 +42,6 @@ public interface ProjectInfoMapper {
                                       @Param("realContractEndTime")Date realContractEndTime);
 
     ProjectInfo getDetails(@Param("projectInfoId")Long projectInfoId);
+
+    ProjectInfo getInfoByProjectId(@Param("projectId")Long projectId);
 }

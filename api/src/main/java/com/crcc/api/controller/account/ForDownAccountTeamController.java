@@ -109,7 +109,7 @@ public class ForDownAccountTeamController extends BaseController{
      * @param subcontractorName
      * @param status
      * @param approval
-     * @param request
+     * @param token
      * @param response
      */
     @GetMapping("/export/v1.1")
@@ -117,9 +117,9 @@ public class ForDownAccountTeamController extends BaseController{
                              @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
                              @RequestParam(value = "status",required = false) Integer status,
                              @RequestParam(value = "approval",required = false) Integer approval,
-                             HttpServletRequest request, HttpServletResponse response){
+                             @RequestParam("token")String token,HttpServletResponse response){
 
-        Long projectId = permissionProject(request);
+        Long projectId = permissionProjectOnlyToken(token);
         List<LaborAccount> laborAccountList = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
                 status,approval,null,null);
 

@@ -146,13 +146,19 @@ public class ProjectController extends BaseController{
     public ResponseVo getPermissionProjectsList(HttpServletRequest request){
         User user = curUser(request);
         List<Project> projectList = projectService.listProjectForProjectUser(user.getId());
+
+        if (projectList != null && projectList.size() <= 0)
+            return ResponseVo.ok();
+
         projectList.forEach(project -> {
-            Long startTime = project.getContractStartTime() != null?project.getContractStartTime().getTime()/1000:null;
-            Long endTime = project.getContractEndTime() != null?project.getContractEndTime().getTime()/1000:null;
-            if (startTime != null && endTime != null){
-                Long distance = endTime-startTime;
-                Integer rate = 60*60*24*30;
-                project.setDistanceTime(distance.intValue()/rate);
+            if (project != null){
+                Long startTime = project.getContractStartTime() != null?project.getContractStartTime().getTime()/1000:null;
+                Long endTime = project.getContractEndTime() != null?project.getContractEndTime().getTime()/1000:null;
+                if (startTime != null && endTime != null){
+                    Long distance = endTime-startTime;
+                    Integer rate = 60*60*24*3;
+                    project.setDistanceTime(distance.intValue()/rate);
+                }
             }
         });
         return ResponseVo.ok(projectList);
@@ -555,10 +561,10 @@ public class ProjectController extends BaseController{
                                       @RequestParam(value = "contractEndTime",required = false) Date contractEndTime,
                                       @RequestParam(value = "realContractStartTime",required = false) Date realContractStartTime,
                                       @RequestParam(value = "realContractEndTime",required = false) Date realContractEndTime,
-                                      HttpServletRequest request, HttpServletResponse response) {
+                                      @RequestParam("token")String token, HttpServletResponse response) {
 
-        User user = curUser(request);
-        List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(null,projectName,status,
+        Long projectId = permissionProjectOnlyToken(token);
+        List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,
                 projectManager,projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,null,null);
 

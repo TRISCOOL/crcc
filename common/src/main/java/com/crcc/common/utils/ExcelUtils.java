@@ -87,6 +87,114 @@ public class ExcelUtils {
         return wb;
     }
 
+    public static HSSFWorkbook getProjectEvaluationExcel(String sheetName,String[] title,List<ProjectEvaluation> projectEvaluations){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        //声明列对象
+        HSSFCell cell = null;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            if (i == 5){
+                cell.setCellValue("合同额");
+            }else if (i == 7) {
+                cell.setCellValue("合同");
+            }else if (i == 9){
+                cell.setCellValue("合同工期(");
+            }else if (i == 12){
+                cell.setCellValue("经管部评估");
+            }else if (i == 17){
+                cell.setCellValue("会审情况");
+            }else if (i == 21){
+                cell.setCellValue("责任状签订");
+            }else {
+                cell.setCellValue("");
+            }
+            cell.setCellStyle(style);
+        }
+        CellRangeAddress merge1 = new CellRangeAddress(0,0,5,6);
+        CellRangeAddress merge2 = new CellRangeAddress(0,0,7,8);
+        CellRangeAddress merge3 = new CellRangeAddress(0,0,12,16);
+        CellRangeAddress merge4 = new CellRangeAddress(0,0,17,20);
+        CellRangeAddress merge5 = new CellRangeAddress(0,0,21,25);
+        sheet.addMergedRegion(merge1);
+        sheet.addMergedRegion(merge2);
+        sheet.addMergedRegion(merge3);
+        sheet.addMergedRegion(merge4);
+        sheet.addMergedRegion(merge5);
+
+        //创建标题
+        num = num+1;
+        HSSFRow realRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = realRow.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(ProjectEvaluation evaluation : projectEvaluations){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(evaluation.getId());
+            contentRow.createCell(1).setCellValue(evaluation.getProjectName());
+            contentRow.createCell(2).setCellValue(evaluation.getEngineeringType());
+            contentRow.createCell(3).setCellValue(evaluation.getEvaluationStatus());
+            contentRow.createCell(4).setCellValue(evaluation.getProjectStatus());
+            //中标
+            contentRow.createCell(5).setCellValue(isNull(evaluation.getWinningBid()));
+            //有效收入
+            contentRow.createCell(6).setCellValue(isNull(evaluation.getEffectiveIncome()));
+            //是否签订
+            contentRow.createCell(7).setCellValue(evaluation.getIsSign());
+            //合同开工日期
+            contentRow.createCell(8).setCellValue(DateTimeUtil.getYYYYMMDD(evaluation.getContractStartTime()));
+            //合同竣工日期
+            contentRow.createCell(9).setCellValue(DateTimeUtil.getYYYYMMDD(evaluation.getContractEndTime()));
+            //工期
+            contentRow.createCell(10).setCellValue(evaluation.getDuration());
+            //评估时间
+            contentRow.createCell(11).setCellValue(DateTimeUtil.getYYYYMMDD(evaluation.getEvaluationTime()));
+            //评估效益点
+            contentRow.createCell(12).setCellValue(isNull(evaluation.getEvaluationBenefit())*100+"%");
+            //含分包差及经营费
+            contentRow.createCell(13).setCellValue(isNull(evaluation.getEvaluationCost()));
+            //评估编号
+            contentRow.createCell(14).setCellValue(evaluation.getEvaluationCode());
+            //附件
+            contentRow.createCell(15).setCellValue(evaluation.getEvaluationAnnex());
+            //会审效益点
+            contentRow.createCell(16).setCellValue(isNull(evaluation.getJointHearingBenefit())*100+"%");
+            //会审含分包差及经营费
+            contentRow.createCell(17).setCellValue(isNull(evaluation.getJointHearingCost()));
+            contentRow.createCell(18).setCellValue(DateTimeUtil.getYYYYMMDD(evaluation.getJointHearingTime()));
+            contentRow.createCell(19).setCellValue(evaluation.getJointHearingAnnex());
+            contentRow.createCell(20).setCellValue(isNull(evaluation.getJointHearingCost()));
+
+            contentRow.createCell(21).setCellValue(isNull(evaluation.getResponsibilityBenefiy())*100+"%");
+            contentRow.createCell(22).setCellValue(DateTimeUtil.getYYYYMMDD(evaluation.getResponsibilityTime()));
+            contentRow.createCell(23).setCellValue(evaluation.getResponsibilityPeople());
+            contentRow.createCell(24).setCellValue(evaluation.getResponsibilitySecretary());
+            contentRow.createCell(25).setCellValue(evaluation.getResponsibilityAnnex());
+            num++;
+
+        }
+        return wb;
+
+    }
+
     public static HSSFWorkbook getExcelForUpAccount(String sheetName,String[] title, List<MeteringAccount> meteringAccounts){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
         int num = 0;
@@ -145,7 +253,7 @@ public class ExcelUtils {
             contentRow.createCell(1).setCellValue(meteringAccount.getProjectName());
             contentRow.createCell(2).setCellValue(meteringAccount.getMeteringNum());
             contentRow.createCell(3).setCellValue(DateTimeUtil.getYYYYMMDD(meteringAccount.getMeteringTime()));
-            contentRow.createCell(4).setCellValue("预付金额");
+            contentRow.createCell(4).setCellValue(meteringAccount.getPrepaymentAmount().setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
             //计价金额含税
             contentRow.createCell(5).setCellValue(meteringAccount.getValuationAmountTax()
                     .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
@@ -369,8 +477,8 @@ public class ExcelUtils {
                     .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
             contentRow.createCell(10).setCellValue(laborAccount.getContractPerson());
             contentRow.createCell(11).setCellValue(laborAccount.getPhone());
-            contentRow.createCell(12).setCellValue(laborAccount.getSettlementAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(12).setCellValue(laborAccount.getSettlementAmount() != null?laborAccount.getSettlementAmount()
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue():-1);
             contentRow.createCell(13).setCellValue(laborAccount.getRemark());
             contentRow.createCell(14).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getTeamTime()));
             contentRow.createCell(15).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getApprovalTime()));
@@ -430,25 +538,18 @@ public class ExcelUtils {
             contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
             contentRow.createCell(1).setCellValue(inspectionAccount.getSubcontractorName());
             contentRow.createCell(2).setCellValue(inspectionAccount.getTeamName());
-            contentRow.createCell(3).setCellValue(inspectionAccount.getContractPrice()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(3).setCellValue(isNull(inspectionAccount.getContractPrice()));
             contentRow.createCell(4).setCellValue(inspectionAccount.getValuationPeriod());
             contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(inspectionAccount.getValuationTime()));
             contentRow.createCell(6).setCellValue(getValuationType(inspectionAccount.getValuationType()));
-            contentRow.createCell(7).setCellValue(inspectionAccount.getValuationPrice()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(8).setCellValue(inspectionAccount.getValuationPriceReduce()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(9).setCellValue(inspectionAccount.getWarranty()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(10).setCellValue(inspectionAccount.getPerformanceBond()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(11).setCellValue(inspectionAccount.getCompensation()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(12).setCellValue(inspectionAccount.getShouldAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(13).setCellValue("已完未计金额");
-            contentRow.createCell(14).setCellValue("对下计价率");
+            contentRow.createCell(7).setCellValue(isNull(inspectionAccount.getValuationPrice()));
+            contentRow.createCell(8).setCellValue(isNull(inspectionAccount.getValuationPriceReduce()));
+            contentRow.createCell(9).setCellValue(isNull(inspectionAccount.getWarranty()));
+            contentRow.createCell(10).setCellValue(isNull(inspectionAccount.getPerformanceBond()));
+            contentRow.createCell(11).setCellValue(isNull(inspectionAccount.getCompensation()));
+            contentRow.createCell(12).setCellValue(isNull(inspectionAccount.getShouldAmount()));
+            contentRow.createCell(13).setCellValue(isNull(inspectionAccount.getEndedPrice()));
+            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate()));
             contentRow.createCell(15).setCellValue(inspectionAccount.getValuationPerson());
             contentRow.createCell(16).setCellValue(inspectionAccount.getRemark());
 
@@ -457,6 +558,14 @@ public class ExcelUtils {
 
         }
         return wb;
+    }
+
+    private static Double isNull(BigDecimal value){
+        if (value == null){
+            return -1d;
+        }
+
+        return value.setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
     }
 
     public static HSSFWorkbook getPersonnelExcel(String sheetName,String[] title, List<Personnel> personnels){

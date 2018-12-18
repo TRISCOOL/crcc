@@ -64,6 +64,16 @@ public class ProjectEvaluation {
     private String createUserStr;
     private String updateUserStr;
 
+    private String projectName;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
     public Double getSettlementAmount() {
         return settlementAmount;
     }

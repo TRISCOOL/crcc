@@ -652,4 +652,8 @@
            `user` uu ON info.update_user = uu.id
         WHERE info.id = #{projectInfoId}
     </select>
+
+  <select id="getInfoByProjectId" resultType="com.crcc.common.model.ProjectInfo">
+    SELECT *FROM project_info WHERE project_id = #{projectId} limit 1
+  </select>
 </mapper>
