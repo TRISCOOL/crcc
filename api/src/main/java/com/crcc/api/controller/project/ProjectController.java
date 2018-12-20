@@ -141,8 +141,8 @@ public class ProjectController extends BaseController{
      * @param request
      * @return
      */
-    @AuthRequire
     @GetMapping("/permission_list/v1.1")
+    @AuthRequire
     public ResponseVo getPermissionProjectsList(HttpServletRequest request){
         User user = curUser(request);
         List<Project> projectList = projectService.listProjectForProjectUser(user.getId());
@@ -548,7 +548,7 @@ public class ProjectController extends BaseController{
      * @param contractEndTime
      * @param realContractStartTime
      * @param realContractEndTime
-     * @param request
+     * @param token
      * @param response
      */
     @GetMapping("/export/v1.1")

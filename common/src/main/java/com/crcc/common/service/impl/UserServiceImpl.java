@@ -38,6 +38,8 @@ public class UserServiceImpl implements UserService{
     @Autowired
     private RoleService roleService;
 
+    private static String USER_CODE_KEY = "user_code";
+
     @Override
     public User login(String account, String password) {
 
@@ -78,6 +80,7 @@ public class UserServiceImpl implements UserService{
     public Long addUser(User user) {
         user.setCreateTime(new Date());
         user.setUuid(Utils.getUuid(true));
+        user.setCode(createUserCode());
         int result = userMapper.insertSelective(user);
         if (result != 0){
             relationUserAndProject(user.getId(),user.getProjects());
@@ -235,5 +238,29 @@ public class UserServiceImpl implements UserService{
             return permissions;
         }
         return null;
+    }
+
+    private String createUserCode(){
+        Long num = redisService.incrby(USER_CODE_KEY,1);
+        if (num < 10){
+            return "0000"+num;
+        }
+
+        if (10<= num && num<100){
+            return "000"+num;
+        }
+
+        if (num>=100 && num<1000){
+            return "00"+num;
+        }
+
+        if (num >= 1000 && num < 10000){
+            return "0"+num;
+        }
+
+        if (num >= 10000)
+            return num+"";
+
+        return "";
     }
 }
