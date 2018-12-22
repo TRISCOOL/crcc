@@ -71,6 +71,16 @@ public class LaborAccount {
     private String createUserStr;
     private String updateUserStr;
 
+    private String contractNumber;
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
     public String getCreateUserStr() {
         return createUserStr;
     }

@@ -127,6 +127,42 @@ public class ProjectController extends BaseController{
     }
 
     /**
+     * 导出项目管理
+     * @param projectName
+     * @param code
+     * @param projectType
+     * @param status
+     * @return
+     */
+    @GetMapping("/export_project/v1.1")
+    public void exportProject(@RequestParam(value = "projectName",required = false)String projectName,
+                                    @RequestParam(value = "code",required = false)String code,
+                                    @RequestParam(value = "projectType",required = false)Long projectType,
+                                    @RequestParam(value = "status",required = false)Integer status,
+                                    HttpServletResponse response){
+
+        List<Project> projectList = projectService.listProjectForPage(code,projectName,projectType,status,
+                null,null);
+
+        OutputStream out = null;
+        try {
+
+            String[] titles = {"项目编码","项目名称","工程类别","状态","创建人","创建时间"};
+
+            out = response.getOutputStream();
+            HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForProject("项目管理",titles,projectList);
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            response.setHeader("Content-disposition", "attachment; filename="+new String("项目管理".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
+
+    /**
      * 项目详情
      * @param projectId
      * @return
@@ -307,7 +343,7 @@ public class ProjectController extends BaseController{
         response.setHeader("content-Type", "application/pdf");
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename="+new String((projectInfo.getProjectName()+"工程信息卡").getBytes("UTF-8"), "ISO8859-1")+".pdf");
-        Document document = new Document();
+        Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
         document.open();
         setContentForPDF(projectInfo,document,writer);
@@ -316,7 +352,7 @@ public class ProjectController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(200, 400);
+        img.setAbsolutePosition(450, 750);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -333,158 +369,121 @@ public class ProjectController extends BaseController{
 
         Paragraph title = new Paragraph(projectInfo.getProjectName()+"工程项目信息卡",font);
         title.setAlignment(Element.ALIGN_CENTER);
+        Paragraph kb1 = new Paragraph(" ");
+        Paragraph kb2 = new Paragraph(" ");
         document.add(title);
+        document.add(kb1);
+        document.add(kb2);
 
-        float[] widths = {0.1f, 0.1f, 0.2f,0.1f, 0.2f,0.1f,0.2f};
+        float[] widths = {0.1f, 0.05f, 0.25f,0.1f, 0.2f,0.1f,0.2f};
         PdfPTable table = new PdfPTable(widths);
+        table.setPaddingTop(100f);
         PdfPCell cell;
-        cell = new PdfPCell(getTitle("工程名称",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("工程名称",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getProjectName(),font));
-        cell.setColspan(5);
-        table.addCell(cell);
-
-        cell = new PdfPCell(getTitle("工程地点",font));
-        cell.setColspan(2);
-        table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getAddress(),font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getProjectName(),font),5,
+                null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("工程状态",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("工程地点",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getStatusStr(),font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getAddress(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("里程桩号",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("工程状态",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getMileageNumber()+"",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getStatusStr(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("项目部地址",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("里程桩号",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getOrgAddress(),font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getMileageNumber()+"",font),2,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("合同总价",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("项目部地址",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getTotalPrice().doubleValue()+"",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getOrgAddress(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("合同编号",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("合同总价",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getContractNumber(),font));
-        cell.setColspan(3);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getTotalPrice().doubleValue()+"",font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("合同工期",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("合同编号",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getContractDay()+"天",font));
-        cell.setColspan(1);
-        table.addCell(cell);
-        cell = new PdfPCell(getTitle("合同开工日期",font));
-        cell.setColspan(1);
-        table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getContractStartTime()),font));
-        cell.setColspan(1);
-        table.addCell(cell);
-        cell = new PdfPCell(getTitle("合同竣工日期",font));
-        cell.setColspan(1);
-        table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getContractEndTime()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getContractNumber(),font),3,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("实际工期",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("合同工期",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getRealContractDay()+"天",font));
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getContractDay()+"天",font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(getTitle("合同开工日期",font),1,null,true,false);
         cell.setColspan(1);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("实际开工时间",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getContractStartTime()),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractStartTime()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("合同竣工日期",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("实际竣工时间",font));
-        cell.setColspan(1);
-        table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractEndTime()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getContractEndTime()),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("业主单位",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("实际工期",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getProprietorCompany(),font));
-        cell.setColspan(3);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getRealContractDay()+"天",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("联系方式",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("实际开工时间",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getProprietorPhone(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractStartTime()),font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(getTitle("实际竣工时间",font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(projectInfo.getRealContractEndTime()),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("监理单位",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("业主单位",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getSupervisionCompany(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getProprietorCompany(),font),3,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("监理地址",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("联系方式",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getSupervisionAddress(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getProprietorPhone(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("联系方式",font));
-        cell.setColspan(1);
+
+        cell = Utils.getNewCell(getTitle("监理单位",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getSupervisionPhone(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getSupervisionCompany(),font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(getTitle("监理地址",font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getSupervisionAddress(),font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(getTitle("联系方式",font),1,null,true,false);
+        table.addCell(cell);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getSupervisionPhone(),font),1,null,true,false);
         table.addCell(cell);
 
         createParagrap(getProjectInfoPeoples(projectInfo.getManager()),table,cell,font,"项目经理");
         createParagrap(getProjectInfoPeoples(projectInfo.getSecretary()),table,cell,font,"项目书记");
         createParagrap(getProjectInfoPeoples(projectInfo.getChiefEngineer()),table,cell,font,"项目总工");
 
-        cell = new PdfPCell(getTitle("投入人员",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("投入人员",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getInputPerson()+"人",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getInputPerson()+"人",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("正式职工",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("正式职工",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getFormalEmployee()+"人",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getFormalEmployee()+"人",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(getTitle("外聘",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("外聘",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getExternalEmployee()+"人",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getExternalEmployee()+"人",font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("工程概述",font));
-        cell.setColspan(1);
-        cell.setRowspan(3);
+        cell = Utils.getNewCell(getTitle("工程概述",font),1,3,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(projectInfo.getDescription(),font));
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getDescription(),font),6,null,true,false);
         cell.setColspan(6);
         table.addCell(cell);
 
@@ -501,28 +500,20 @@ public class ProjectController extends BaseController{
             return;
         }
 
-        cell = new PdfPCell(getTitle(title,font));
-        cell.setColspan(1);
-        cell.setRowspan(projectInfoPeople.size());
+        cell = Utils.getNewCell(getTitle(title,font),1,projectInfoPeople.size(),true,true);
         table.addCell(cell);
         for (ProjectInfoPeople people : projectInfoPeople){
-            cell = new PdfPCell(new Paragraph("姓名",font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph("姓名",font),1,null,true,false);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(people.getName(),font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph(people.getName(),font),1,null,true,false);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph("任职时间",font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph("任职时间",font),1,null,true,false);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(people.getTime(),font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph(people.getTime(),font),1,null,true,false);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph("联系方式",font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph("联系方式",font),1,null,true,false);
             table.addCell(cell);
-            cell = new PdfPCell(new Paragraph(people.getPhone(),font));
-            cell.setColspan(1);
+            cell = Utils.getNewCell(new Paragraph(people.getPhone(),font),1,null,true,false);
             table.addCell(cell);
         }
     }

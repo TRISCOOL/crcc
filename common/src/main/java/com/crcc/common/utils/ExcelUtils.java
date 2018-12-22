@@ -9,6 +9,84 @@ import java.math.BigDecimal;
 import java.util.List;
 
 public class ExcelUtils {
+
+    public static HSSFWorkbook getHSSFWorkbookForUser(String sheetName,String[] title,List<User> users){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFCell cell = null;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        num = num+1;
+        for (User user:users){
+            HSSFRow contextRow = sheet.createRow(num);
+            contextRow.createCell(0).setCellValue(user.getCode());
+            contextRow.createCell(1).setCellValue(user.getType() == 0?"公司":"项目部");
+            contextRow.createCell(2).setCellValue(user.getAccount());
+            contextRow.createCell(3).setCellValue(user.getProjectName());
+            contextRow.createCell(4).setCellValue(user.getPassword());
+            contextRow.createCell(5).setCellValue(user.getRoleName());
+            contextRow.createCell(6).setCellValue(user.getDisable()==0?"启用":"禁用");
+            contextRow.createCell(7).setCellValue(user.getCreateUserStr());
+            contextRow.createCell(8).setCellValue(user.getCreateTime() == null?"":DateTimeUtil.getYYYYMMDD(user.getCreateTime()));
+            contextRow.createCell(9).setCellValue(user.getUpdateUserStr());
+            contextRow.createCell(10).setCellValue(user.getUpdateTime() == null?"":DateTimeUtil.getYYYYMMDD(user.getUpdateTime()));
+            num++;
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getHSSFWorkbookForProject(String sheetName,String[] title,List<Project> projectList){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFCell cell = null;
+        for(int i=0;i<title.length;i++){
+            cell = row.createCell(i);
+            cell.setCellValue(title[i]);
+            cell.setCellStyle(style);
+        }
+
+        num = num+1;
+        for (Project project:projectList){
+            HSSFRow contextRow = sheet.createRow(num);
+            contextRow.createCell(0).setCellValue(project.getCode());
+            contextRow.createCell(1).setCellValue(project.getName());
+            contextRow.createCell(2).setCellValue(project.getProjectType());
+            contextRow.createCell(3).setCellValue(project.getStatusStr());
+            contextRow.createCell(4).setCellValue(project.getCreateUserStr());
+            contextRow.createCell(5).setCellValue(project.getCreateTime() == null?"":DateTimeUtil.getYYYYMMDD(project.getCreateTime()));
+            num++;
+        }
+        return wb;
+    }
+
     /**
      * 导出Excel
      * @param sheetName sheet名称
@@ -227,7 +305,7 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress addressPlane = new CellRangeAddress(0,0,3,7);
+        CellRangeAddress addressPlane = new CellRangeAddress(0,0,5,7);
         CellRangeAddress addressRealTime = new CellRangeAddress(0,0,8,9);
         CellRangeAddress addressContract = new CellRangeAddress(0,0,10,12);
         CellRangeAddress address = new CellRangeAddress(0,0,13,14);
@@ -244,7 +322,11 @@ public class ExcelUtils {
             cell.setCellValue(title[i]);
             cell.setCellStyle(style);
         }
-
+        Double sumAlreadyAmount = 0d;
+        Double sumRealTaxAmount = 0d;
+        Double sumTaxAmount = 0d;
+        Double sumEndAmount = 0d;
+        Double sumExtraAmount = 0d;
         //创建内容
         num = num+1;
         for(MeteringAccount meteringAccount : meteringAccounts){
@@ -288,10 +370,39 @@ public class ExcelUtils {
             contentRow.createCell(15).setCellValue(meteringAccount.getProductionValue()
                     .setScale(2,BigDecimal.ROUND_DOWN).doubleValue()*100+"%");
             contentRow.createCell(16).setCellValue(meteringAccount.getRemark());
+            sumAlreadyAmount = addAmount(sumAlreadyAmount,meteringAccount.getAlreadyPaidAmount());
+            sumRealTaxAmount = addAmount(sumRealTaxAmount,meteringAccount.getRealAmountTax());
+            sumTaxAmount = addAmount(sumTaxAmount,meteringAccount.getValuationAmountTax());
+            sumEndAmount = addAmount(sumEndAmount,meteringAccount.getNotCalculatedAmount());
+            sumExtraAmount = addAmount(sumExtraAmount,meteringAccount.getExtraAmount());
             num++;
 
         }
+        num = num+1;
+        HSSFRow contentRow = sheet.createRow(num);
+        contentRow.createCell(0).setCellValue("合计");
+        contentRow.createCell(12).setCellValue(
+                computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount))+"%"
+        );
+        contentRow.createCell(15).setCellValue(
+                computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount))+"%");
         return wb;
+    }
+
+    private static Double computerDivide(BigDecimal bcs,BigDecimal cs){
+        if (bcs.doubleValue() == 0d)
+            return 0d;
+
+        return bcs.divide(cs,2,BigDecimal.ROUND_HALF_DOWN).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
+    }
+
+    private static Double addAmount(Double sum,BigDecimal value){
+        Double mid = 0d;
+        if (value != null){
+            mid = value.doubleValue();
+        }
+        sum = sum + mid;
+        return sum;
     }
 
     public static HSSFWorkbook getSubcontractorExcel(String sheetName,String[] title, List<Subcontractor> subcontractors){
@@ -382,8 +493,8 @@ public class ExcelUtils {
             contentRow.createCell(6).setCellValue(subcontractorResume.getProjectName());
             contentRow.createCell(7).setCellValue(subcontractorResume.getContractPerson());
             contentRow.createCell(8).setCellValue(subcontractorResume.getPhone());
-            contentRow.createCell(9).setCellValue(subcontractorResume.getContractAmount());
-            contentRow.createCell(10).setCellValue(subcontractorResume.getSettlementAmount());
+            contentRow.createCell(9).setCellValue(subcontractorResume.getContractAmount() != null?subcontractorResume.getContractAmount():0d);
+            contentRow.createCell(10).setCellValue(subcontractorResume.getSettlementAmount() != null?subcontractorResume.getSettlementAmount():0d);
             contentRow.createCell(11).setCellValue(subcontractorResume.getProjectEvaluation());
             contentRow.createCell(12).setCellValue(subcontractorResume.getProjectDescription());
             num++;
@@ -533,6 +644,8 @@ public class ExcelUtils {
 
         //创建内容
         num = num+1;
+        Double sumPrice = 0d;
+        Double sumEndPrice = 0d;
         for(InspectionAccount inspectionAccount : inspectionAccounts){
             HSSFRow contentRow = sheet.createRow(num);
             contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
@@ -549,14 +662,19 @@ public class ExcelUtils {
             contentRow.createCell(11).setCellValue(isNull(inspectionAccount.getCompensation()));
             contentRow.createCell(12).setCellValue(isNull(inspectionAccount.getShouldAmount()));
             contentRow.createCell(13).setCellValue(isNull(inspectionAccount.getEndedPrice()));
-            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate()));
+            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate())+"%");
             contentRow.createCell(15).setCellValue(inspectionAccount.getValuationPerson());
             contentRow.createCell(16).setCellValue(inspectionAccount.getRemark());
-
-
+            sumPrice = addAmount(sumPrice,inspectionAccount.getValuationPrice());
+            sumEndPrice = addAmount(sumEndPrice,inspectionAccount.getEndedPrice());
             num++;
 
         }
+        HSSFRow contentRow = sheet.createRow(num);
+        contentRow.createCell(0).setCellValue("合计");
+        contentRow.createCell(14).setCellValue(
+                computerDivide(new BigDecimal(sumPrice),new BigDecimal(sumPrice+sumEndPrice))+"%"
+        );
         return wb;
     }
 

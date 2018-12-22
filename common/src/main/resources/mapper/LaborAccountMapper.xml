@@ -416,11 +416,13 @@
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
     SELECT
-      la.*, p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
+      la.*, p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,info.contract_number AS contractCode
     FROM
       labor_account la
     LEFT JOIN
       project p ON la.project_id = p.id
+    LEFT JOIN
+      project_info info ON info.project_id = la.project_id
     LEFT JOIN
       `user` cu ON la.create_user = cu.id
     LEFT JOIN

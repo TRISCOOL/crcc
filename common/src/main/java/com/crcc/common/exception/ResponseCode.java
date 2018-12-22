@@ -6,6 +6,7 @@ public enum ResponseCode {
     //400-500
     AUTH_FAILED("401","User authentication failed"),
     PERMISSION_CHANGED("402","permission changed"),
+    USER_DISABLE("403","this use is disabled"),
     PARAM_ILLEGAL("420","param is illegal"),
     NOT_FOUND_USER("421","not found this user"),
     PASSWORD_ERROR("422","password is error"),

@@ -11,11 +11,11 @@ public interface SubcontractorService {
 
     Subcontractor getDetails(Long subcontractorId);
 
-    List<Subcontractor> listSubcontractor(String name,String type,Long professionType,Integer minAmount,Integer maxAmount,
+    List<Subcontractor> listSubcontractor(String name,String type,String professionType,Integer minAmount,Integer maxAmount,
                                           String shareEvaluation,String groupEvaluation,String companyEvaluation,
                                           Integer offset,Integer length);
 
-    Integer listSubcontractorSize(String name,String type,Long professionType,Integer minAmount,Integer maxAmount,
+    Integer listSubcontractorSize(String name,String type,String professionType,Integer minAmount,Integer maxAmount,
                                   String shareEvaluation,String groupEvaluation,String companyEvaluation);
 
 

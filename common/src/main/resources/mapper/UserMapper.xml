@@ -273,7 +273,8 @@
       p.id AS projectId,
       cu.name AS createUserStr,
       uu.name AS updateUserStr,
-      r.name AS roleName
+      r.name AS roleName,
+      r.id AS roleId
     FROM
       `user` u
     LEFT JOIN

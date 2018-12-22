@@ -2,6 +2,9 @@ package com.crcc.common.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.Paragraph;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPHeaderCell;
 import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
@@ -124,5 +127,28 @@ public class Utils {
     public static boolean vinMatch(String vin){
         if(vin == null) return false;
         return vin.matches(vinReg);
+    }
+
+    public static PdfPCell getNewCell(Paragraph context, Integer colSpan, Integer rowSpan,
+                                boolean isMiddle, boolean isFixHeight){
+        PdfPCell cell = new PdfPCell(context);
+        if (colSpan != null){
+            cell.setColspan(colSpan);
+        }
+
+        if (rowSpan != null){
+            cell.setRowspan(rowSpan);
+        }
+
+        if (isMiddle){
+            cell.setUseAscender(true);
+            cell.setVerticalAlignment(PdfPHeaderCell.ALIGN_MIDDLE);
+        }
+
+        if (isFixHeight){
+            cell.setFixedHeight(40f);
+        }
+
+        return cell;
     }
 }

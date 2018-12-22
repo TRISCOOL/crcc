@@ -120,8 +120,7 @@ public class ForDownAccountInspectionController extends BaseController{
      * @param response
      */
     @GetMapping("/export/v1.1")
-    @AuthRequire
-    public void export(@RequestParam(value = "proejctName",required = false)String projectName,
+    public void export(@RequestParam(value = "projectName",required = false)String projectName,
                        @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
                        @RequestParam(value = "valuationType",required = false)Integer valuationType,
                        @RequestParam(value = "valuationTime",required = false)Date valuationTime,

@@ -6,10 +6,16 @@ import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.User;
 import com.crcc.common.service.UserService;
+import com.crcc.common.utils.ExcelUtils;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -133,6 +139,36 @@ public class UserController extends BaseController {
 
         Integer total = userService.listUserSize(code,projectName,status);
         return ResponseVo.ok(total,page,pageSize,users);
+    }
+
+    /**
+     * 导出用户管理列表
+     * @param projectName
+     * @param code
+     * @param status
+     * @param response
+     */
+    @GetMapping("/export/v1.1")
+    public void exportExcelForUsers(@RequestParam(value = "projectName",required = false)String projectName,
+                                    @RequestParam(value = "code",required = false)String code,
+                                    @RequestParam(value = "status",required = false)Integer status,
+                                    HttpServletResponse response){
+
+        List<User> users = userService.listUser(code,projectName,status,null,null);
+        OutputStream out = null;
+        try {
+
+            String[] titles = {"序号编码","帐号类别","帐号名称","项目名称","密码","角色权限","状态","创建人","创建时间","更新人","更新时间"};
+
+            out = response.getOutputStream();
+            HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForUser("用户管理",titles,users);
+            response.setHeader("Content-disposition", "attachment; filename="+new String("用户管理".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 
 }

@@ -12,6 +12,7 @@ import com.crcc.common.model.User;
 import com.crcc.common.service.SubcontractorService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -97,7 +98,7 @@ public class SubcontractorController extends BaseController{
     @GetMapping("/list/v1.1")
     public ResponseVo list(@RequestParam(value = "name",required = false) String name,
                            @RequestParam(value = "type",required = false) String type,
-                           @RequestParam(value = "professionType",required = false) Long professionType,
+                           @RequestParam(value = "professionType",required = false) String professionType,
                            @RequestParam(value = "minAmount",required = false) Integer minAmount,
                            @RequestParam(value = "maxAmount",required = false) Integer maxAmount,
                            @RequestParam(value = "shareEvaluation",required = false) String shareEvaluation,
@@ -143,7 +144,7 @@ public class SubcontractorController extends BaseController{
      * 导出分包商excel
      * @param name
      * @param type
-     * @param professionId
+     * @param professionType
      * @param minAmount
      * @param maxAmount
      * @param shareEvaluation
@@ -154,7 +155,7 @@ public class SubcontractorController extends BaseController{
     @GetMapping("/export/v1.1")
     public void export(@RequestParam(value = "name",required = false) String name,
                        @RequestParam(value = "type",required = false) String type,
-                       @RequestParam(value = "professionId",required = false) Long professionId,
+                       @RequestParam(value = "professionType",required = false) String professionType,
                        @RequestParam(value = "minAmount",required = false) Integer minAmount,
                        @RequestParam(value = "maxAmount",required = false) Integer maxAmount,
                        @RequestParam(value = "shareEvaluation",required = false) String shareEvaluation,
@@ -162,7 +163,7 @@ public class SubcontractorController extends BaseController{
                        @RequestParam(value = "companyEvaluation",required = false) String companyEvaluation,
                        HttpServletResponse response){
 
-        List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionId,minAmount,
+        List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
                 maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,null,null);
 
         String[] titles = {"分包商备案编码","分包商全称","分包商类型","专业类别","纳税人类型","法人","注册资本金（万元）",
@@ -213,7 +214,7 @@ public class SubcontractorController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(200, 400);
+        img.setAbsolutePosition(450, 750);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -230,197 +231,143 @@ public class SubcontractorController extends BaseController{
 
         Paragraph title = new Paragraph(subcontractor.getName()+"资质信息卡",font);
         title.setAlignment(Element.ALIGN_CENTER);
+        Paragraph kb1 = new Paragraph(" ");
+        Paragraph kb2 = new Paragraph(" ");
         document.add(title);
+        document.add(kb1);
+        document.add(kb2);
 
         float[] widths = {0.15f, 0.1f, 0.2f,0.1f, 0.2f,0.1f,0.15f};
         PdfPTable table = new PdfPTable(widths);
         PdfPCell cell;
-        cell = new PdfPCell(getTitle("分包商全称",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("分包商全称",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getName(),font));
-        cell.setColspan(5);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getName(),font),5,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("成立日期",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("成立日期",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSetUpTime()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSetUpTime()),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("纳税人类型",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("纳税人类型",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getTaxpayerType(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getTaxpayerType(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("注册资本金",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("注册资本金",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getRegisteredCapital().doubleValue()+"",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getRegisteredCapital().doubleValue()+"",font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("类型",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("类型",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getType(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getType(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("电话",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("电话",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getPhone(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getPhone(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("电子邮箱",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("电子邮箱",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getEmail(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getEmail(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("注册地址",font));
-        cell.setColspan(2);
+        cell = Utils.getNewCell(getTitle("注册地址",font),2,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getAddress(),font));
-        cell.setColspan(3);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getAddress(),font),3,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("邮编",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("邮编",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getZipCode(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getZipCode(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("法定代表人",font));
-        cell.setRowspan(2);
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("法定代表人",font),1,2,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("姓名",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("姓名",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getName(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getName(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("职务",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("职务",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getLegalPersonPosition(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonPosition(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("身份证号码",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("身份证号码",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getLegalPersonCard(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonCard(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("联系方式",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("联系方式",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getLegalPersonPhone(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonPhone(),font),1,null,true,false);
         table.addCell(cell);
         Paragraph address = new Paragraph("家庭地址",font);
         address.setAlignment(Element.ALIGN_CENTER);
-        cell = new PdfPCell(address);
-        cell.setColspan(1);
+        cell = Utils.getNewCell(address,1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getLegalPersonAddress(),font));
-        cell.setColspan(3);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonAddress(),font),3,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("营业执照",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("营业执照",font),1,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("统一社会信用代码",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("统一社会信用代码",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getBusinessLicenseCode(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getBusinessLicenseCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("有效期限",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getBusinessLicenseValidityPeriod()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getBusinessLicenseValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("发证机关",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getBusinessLicenseFrom(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getBusinessLicenseFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("资质证书",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("资质证书",font),1,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("证书编号",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("证书编号",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getQualificationCode(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getQualificationCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("有效期限",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getQualificationValidityPeriod()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getQualificationValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("发证机关",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getQualificationFrom(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getQualificationFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("安全生产许可证",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("安全生产许可证",font),1,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("编号",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("编号",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getSafetyCode(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getSafetyCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("有效期限",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSafetyValidityPeriod()),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSafetyValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("发证机关",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getSafetyFrom(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getSafetyFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = new PdfPCell(getTitle("开户银行许可证",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(getTitle("开户银行许可证",font),1,null,true,true);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("开户银行",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("开户银行",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getBank(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getBank(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("银行账号",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("银行账号",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getBankAccount(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getBankAccount(),font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph("发证机关",font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
         table.addCell(cell);
-        cell = new PdfPCell(new Paragraph(subcontractor.getBankFrom(),font));
-        cell.setColspan(1);
+        cell = Utils.getNewCell(new Paragraph(subcontractor.getBankFrom(),font),1,null,true,false);
         table.addCell(cell);
 
         document.add(table);

@@ -99,7 +99,10 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
     }
 
     private BigDecimal computerDivide(BigDecimal bcs,BigDecimal cs){
-        return bcs.divide(cs);
+        if (bcs.doubleValue() == 0d)
+            return new BigDecimal(0);
+
+        return bcs.divide(cs,2,BigDecimal.ROUND_HALF_DOWN);
     }
 
     private BigDecimal add(BigDecimal first,BigDecimal second,BigDecimal third){

@@ -47,6 +47,9 @@ public class UserServiceImpl implements UserService{
         if (existUser == null)
             throw new CrccException(ResponseCode.NOT_FOUND_USER);
 
+        if (existUser.getDisable() == 1)
+            throw new CrccException(ResponseCode.USER_DISABLE);
+
         if (!existUser.getPassword().equals(password))
             throw new CrccException(ResponseCode.PASSWORD_ERROR);
 
