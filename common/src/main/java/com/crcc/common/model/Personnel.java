@@ -84,6 +84,16 @@ public class Personnel {
     private String createUserStr;
     private String updateUserStr;
 
+    private String code;
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
+    }
+
     public String getCreateUserStr() {
         return createUserStr;
     }

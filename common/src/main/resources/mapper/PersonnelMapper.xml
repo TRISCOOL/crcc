@@ -41,6 +41,7 @@
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="code" property="code" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, famous_family, join_association, join_association_time, job_title, work_time, 
@@ -48,7 +49,7 @@
     project_name, brithday, qq_number, status, first_degree_school, first_degree_profession, 
     first_degree_time, first_degree_level, second_degree_school, second_degree_level, 
     second_degree_time, second_degree_profession, work_experience, certificate, training, 
-    remark, award, head_url,education,create_time,create_user,update_time,update_user,`name`
+    remark, award, head_url,education,create_time,create_user,update_time,update_user,`name`,code
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -72,7 +73,7 @@
       second_degree_level, second_degree_time, 
       second_degree_profession, work_experience, 
       certificate, training, remark, education,create_time,create_user,update_time,update_user,`name`
-      award, head_url)
+      award, head_url,code)
     values (#{id,jdbcType=BIGINT}, #{famousFamily,jdbcType=VARCHAR}, #{joinAssociation,jdbcType=TINYINT}, 
       #{joinAssociationTime,jdbcType=TIMESTAMP}, #{jobTitle,jdbcType=VARCHAR}, #{workTime,jdbcType=INTEGER}, 
       #{birthplace,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
@@ -85,7 +86,7 @@
       #{secondDegreeProfession,jdbcType=VARCHAR}, #{workExperience,jdbcType=VARCHAR}, 
       #{certificate,jdbcType=VARCHAR}, #{training,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{award,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR},#{education},#{createTime},#{createUser},#{updateTime},
-      #{updateUser},#{name})
+      #{updateUser},#{name},#{code})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.Personnel" keyProperty="id" useGeneratedKeys="true">
     insert into personnel
@@ -207,6 +208,9 @@
       <if test="name != null">
         `name`,
       </if>
+      <if test="code != null">
+        `code`,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -325,6 +329,9 @@
       </if>
       <if test="name != null">
         #{name},
+      </if>
+      <if test="code != null">
+        #{code},
       </if>
     </trim>
   </insert>
@@ -445,6 +452,9 @@
       <if test="name != null">
         `name` = #{name}
       </if>
+      <if test="code != null">
+        code = #{code}
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -461,7 +471,7 @@
       sex = #{sex,jdbcType=VARCHAR},
       health = #{health,jdbcType=VARCHAR},
       jiguan = #{jiguan,jdbcType=VARCHAR},
-      position = #{position,jdbcType=VARCHAR},
+      `position` = #{position,jdbcType=VARCHAR},
       specialty = #{specialty,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
       project_name = #{projectName,jdbcType=VARCHAR},
@@ -481,7 +491,8 @@
       training = #{training,jdbcType=VARCHAR},
       remark = #{remark,jdbcType=VARCHAR},
       award = #{award,jdbcType=VARCHAR},
-      head_url = #{headUrl,jdbcType=VARCHAR}
+      head_url = #{headUrl,jdbcType=VARCHAR},
+      code = #{code}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

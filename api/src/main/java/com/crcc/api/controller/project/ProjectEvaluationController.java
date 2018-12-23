@@ -101,7 +101,6 @@ public class ProjectEvaluationController extends BaseController{
     }
 
     @GetMapping("/export/v1.1")
-    @AuthRequire
     public void export(@RequestParam(value = "projectName",required = false) String projectName,
                        @RequestParam(value = "evaluationStatus",required = false) String evaluationStatus,
                        @RequestParam(value = "projectStatus",required = false) String projectStatus,

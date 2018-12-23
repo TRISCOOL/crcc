@@ -32,6 +32,8 @@ public class Project {
     private Date contractEndTime;
     private String statusStr;
 
+    private Integer distanceTime;
+
     public Integer getDistanceTime() {
         return distanceTime;
     }
@@ -40,7 +42,6 @@ public class Project {
         this.distanceTime = distanceTime;
     }
 
-    private Integer distanceTime;
 
     public Date getContractStartTime() {
         return contractStartTime;

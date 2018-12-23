@@ -382,10 +382,10 @@ public class ExcelUtils {
         HSSFRow contentRow = sheet.createRow(num);
         contentRow.createCell(0).setCellValue("合计");
         contentRow.createCell(12).setCellValue(
-                computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount))+"%"
+                computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount))*100+"%"
         );
         contentRow.createCell(15).setCellValue(
-                computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount))+"%");
+                computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount))*100+"%");
         return wb;
     }
 
@@ -715,7 +715,7 @@ public class ExcelUtils {
         num = num+1;
         for(Personnel personnel : personnels){
             HSSFRow contentRow = sheet.createRow(num);
-            contentRow.createCell(0).setCellValue("编码待定");
+            contentRow.createCell(0).setCellValue(personnel.getCode());
             contentRow.createCell(1).setCellValue(personnel.getName());
             contentRow.createCell(2).setCellValue(personnel.getSex());
             contentRow.createCell(3).setCellValue(personnel.getStatus());
@@ -729,7 +729,7 @@ public class ExcelUtils {
             contentRow.createCell(11).setCellValue(personnel.getIdCard());
             contentRow.createCell(12).setCellValue(personnel.getCertificate());
             contentRow.createCell(13).setCellValue(personnel.getJiguan());
-            contentRow.createCell(14).setCellValue(personnel.getCreateTime());
+            contentRow.createCell(14).setCellValue(personnel.getCreateTime() == null?"":DateTimeUtil.getYYYYMMDD(personnel.getCreateTime()));
             num++;
 
         }
