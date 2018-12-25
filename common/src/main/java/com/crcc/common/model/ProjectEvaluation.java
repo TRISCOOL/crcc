@@ -66,6 +66,26 @@ public class ProjectEvaluation {
 
     private String projectName;
 
+    private String projectStatusStr;
+
+    private String engineeringStatus;
+
+    public String getEngineeringStatus() {
+        return engineeringStatus;
+    }
+
+    public void setEngineeringStatus(String engineeringStatus) {
+        this.engineeringStatus = engineeringStatus;
+    }
+
+    public String getProjectStatusStr() {
+        return projectStatusStr;
+    }
+
+    public void setProjectStatusStr(String projectStatusStr) {
+        this.projectStatusStr = projectStatusStr;
+    }
+
     public String getProjectName() {
         return projectName;
     }

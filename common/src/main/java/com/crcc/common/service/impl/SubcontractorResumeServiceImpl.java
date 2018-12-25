@@ -47,4 +47,9 @@ public class SubcontractorResumeServiceImpl implements SubcontractorResumeServic
     public SubcontractorResume getDetails(Long subcontractorResumeId) {
         return subcontractorResumeMapper.getDetails(subcontractorResumeId);
     }
+
+    @Override
+    public List<SubcontractorResume> listResumeBySubcontractorId(Long subcontractorId) {
+        return subcontractorResumeMapper.listResumeBySubcontractorId(subcontractorId);
+    }
 }

@@ -85,7 +85,7 @@ public class ForUpAccountController extends BaseController{
     @GetMapping("/list/v1.1")
     @AuthRequire
     public ResponseVo list(@RequestParam(value = "projectName",required = false)String projectName,
-                           @RequestParam(value = "meteringTime",required = false) @DateTimeFormat(pattern = "yyyy-MM-dd")Date meteringTime,
+                           @RequestParam(value = "meteringTime",required = false) @DateTimeFormat(pattern = "yyyy-MM")Date meteringTime,
                            @RequestParam(value = "minPayProportion",required = false)Double minPayProportion,
                            @RequestParam(value = "maxPayProportion",required = false)Double maxPayProportion,
                            @RequestParam(value = "minProductionValue",required = false)Double minProductionValue,

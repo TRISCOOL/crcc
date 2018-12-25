@@ -2,6 +2,7 @@ package com.crcc.common.utils;
 
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPHeaderCell;
@@ -129,9 +130,35 @@ public class Utils {
         return vin.matches(vinReg);
     }
 
+    @SuppressWarnings("Duplicates")
     public static PdfPCell getNewCell(Paragraph context, Integer colSpan, Integer rowSpan,
-                                boolean isMiddle, boolean isFixHeight){
+                                      boolean isMiddle, boolean isFixHeight){
         PdfPCell cell = new PdfPCell(context);
+        if (colSpan != null){
+            cell.setColspan(colSpan);
+        }
+
+        if (rowSpan != null){
+            cell.setRowspan(rowSpan);
+        }
+
+        if (isMiddle){
+            cell.setUseAscender(true);
+            cell.setVerticalAlignment(PdfPHeaderCell.ALIGN_MIDDLE);
+        }
+
+        if (isFixHeight){
+            cell.setFixedHeight(40f);
+        }
+
+        return cell;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public static PdfPCell getImageCell(Image image, Integer colSpan, Integer rowSpan,
+                                        boolean isMiddle, boolean isFixHeight){
+        PdfPCell cell = new PdfPCell(image,true);
+        //image.scaleAbsolute(10,5);
         if (colSpan != null){
             cell.setColspan(colSpan);
         }

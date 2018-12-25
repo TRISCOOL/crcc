@@ -20,8 +20,12 @@ public interface PersonnelMapper {
 
     List<Personnel> listForPage(@Param("name") String name, @Param("projectName") String projectName,
                                 @Param("position") String position, @Param("workTime") Integer workTime,
+                                @Param("firstDegreeLevel")String firstDegreeLevel,
+                                @Param("secondDegreeLevel") String secondDegreeLevel,
                                 @Param("offset") Integer offset, @Param("length") Integer length);
 
     Integer listForPageSize(@Param("name") String name, @Param("projectName") String projectName,
-                            @Param("position") String position, @Param("workTime") Integer workTime);
+                            @Param("position") String position, @Param("workTime") Integer workTime,
+                            @Param("firstDegreeLevel")String firstDegreeLevel,
+                            @Param("secondDegreeLevel") String secondDegreeLevel);
 }

@@ -64,13 +64,16 @@ public class PersonnelServiceImpl implements PersonnelService{
     }
 
     @Override
-    public List<Personnel> listForPage(String name, String projectName, String position, Integer workTime, Integer offset, Integer length) {
-        return personnelMapper.listForPage(name,projectName,position,workTime,offset,length);
+    public List<Personnel> listForPage(String name, String projectName, String position,String firstDegreeLevel,
+                                       String secondDegreeLevel,Integer workTime, Integer offset, Integer length) {
+        return personnelMapper.listForPage(name,projectName,position,
+                workTime,firstDegreeLevel,secondDegreeLevel, offset,length);
     }
 
     @Override
-    public Integer listForPageSize(String name, String projectName, String position, Integer workTime) {
-        return personnelMapper.listForPageSize(name,projectName,position,workTime);
+    public Integer listForPageSize(String name, String projectName,String position,String firstDegreeLevel,
+                                   String secondDegreeLevel, Integer workTime) {
+        return personnelMapper.listForPageSize(name,projectName,position,workTime,firstDegreeLevel,secondDegreeLevel);
     }
 
     @Override

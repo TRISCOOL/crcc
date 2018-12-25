@@ -34,6 +34,16 @@ public class Project {
 
     private Integer distanceTime;
 
+    private Integer engineeringStatus;
+
+    public Integer getEngineeringStatus() {
+        return engineeringStatus;
+    }
+
+    public void setEngineeringStatus(Integer engineeringStatus) {
+        this.engineeringStatus = engineeringStatus;
+    }
+
     public Integer getDistanceTime() {
         return distanceTime;
     }

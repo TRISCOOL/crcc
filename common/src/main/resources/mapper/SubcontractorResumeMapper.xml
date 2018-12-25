@@ -211,6 +211,34 @@
     where id = #{id,jdbcType=BIGINT}
   </update>
 
+  <select id="listResumeBySubcontractorId" resultType="com.crcc.common.model.SubcontractorResume">
+    SELECT
+      sr.*,
+      la.team_name AS teamName,
+      p.name AS projectName,
+      s.name AS subcontractorName,
+      la.contract_person AS contractPerson,
+      la.phone,
+      la.estimated_contract_amount AS contractAmount,
+      la.settlement_amount AS settlementAmount,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr,
+      la.settlement_amount AS settlementAmount
+    FROM
+      subcontractor_resume sr
+    LEFT JOIN
+      labor_account la ON sr.labor_account_id = la.id
+    LEFT JOIN
+      subcontractor s ON sr.subcontractor_id = s.id
+    LEFT JOIN
+      project p ON sr.project_id = p.id
+    LEFT JOIN
+      `user` cu ON sr.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON sr.update_user = uu.id
+    WHERE sr.subcontractor_id = #{subcontractorId}
+  </select>
+
   <select id="listForPage" resultType="com.crcc.common.model.SubcontractorResume">
     SELECT
       sr.*,

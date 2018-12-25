@@ -401,13 +401,15 @@
 
   <select id="listForPage" resultType="com.crcc.common.model.ProjectEvaluation">
     SELECT
-      pe.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr
+      pe.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,info.status AS engineeringStatus
     FROM
       project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
     LEFT JOIN
       `user` cu ON pe.create_user = cu.id
     LEFT JOIN
       `user` uu ON pe.update_user = uu.id
+    LEFT JOIN
+      project_info info ON pe.project_id = info.project_id
     WHERE 1=1
     <if test="projectId != null">
       AND pe.project_id = #{projectId}
@@ -418,8 +420,8 @@
     <if test="evaluationStatus != null">
       AND pe.evaluation_status = #{evaluationStatus}
     </if>
-    <if test="projectStatus != null">
-      AND pe.project_status = #{projectStatus}
+    <if test="engineeringStatus != null">
+      AND info.status = #{engineeringStatus}
     </if>
     <if test="isSign != null">
       AND pe.is_sign = #{isSign}
@@ -438,9 +440,11 @@
 
   <select id="listForPageSize" resultType="java.lang.Integer">
     SELECT
-     COUNT(*)
+      COUNT(*)
     FROM
-    project_evaluation pe LEFT JOIN project p ON pe.project_id = p.id
+      project_evaluation pe
+    LEFT JOIN project p ON pe.project_id = p.id
+    LEFT JOIN project_info info ON pe.project_id = info.project_id
     WHERE 1=1
     <if test="projectId != null">
       AND pe.project_id = #{projectId}
@@ -451,8 +455,8 @@
     <if test="evaluationStatus != null">
       AND pe.evaluation_status = #{evaluationStatus}
     </if>
-    <if test="projectStatus != null">
-      AND pe.project_status = #{projectStatus}
+    <if test="engineeringStatus != null">
+      AND info.status = #{engineeringStatus}
     </if>
     <if test="isSign != null">
       AND pe.is_sign = #{isSign}

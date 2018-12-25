@@ -158,7 +158,8 @@
       uu.name AS updateUserStr,
       d.value AS projectType,
       info.contract_start_time AS contractStartTime,
-      info.contract_end_time AS contractEndTime
+      info.contract_end_time AS contractEndTime,
+      info.status AS engineeringStatus
     FROM
       user_project_rel rel
     LEFT JOIN
@@ -250,7 +251,8 @@
       uu.name AS updateUserStr,
       d.value AS projectType,
       info.contract_start_time AS contractStartTime,
-      info.contract_end_time AS contractEndTime
+      info.contract_end_time AS contractEndTime,
+      info.status AS engineeringStatus
     FROM
       project p
     LEFT JOIN

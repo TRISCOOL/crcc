@@ -17,4 +17,6 @@ public interface SubcontractorResumeService {
                                            String gm);
 
     SubcontractorResume getDetails(Long subcontractorResumeId);
+
+    List<SubcontractorResume> listResumeBySubcontractorId(Long subcontractorId);
 }

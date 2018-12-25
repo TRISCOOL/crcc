@@ -70,7 +70,7 @@ public class ProjectEvaluationController extends BaseController{
      * 列表
      * @param projectName
      * @param evaluationStatus
-     * @param projectStatus
+     * @param engineeringStatus
      * @param isSign
      * @param isResponsibility
      * @param page
@@ -82,7 +82,7 @@ public class ProjectEvaluationController extends BaseController{
     @AuthRequire
     public ResponseVo list(@RequestParam(value = "projectName",required = false) String projectName,
                            @RequestParam(value = "evaluationStatus",required = false) String evaluationStatus,
-                           @RequestParam(value = "projectStatus",required = false) String projectStatus,
+                           @RequestParam(value = "engineeringStatus",required = false) String engineeringStatus,
                            @RequestParam(value = "isSign",required = false) String isSign,
                            @RequestParam(value = "isResponsibility",required = false) Integer isResponsibility,
                            @Param("page") Integer page, @Param("pageSize") Integer pageSize,
@@ -92,10 +92,10 @@ public class ProjectEvaluationController extends BaseController{
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
-                projectStatus,isSign,isResponsibility,offset*pageSize,pageSize);
+                engineeringStatus,isSign,isResponsibility,offset*pageSize,pageSize);
 
         Integer total = projectEvaluationService.listForPageSize(projectId,projectName,evaluationStatus,
-                projectStatus,isSign,isResponsibility);
+                engineeringStatus,isSign,isResponsibility);
 
         return ResponseVo.ok(total,page,pageSize,projectEvaluations);
     }
@@ -103,7 +103,7 @@ public class ProjectEvaluationController extends BaseController{
     @GetMapping("/export/v1.1")
     public void export(@RequestParam(value = "projectName",required = false) String projectName,
                        @RequestParam(value = "evaluationStatus",required = false) String evaluationStatus,
-                       @RequestParam(value = "projectStatus",required = false) String projectStatus,
+                       @RequestParam(value = "engineeringStatus",required = false) String engineeringStatus,
                        @RequestParam(value = "isSign",required = false) String isSign,
                        @RequestParam(value = "isResponsibility",required = false) Integer isResponsibility,
                        @RequestParam("token")String token,
@@ -111,7 +111,7 @@ public class ProjectEvaluationController extends BaseController{
 
         Long projectId = permissionProjectOnlyToken(token);
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
-                projectStatus,isSign,isResponsibility,null,null);
+                engineeringStatus,isSign,isResponsibility,null,null);
 
         String[] titles = {"序号","项目名称","工程类别","评估状态","项目状态","中标","有效收入","是否签订",
                 "签订日期","合同开工时间","合同竣工时间","工期（月）","评估时间","评估效益点（%)","含分包差及经营费（%）","评估编号",

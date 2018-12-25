@@ -34,15 +34,15 @@ public class ProjectEvaluationServiceImpl implements ProjectEvaluationService{
     }
 
     @Override
-    public List<ProjectEvaluation> listForPage(Long projectId,String projectName, String evaluationStatus, String projectStatus,
+    public List<ProjectEvaluation> listForPage(Long projectId,String projectName, String evaluationStatus, String engineeringStatus,
                                                String isSign, Integer isResponsibility,Integer offset,Integer length) {
-        return projectEvaluationMapper.listForPage(projectId,projectName,evaluationStatus,projectStatus,isSign,isResponsibility,
+        return projectEvaluationMapper.listForPage(projectId,projectName,evaluationStatus,engineeringStatus,isSign,isResponsibility,
                 offset,length);
     }
 
     @Override
-    public Integer listForPageSize(Long projectId, String projectName, String evaluationStatus, String projectStatus, String isSign, Integer isResponsibility) {
-        return projectEvaluationMapper.listForPageSize(projectId,projectName,evaluationStatus,projectStatus,isSign,isResponsibility);
+    public Integer listForPageSize(Long projectId, String projectName, String evaluationStatus, String engineeringStatus, String isSign, Integer isResponsibility) {
+        return projectEvaluationMapper.listForPageSize(projectId,projectName,evaluationStatus,engineeringStatus,isSign,isResponsibility);
     }
 
     @Override

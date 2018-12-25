@@ -515,8 +515,14 @@
     <if test="position != null">
       AND p.`position` LIKE concat('%',#{position},'%')
     </if>
+    <if test="firstDegreeLevel != null">
+      AND p.first_degree_level = #{firstDegreeLevel}
+    </if>
+    <if test="secondDegreeLevel != null">
+      AND p.second_degree_level = #{secondDegreeLevel}
+    </if>
     <if test="workTime != null">
-      AND p.work_time = #{workTime},
+      AND p.work_time = #{workTime}
     </if>
     ORDER BY p.id DESC
     <if test="offset != null and length != null">
@@ -536,7 +542,13 @@
       AND `position` LIKE concat('%',#{position},'%')
     </if>
     <if test="workTime != null">
-      AND work_time = #{workTime},
+      AND work_time = #{workTime}
+    </if>
+    <if test="firstDegreeLevel != null">
+      AND first_degree_level = #{firstDegreeLevel}
+    </if>
+    <if test="secondDegreeLevel != null">
+      AND second_degree_level = #{secondDegreeLevel}
     </if>
   </select>
 </mapper>

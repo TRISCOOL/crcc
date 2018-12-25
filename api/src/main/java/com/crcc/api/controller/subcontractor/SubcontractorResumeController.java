@@ -95,6 +95,16 @@ public class SubcontractorResumeController extends BaseController{
     }
 
     /**
+     * 某一个分包商履历列表
+     * @param subcontractorId
+     * @return
+     */
+    @GetMapping("/list_for_subcontractor/v1.1")
+    public ResponseVo listResumesForSubcontractor(@RequestParam("subcontractorId")Long subcontractorId){
+        return ResponseVo.ok(subcontractorResumeService.listResumeBySubcontractorId(subcontractorId));
+    }
+
+    /**
      * 获得详情
      * @param id
      * @return

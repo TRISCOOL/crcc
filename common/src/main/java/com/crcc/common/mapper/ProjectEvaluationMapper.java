@@ -22,14 +22,14 @@ public interface ProjectEvaluationMapper {
 
     List<ProjectEvaluation> listForPage(@Param("projectId")Long projectId,@Param("projectName") String projectName,
                                         @Param("evaluationStatus") String evaluationStatus,
-                                        @Param("projectStatus") String projectStatus,
+                                        @Param("engineeringStatus") String engineeringStatus,
                                         @Param("isSign") String isSign,
                                         @Param("isResponsibility") Integer isResponsibility,
                                         @Param("offset")Integer offset,@Param("length")Integer length);
 
     Integer listForPageSize(@Param("projectId")Long projectId,@Param("projectName") String projectName,
                             @Param("evaluationStatus") String evaluationStatus,
-                            @Param("projectStatus") String projectStatus,
+                            @Param("engineeringStatus") String engineeringStatus,
                             @Param("isSign") String isSign,
                             @Param("isResponsibility") Integer isResponsibility);
 }

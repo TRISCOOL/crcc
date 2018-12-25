@@ -28,4 +28,6 @@ public interface SubcontractorResumeMapper {
     Integer listForPageSize(@Param("subcontractorName")String subcontractorName,
                             @Param("projectEvaluation")String projectEvaluation,
                             @Param("constructionScale")String constructionScale);
+
+    List<SubcontractorResume> listResumeBySubcontractorId(@Param("subcontractorId")Long subcontractorId);
 }

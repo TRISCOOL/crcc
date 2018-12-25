@@ -12,6 +12,7 @@ import com.crcc.common.service.PersonnelService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
 import com.crcc.common.utils.Utils;
+import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.*;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -94,13 +95,16 @@ public class ManagerPeopleController extends BaseController{
                                   @RequestParam(value = "projectName",required = false) String projectName,
                                   @RequestParam(value = "position",required = false) String position,
                                   @RequestParam(value = "workTime",required = false) Integer workTime,
+                                  @RequestParam(value = "firstDegreeLevel",required = false)String firstDegreeLevel,
+                                  @RequestParam(value = "secondDegreeLevel",required = false)String secondDegreeLevel,
                                   @RequestParam(value = "page") Integer page,@RequestParam("pageSize") Integer pageSize){
 
         Integer offset = page - 1<0 ? 0:page-1;
 
-        List<Personnel> personnels = personnelService.listForPage(name,projectName,position,workTime,offset*pageSize,pageSize);
+        List<Personnel> personnels = personnelService.listForPage(name,projectName,position,firstDegreeLevel,
+                secondDegreeLevel,workTime,offset*pageSize,pageSize);
 
-        Integer total = personnelService.listForPageSize(name,projectName,position,workTime);
+        Integer total = personnelService.listForPageSize(name,projectName,position,firstDegreeLevel,secondDegreeLevel,workTime);
 
         return ResponseVo.ok(total,page,pageSize,personnels);
     }
@@ -127,13 +131,16 @@ public class ManagerPeopleController extends BaseController{
     public void export(@RequestParam(value = "name",required = false) String name,
                        @RequestParam(value = "projectName",required = false) String projectName,
                        @RequestParam(value = "position",required = false) String position,
+                       @RequestParam(value = "firstDegreeLevel",required = false)String firstDegreeLevel,
+                       @RequestParam(value = "secondDegreeLevel",required = false)String secondDegreeLevel,
                        @RequestParam(value = "workTime",required = false) Integer workTime,
                        HttpServletResponse response){
 
         String[] titles = {"人员编码","姓名","性别","当前状态","项目名称","职务","职称","参加工作年限","学历","手机号码","QQ号码",
         "身份证号码","已取得证书","籍贯（省市区/县）","创建时间","备注"};
 
-        List<Personnel> personnelList = personnelService.listForPage(name,projectName,position,workTime,null,null);
+        List<Personnel> personnelList = personnelService.listForPage(name,projectName,position,firstDegreeLevel,
+                secondDegreeLevel,workTime,null,null);
         HSSFWorkbook wb = ExcelUtils.getPersonnelExcel("经管人员",titles,personnelList);
         OutputStream out = null;
         try {
@@ -217,7 +224,8 @@ public class ManagerPeopleController extends BaseController{
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getBrithday()),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("照片",font),1,4,true,false);
+        Image headImg = Image.getInstance(getHeadUrl(personnel.getHeadUrl()));
+        cell = Utils.getImageCell(headImg,1,4,false,false);
         table.addCell(cell);
 
         cell = Utils.getNewCell(getTitle("名族",font),1,null,true,true);
@@ -344,5 +352,21 @@ public class ManagerPeopleController extends BaseController{
         Paragraph paragraph = new Paragraph(value,font);
         paragraph.setAlignment(Element.ALIGN_CENTER);
         return paragraph;
+    }
+
+    public String getHeadUrl(String value){
+        if (value == null)
+            return null;
+
+        if ("".equals(value))
+            return null;
+
+        try {
+            Map<String,String> values = Utils.fromJson(value,new TypeToken<Map<String,String>>(){});
+            return values.get("url");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 }

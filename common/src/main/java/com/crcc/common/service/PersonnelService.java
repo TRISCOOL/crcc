@@ -9,10 +9,11 @@ public interface PersonnelService {
 
     boolean updatePersonnel(Personnel personnel);
 
-    List<Personnel> listForPage(String name,String projectName,String position,Integer workTime,
-                                Integer offset,Integer length);
+    List<Personnel> listForPage(String name,String projectName,String position,String firstDegreeLevel,
+                                String secondDegreeLevel,Integer workTime, Integer offset,Integer length);
 
-    Integer listForPageSize(String name,String projectName,String position,Integer workTime);
+    Integer listForPageSize(String name,String projectName,String position,String firstDegreeLevel,
+                            String secondDegreeLevel,Integer workTime);
 
     Personnel getDetails(Long personnelId);
 }
