@@ -159,7 +159,8 @@
       d.value AS projectType,
       info.contract_start_time AS contractStartTime,
       info.contract_end_time AS contractEndTime,
-      info.status AS engineeringStatus
+      info.status AS engineeringStatus,
+      info.contract_number AS contractNumber
     FROM
       user_project_rel rel
     LEFT JOIN
@@ -252,7 +253,8 @@
       d.value AS projectType,
       info.contract_start_time AS contractStartTime,
       info.contract_end_time AS contractEndTime,
-      info.status AS engineeringStatus
+      info.status AS engineeringStatus,
+      info.contract_number AS contractNumber
     FROM
       project p
     LEFT JOIN

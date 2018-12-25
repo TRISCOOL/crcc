@@ -36,6 +36,16 @@ public class Project {
 
     private Integer engineeringStatus;
 
+    private String contractNumber;
+
+    public String getContractNumber() {
+        return contractNumber;
+    }
+
+    public void setContractNumber(String contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+
     public Integer getEngineeringStatus() {
         return engineeringStatus;
     }

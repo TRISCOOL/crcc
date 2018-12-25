@@ -416,7 +416,10 @@
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
     SELECT
-      la.*, p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,info.contract_number AS contractCode
+      la.*, p.name AS projectName,
+      cu.name AS createUserStr,
+      uu.name AS updateUserStr,info.contract_number AS contractNumber,
+      s.name AS subcontractorName
     FROM
       labor_account la
     LEFT JOIN
@@ -427,6 +430,8 @@
       `user` cu ON la.create_user = cu.id
     LEFT JOIN
       `user` uu ON la.update_user = uu.id
+    LEFT JOIN
+      subcontractor s ON s.id = la.subcontractor_id
     WHERE 1=1
     <if test="projectId != null">
       AND la.project_id = #{projectId}

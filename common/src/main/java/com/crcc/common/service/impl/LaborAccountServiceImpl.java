@@ -3,6 +3,7 @@ package com.crcc.common.service.impl;
 import com.crcc.common.mapper.LaborAccountMapper;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.service.LaborAccountService;
+import com.crcc.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -16,11 +17,35 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Autowired
     private LaborAccountMapper laborAccountMapper;
 
+    @Autowired
+    private RedisService redisService;
+
+    private static String LABORACCOUNT_CONTRACT_CODE_KEY = "contract_code_key";
+
     @Override
     public Long addLaborAccount(LaborAccount laborAccount) {
         laborAccount.setCreateTime(new Date());
+        laborAccount.setContractCode(getContractCode(laborAccount));
         laborAccountMapper.insertSelective(laborAccount);
         return laborAccount.getId();
+    }
+
+    private String getContractCode(LaborAccount laborAccount){
+        if (laborAccount != null && laborAccount.getContractType() == 0){
+            return laborAccount.getContractCode();
+        }
+
+        Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY,1);
+        if (num<10)
+            return "00"+num;
+
+        if (num >= 10 && num <100)
+            return "0"+num;
+
+        if (num>=100)
+            return num+"";
+
+        return laborAccount.getContractCode();
     }
 
     @Override
