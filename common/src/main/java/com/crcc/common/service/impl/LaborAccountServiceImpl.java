@@ -35,17 +35,18 @@ public class LaborAccountServiceImpl implements LaborAccountService{
             return laborAccount.getContractCode();
         }
 
+        String label = "";
         Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY,1);
         if (num<10)
-            return "00"+num;
+            label = "00"+num;
 
         if (num >= 10 && num <100)
-            return "0"+num;
+            label = "0"+num;
 
         if (num>=100)
-            return num+"";
+            label = num+"";
 
-        return laborAccount.getContractCode();
+        return laborAccount.getContractCode()+label;
     }
 
     @Override

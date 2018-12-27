@@ -466,7 +466,7 @@ public class ProjectController extends BaseController{
 
         createParagrap(getProjectInfoPeoples(projectInfo.getManager()),table,cell,font,"项目经理");
         createParagrap(getProjectInfoPeoples(projectInfo.getSecretary()),table,cell,font,"项目书记");
-        createParagrap(getProjectInfoPeoples(projectInfo.getChiefEngineer()),table,cell,font,"项目总工");
+        createParagrap(getProjectInfoPeoples(projectInfo.getEngineer()),table,cell,font,"项目总工");
 
         cell = Utils.getNewCell(getTitle("投入人员",font),2,null,true,true);
         table.addCell(cell);

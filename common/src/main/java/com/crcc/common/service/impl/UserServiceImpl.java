@@ -84,6 +84,7 @@ public class UserServiceImpl implements UserService{
         user.setCreateTime(new Date());
         user.setUuid(Utils.getUuid(true));
         user.setCode(createUserCode());
+        user.setName(user.getAccount());
         int result = userMapper.insertSelective(user);
         if (result != 0){
             relationUserAndProject(user.getId(),user.getProjects());

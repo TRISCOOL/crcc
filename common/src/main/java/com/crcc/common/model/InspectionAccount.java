@@ -57,6 +57,16 @@ public class InspectionAccount {
 
     private BigDecimal underRate;
 
+    private Long laborAccountId;
+
+    public Long getLaborAccountId() {
+        return laborAccountId;
+    }
+
+    public void setLaborAccountId(Long laborAccountId) {
+        this.laborAccountId = laborAccountId;
+    }
+
     public BigDecimal getEndedPrice() {
         return endedPrice;
     }

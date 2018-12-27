@@ -17,7 +17,6 @@
     <result column="position" property="position" jdbcType="VARCHAR" />
     <result column="specialty" property="specialty" jdbcType="VARCHAR" />
     <result column="phone" property="phone" jdbcType="VARCHAR" />
-    <result column="project_name" property="projectName" jdbcType="VARCHAR" />
     <result column="brithday" property="brithday" jdbcType="TIMESTAMP" />
     <result column="qq_number" property="qqNumber" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="VARCHAR" />
@@ -42,14 +41,16 @@
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="code" property="code" jdbcType="VARCHAR" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="email" property="email" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, famous_family, join_association, join_association_time, job_title, work_time, 
     birthplace, id_card, home_address, sex, health, jiguan, `position`, specialty, phone,
-    project_name, brithday, qq_number, status, first_degree_school, first_degree_profession, 
+     brithday, qq_number, status, first_degree_school, first_degree_profession,
     first_degree_time, first_degree_level, second_degree_school, second_degree_level, 
     second_degree_time, second_degree_profession, work_experience, certificate, training, 
-    remark, award, head_url,education,create_time,create_user,update_time,update_user,`name`,code
+    remark, award, head_url,education,create_time,create_user,update_time,update_user,`name`,code,project_id,email
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -67,26 +68,26 @@
       birthplace, id_card, home_address, 
       sex, health, jiguan, 
       `position`, specialty, phone,
-      project_name, brithday, qq_number, 
+       brithday, qq_number,
       status, first_degree_school, first_degree_profession, 
       first_degree_time, first_degree_level, second_degree_school, 
       second_degree_level, second_degree_time, 
       second_degree_profession, work_experience, 
       certificate, training, remark, education,create_time,create_user,update_time,update_user,`name`
-      award, head_url,code)
+      award, head_url,code,project_id,email)
     values (#{id,jdbcType=BIGINT}, #{famousFamily,jdbcType=VARCHAR}, #{joinAssociation,jdbcType=TINYINT}, 
       #{joinAssociationTime,jdbcType=TIMESTAMP}, #{jobTitle,jdbcType=VARCHAR}, #{workTime,jdbcType=INTEGER}, 
       #{birthplace,jdbcType=VARCHAR}, #{idCard,jdbcType=VARCHAR}, #{homeAddress,jdbcType=VARCHAR}, 
       #{sex,jdbcType=VARCHAR}, #{health,jdbcType=VARCHAR}, #{jiguan,jdbcType=VARCHAR}, 
       #{position,jdbcType=VARCHAR}, #{specialty,jdbcType=VARCHAR}, #{phone,jdbcType=VARCHAR}, 
-      #{projectName,jdbcType=VARCHAR}, #{brithday,jdbcType=TIMESTAMP}, #{qqNumber,jdbcType=VARCHAR}, 
+      #{brithday,jdbcType=TIMESTAMP}, #{qqNumber,jdbcType=VARCHAR},
       #{status,jdbcType=VARCHAR}, #{firstDegreeSchool,jdbcType=VARCHAR}, #{firstDegreeProfession,jdbcType=VARCHAR}, 
       #{firstDegreeTime,jdbcType=TIMESTAMP}, #{firstDegreeLevel,jdbcType=VARCHAR}, #{secondDegreeSchool,jdbcType=VARCHAR}, 
       #{secondDegreeLevel,jdbcType=VARCHAR}, #{secondDegreeTime,jdbcType=TIMESTAMP}, 
       #{secondDegreeProfession,jdbcType=VARCHAR}, #{workExperience,jdbcType=VARCHAR}, 
       #{certificate,jdbcType=VARCHAR}, #{training,jdbcType=VARCHAR}, #{remark,jdbcType=VARCHAR}, 
       #{award,jdbcType=VARCHAR}, #{headUrl,jdbcType=VARCHAR},#{education},#{createTime},#{createUser},#{updateTime},
-      #{updateUser},#{name},#{code})
+      #{updateUser},#{name},#{code},#{projectId},#{email})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.Personnel" keyProperty="id" useGeneratedKeys="true">
     insert into personnel
@@ -135,9 +136,6 @@
       </if>
       <if test="phone != null" >
         phone,
-      </if>
-      <if test="projectName != null" >
-        project_name,
       </if>
       <if test="brithday != null" >
         brithday,
@@ -211,6 +209,12 @@
       <if test="code != null">
         `code`,
       </if>
+      <if test="projectId != null">
+        project_id,
+      </if>
+      <if test="email != null">
+        email,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -257,9 +261,6 @@
       </if>
       <if test="phone != null" >
         #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        #{projectName,jdbcType=VARCHAR},
       </if>
       <if test="brithday != null" >
         #{brithday,jdbcType=TIMESTAMP},
@@ -333,6 +334,12 @@
       <if test="code != null">
         #{code},
       </if>
+      <if test="projectId != null">
+        #{projectId},
+      </if>
+      <if test="email != null">
+        #{email},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.Personnel" >
@@ -379,9 +386,6 @@
       </if>
       <if test="phone != null" >
         phone = #{phone,jdbcType=VARCHAR},
-      </if>
-      <if test="projectName != null" >
-        project_name = #{projectName,jdbcType=VARCHAR},
       </if>
       <if test="brithday != null" >
         brithday = #{brithday,jdbcType=TIMESTAMP},
@@ -450,10 +454,16 @@
         update_user = #{updateUser},
       </if>
       <if test="name != null">
-        `name` = #{name}
+        `name` = #{name},
       </if>
       <if test="code != null">
-        code = #{code}
+        code = #{code},
+      </if>
+      <if test="projectId != null">
+        project_id = #{projectId},
+      </if>
+      <if test="email != null">
+        email = #{email},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
@@ -474,7 +484,6 @@
       `position` = #{position,jdbcType=VARCHAR},
       specialty = #{specialty,jdbcType=VARCHAR},
       phone = #{phone,jdbcType=VARCHAR},
-      project_name = #{projectName,jdbcType=VARCHAR},
       brithday = #{brithday,jdbcType=TIMESTAMP},
       qq_number = #{qqNumber,jdbcType=VARCHAR},
       status = #{status,jdbcType=VARCHAR},
@@ -492,17 +501,20 @@
       remark = #{remark,jdbcType=VARCHAR},
       award = #{award,jdbcType=VARCHAR},
       head_url = #{headUrl,jdbcType=VARCHAR},
-      code = #{code}
+      code = #{code},
+      email = #{email}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
   <select id="listForPage" resultType="com.crcc.common.model.Personnel">
     SELECT
-     p.*,cu.name AS createUserStr,uu.name AS updateUserStr
+     p.*,cu.name AS createUserStr,uu.name AS updateUserStr,pro.name AS projectName
     FROM
       personnel p
     LEFT JOIN
-      `user` cu ON p.create_user = p.id
+      project pro ON p.project_id = pro.id
+    LEFT JOIN
+      `user` cu ON p.create_user = cu.id
     LEFT JOIN
       `user` uu ON p.update_user = uu.id
     WHERE 1=1
@@ -510,7 +522,7 @@
       AND p.`name` LIKE concat('%',#{name},'%')
     </if>
     <if test="projectName != null">
-      AND p.project_name LIKE concat('%',#{projectName},'%')
+      AND pro.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="position != null">
       AND p.`position` LIKE concat('%',#{position},'%')
@@ -531,24 +543,30 @@
   </select>
 
   <select id="listForPageSize" resultType="com.crcc.common.model.Personnel">
-    SELECT COUNT(*) FROM personnel WHERE 1=1
+    SELECT
+      COUNT(*)
+    FROM
+      personnel p
+    LEFT JOIN
+      project pro ON p.project_id = pro.id
+    WHERE 1=1
     <if test="name != null">
-      AND `name` LIKE concat('%',#{name},'%')
+      AND p.`name` LIKE concat('%',#{name},'%')
     </if>
     <if test="projectName != null">
-      AND project_name LIKE concat('%',#{projectName},'%')
+      AND pro.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="position != null">
-      AND `position` LIKE concat('%',#{position},'%')
+      AND p.`position` LIKE concat('%',#{position},'%')
     </if>
     <if test="workTime != null">
-      AND work_time = #{workTime}
+      AND p.work_time = #{workTime}
     </if>
     <if test="firstDegreeLevel != null">
-      AND first_degree_level = #{firstDegreeLevel}
+      AND p.first_degree_level = #{firstDegreeLevel}
     </if>
     <if test="secondDegreeLevel != null">
-      AND second_degree_level = #{secondDegreeLevel}
+      AND p.second_degree_level = #{secondDegreeLevel}
     </if>
   </select>
 </mapper>

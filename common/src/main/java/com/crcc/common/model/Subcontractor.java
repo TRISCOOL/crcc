@@ -95,6 +95,16 @@ public class Subcontractor {
     private String createUserStr;
     private String updateUserStr;
 
+    private String remark;
+
+    public String getRemark() {
+        return remark;
+    }
+
+    public void setRemark(String remark) {
+        this.remark = remark;
+    }
+
     public String getCreateUserStr() {
         return createUserStr;
     }

@@ -1,6 +1,7 @@
 package com.crcc.common.utils;
 
 import com.crcc.common.model.*;
+import com.google.gson.reflect.TypeToken;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
@@ -156,13 +157,21 @@ public class ExcelUtils {
             contentRow.createCell(6).setCellValue(DateTimeUtil.getYYYYMMDD(info.getRealContractEndTime()));
             contentRow.createCell(7).setCellValue(info.getTotalPrice().setScale(2, BigDecimal.ROUND_DOWN).doubleValue());
             contentRow.createCell(8).setCellValue(info.getTemporarilyPrice().setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
-            contentRow.createCell(9).setCellValue(info.getProjectManager());
-            contentRow.createCell(10).setCellValue(info.getProjectSecretary());
-            contentRow.createCell(11).setCellValue(info.getChiefEngineer());
+            contentRow.createCell(9).setCellValue(getProjectNameFirst(info.getManager()));
+            contentRow.createCell(10).setCellValue(getProjectNameFirst(info.getSecretary()));
+            contentRow.createCell(11).setCellValue(getProjectNameFirst(info.getEngineer()));
             num++;
 
         }
         return wb;
+    }
+
+    private static String getProjectNameFirst(String value){
+        List<ProjectInfoPeople> projectInfoPeople = Utils.fromJson(value,new TypeToken<List<ProjectInfoPeople>>(){});
+        if (projectInfoPeople == null)
+            return "";
+
+        return projectInfoPeople.get(projectInfoPeople.size()-1).getName();
     }
 
     public static HSSFWorkbook getProjectEvaluationExcel(String sheetName,String[] title,List<ProjectEvaluation> projectEvaluations){
@@ -327,6 +336,11 @@ public class ExcelUtils {
         Double sumTaxAmount = 0d;
         Double sumEndAmount = 0d;
         Double sumExtraAmount = 0d;
+
+        Double sumPrepaymentAmount = 0d;
+        Double sumAmountNotTax = 0d;
+        Double sumRealAmount = 0d;
+        Double sumUnpaidAmount = 0d;
         //创建内容
         num = num+1;
         for(MeteringAccount meteringAccount : meteringAccounts){
@@ -370,20 +384,35 @@ public class ExcelUtils {
             contentRow.createCell(15).setCellValue(meteringAccount.getProductionValue()
                     .setScale(2,BigDecimal.ROUND_DOWN).doubleValue()*100+"%");
             contentRow.createCell(16).setCellValue(meteringAccount.getRemark());
+
             sumAlreadyAmount = addAmount(sumAlreadyAmount,meteringAccount.getAlreadyPaidAmount());
             sumRealTaxAmount = addAmount(sumRealTaxAmount,meteringAccount.getRealAmountTax());
             sumTaxAmount = addAmount(sumTaxAmount,meteringAccount.getValuationAmountTax());
             sumEndAmount = addAmount(sumEndAmount,meteringAccount.getNotCalculatedAmount());
             sumExtraAmount = addAmount(sumExtraAmount,meteringAccount.getExtraAmount());
+            sumPrepaymentAmount = addAmount(sumPrepaymentAmount,meteringAccount.getPrepaymentAmount());
+            sumAmountNotTax = addAmount(sumAmountNotTax,meteringAccount.getValuationAmountNotTax());
+            sumRealAmount = addAmount(sumRealAmount,meteringAccount.getRealAmount());
+            sumUnpaidAmount = addAmount(sumUnpaidAmount,meteringAccount.getUnpaidAmount());
+
             num++;
 
         }
         num = num+1;
         HSSFRow contentRow = sheet.createRow(num);
         contentRow.createCell(0).setCellValue("合计");
+        contentRow.createCell(4).setCellValue(sumPrepaymentAmount); //预付款
+        contentRow.createCell(5).setCellValue(sumTaxAmount);
+        contentRow.createCell(7).setCellValue(sumAmountNotTax);
+        contentRow.createCell(8).setCellValue(sumRealTaxAmount);
+        contentRow.createCell(9).setCellValue(sumRealAmount);
+        contentRow.createCell(10).setCellValue(sumAlreadyAmount);
+        contentRow.createCell(11).setCellValue(sumUnpaidAmount);
         contentRow.createCell(12).setCellValue(
                 computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount))*100+"%"
         );
+        contentRow.createCell(13).setCellValue(sumExtraAmount);
+        contentRow.createCell(14).setCellValue(sumEndAmount);
         contentRow.createCell(15).setCellValue(
                 computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount))*100+"%");
         return wb;
@@ -448,7 +477,7 @@ public class ExcelUtils {
             contentRow.createCell(10).setCellValue(subcontractor.getCompanyEvaluation());
             contentRow.createCell(11).setCellValue(DateTimeUtil
                     .getYYYYMMDD(subcontractor.getQualificationValidityPeriod()));
-            contentRow.createCell(12).setCellValue(subcontractor.getShareRemark());
+            contentRow.createCell(12).setCellValue(subcontractor.getRemark());
             num++;
 
         }
@@ -537,8 +566,9 @@ public class ExcelUtils {
         sheet.addMergedRegion(address2);
 
         num = num + 1;
+        HSSFRow rowSecondTilte = sheet.createRow(num);
         for(int i=0;i<title.length;i++){
-            cell = row.createCell(i);
+            cell = rowSecondTilte.createCell(i);
             if (i == 8){
                 cell.setCellValue("履约保证金");
             }else if (i == 10) {
@@ -589,7 +619,7 @@ public class ExcelUtils {
             contentRow.createCell(10).setCellValue(laborAccount.getContractPerson());
             contentRow.createCell(11).setCellValue(laborAccount.getPhone());
             contentRow.createCell(12).setCellValue(laborAccount.getSettlementAmount() != null?laborAccount.getSettlementAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue():-1);
+                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue():0d);
             contentRow.createCell(13).setCellValue(laborAccount.getRemark());
             contentRow.createCell(14).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getTeamTime()));
             contentRow.createCell(15).setCellValue(DateTimeUtil.getYYYYMMDD(laborAccount.getApprovalTime()));

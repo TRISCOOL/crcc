@@ -265,6 +265,7 @@
       dict d ON d.id = p.dict_id
     LEFT JOIN
       project_info info ON p.id = info.project_id
+    WHERE p.status != 1
     GROUP BY p.id
   </select>
 </mapper>

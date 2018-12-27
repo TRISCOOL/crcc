@@ -43,6 +43,7 @@
     <result column="company_evaluation" jdbcType="CHAR" property="companyEvaluation" />
     <result column="company_group_evaluation" jdbcType="CHAR" property="companyGroupEvaluation" />
     <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="remark" property="remark" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List">
     id, set_up_time, taxpayer_type, registered_capital, `type`, phone, email, address,
@@ -51,7 +52,7 @@
     qualification_code, qualification_validity_period, qualification_from, safety_code, 
     safety_validity_period, safety_from, bank, bank_account, bank_from, annex, create_time, 
     create_user, update_time, update_user, profession_type, share_evaluation, qualification, 
-    share_remark, group_evaluation, group_remark, company_evaluation, company_group_evaluation,`name`
+    share_remark, group_evaluation, group_remark, company_evaluation, company_group_evaluation,`name`,remark
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -78,7 +79,7 @@
       update_time, update_user, profession_type, 
       share_evaluation, qualification, share_remark, 
       group_evaluation, group_remark, company_evaluation,`name`
-      company_group_evaluation)
+      company_group_evaluation,remark)
     values (#{id,jdbcType=BIGINT}, #{setUpTime,jdbcType=TIMESTAMP}, #{taxpayerType,jdbcType=BIGINT},
       #{registeredCapital,jdbcType=DECIMAL}, #{type,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR},
       #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
@@ -93,7 +94,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{professionType},
       #{shareEvaluation,jdbcType=CHAR}, #{qualification,jdbcType=CHAR}, #{shareRemark,jdbcType=VARCHAR}, 
       #{groupEvaluation,jdbcType=CHAR}, #{groupRemark,jdbcType=VARCHAR}, #{companyEvaluation,jdbcType=CHAR}, 
-      #{companyGroupEvaluation,jdbcType=CHAR},#{name})
+      #{companyGroupEvaluation,jdbcType=CHAR},#{name},#{remark})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.Subcontractor" useGeneratedKeys="true" keyProperty="id">
     insert into subcontractor
@@ -221,6 +222,9 @@
       <if test="name != null">
         `name`,
       </if>
+      <if test="remark != null">
+        remark,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -346,6 +350,9 @@
       <if test="name != null">
         #{name},
       </if>
+      <if test="remark != null">
+        #{remark},
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.Subcontractor">
@@ -469,7 +476,10 @@
         company_group_evaluation = #{companyGroupEvaluation,jdbcType=CHAR},
       </if>
       <if test="name != null">
-        `name` = #{name}
+        `name` = #{name},
+      </if>
+      <if test="remark != null">
+        remark = #{remark},
       </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
