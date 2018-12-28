@@ -12,7 +12,8 @@ public enum ResponseCode {
     PASSWORD_ERROR("422","password is error"),
     //500-600
     SERVER_ERROR("500","server error"),
-    PROJECT_INFO_EXIST("600","this project had projectInfo");
+    PROJECT_INFO_EXIST("600","this project had projectInfo"),
+    SUBCONTRACTOR_ALREADY_EXISTS("601","this subcontractor have already exists");
 
     private String code;
     private String message;

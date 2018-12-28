@@ -30,7 +30,8 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
         if (inspectionAccount.getValuationPrice() != null && inspectionAccount.getEndedPrice() != null){
             BigDecimal midValue = inspectionAccount.getValuationPrice().add(inspectionAccount.getEndedPrice());
             if (midValue.doubleValue() != 0d){
-                inspectionAccount.setUnderRate(inspectionAccount.getValuationPrice().divide(midValue));
+                inspectionAccount.setUnderRate(inspectionAccount.getValuationPrice().divide(
+                        midValue,2,BigDecimal.ROUND_HALF_DOWN));
             }
         }
 

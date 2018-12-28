@@ -18,6 +18,10 @@ public interface SubcontractorService {
     Integer listSubcontractorSize(String name,String type,String professionType,Integer minAmount,Integer maxAmount,
                                   String shareEvaluation,String groupEvaluation,String companyEvaluation);
 
+    List<Subcontractor> selectSubcontractorByName(String subcontractorName);
+
+    boolean isCanAdd(Subcontractor subcontractor);
+
 
 
 }

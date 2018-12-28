@@ -606,4 +606,8 @@
       AND s.company_evaluation = #{companyEvaluation}
     </if>
   </select>
+
+  <select id="selectSubcontractorByName" resultType="com.crcc.common.model.Subcontractor">
+    SELECT *FROM subcontractor WHERE `name` = #{subcontractorName}
+  </select>
 </mapper>

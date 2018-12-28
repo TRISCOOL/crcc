@@ -188,13 +188,8 @@ public class ProjectController extends BaseController{
 
         projectList.forEach(project -> {
             if (project != null){
-                Long startTime = project.getContractStartTime() != null?project.getContractStartTime().getTime()/1000:null;
-                Long endTime = project.getContractEndTime() != null?project.getContractEndTime().getTime()/1000:null;
-                if (startTime != null && endTime != null){
-                    Long distance = endTime-startTime;
-                    Integer rate = 60*60*24*3;
-                    project.setDistanceTime(distance.intValue()/rate);
-                }
+                Integer distance = DateTimeUtil.getDistanceMonthByDate(project.getContractStartTime(),project.getContractEndTime());
+                project.setDistanceTime(distance);
             }
         });
         return ResponseVo.ok(projectList);

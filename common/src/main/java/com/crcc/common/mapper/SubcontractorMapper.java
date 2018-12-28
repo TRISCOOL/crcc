@@ -34,4 +34,6 @@ public interface SubcontractorMapper {
                             @Param("shareEvaluation") String shareEvaluation,
                             @Param("groupEvaluation") String groupEvaluation,
                             @Param("companyEvaluation") String companyEvaluation);
+
+    List<Subcontractor> selectSubcontractorByName(@Param("subcontractorName")String subcontractorName);
 }

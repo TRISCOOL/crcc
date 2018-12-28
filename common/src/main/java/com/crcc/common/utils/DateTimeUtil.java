@@ -2198,4 +2198,41 @@ public class DateTimeUtil {
     		return false;
     	}
     }
+
+    /**
+     * 计算两个时间之间差了几个月，要求：2018-11-29 与 2018-12-01 之间相差一个月
+     * @param startTime
+     * @param endTime
+     * @return
+     */
+    public static Integer getDistanceMonthByDate(Date startTime,Date endTime){
+        if (startTime == null || endTime == null)
+            return null;
+
+        Calendar start = Calendar.getInstance();
+        start.setTime(startTime);
+
+        Calendar end = Calendar.getInstance();
+        end.setTime(endTime);
+
+        Integer startYear = start.get(Calendar.YEAR);
+        Integer endYear = end.get(Calendar.YEAR);
+
+        Integer startMonth = start.get(Calendar.MONTH);
+        Integer endMonth = end.get(Calendar.MONTH);
+
+        //同一年的情况
+        if (startYear.equals(endYear)){
+            return endMonth - startMonth;
+        }
+
+        //非同一年情况
+        Integer distance = endYear - startYear;
+        if (distance <= 1){
+            return (12-startMonth) + (endMonth-0);
+        }else {
+            return (12-startMonth) + (endMonth-0) + 12*distance;
+        }
+
+    }
 }

@@ -51,6 +51,11 @@ public class SubcontractorController extends BaseController{
     @PostMapping("/add/v1.1")
     @AuthRequire
     public ResponseVo addSubcontractor(@RequestBody Subcontractor subcontractor, HttpServletRequest request){
+
+        if (!subcontractorService.isCanAdd(subcontractor)){
+            return ResponseVo.error(ResponseCode.SUBCONTRACTOR_ALREADY_EXISTS);
+        }
+
         User user = curUser(request);
         subcontractor.setCreateUser(user.getId());
         Long id = subcontractorService.addSubcontractor(subcontractor);

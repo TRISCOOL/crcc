@@ -24,6 +24,9 @@ public class SubcontractorServiceImpl implements SubcontractorService{
 
     @Override
     public Long addSubcontractor(Subcontractor subcontractor) {
+
+
+
         subcontractor.setCreateTime(new Date());
         subcontractor.setCode(getCode());
         subcontractorMapper.insertSelective(subcontractor);
@@ -82,5 +85,19 @@ public class SubcontractorServiceImpl implements SubcontractorService{
     public Integer listSubcontractorSize(String name, String type, String professionType, Integer minAmount, Integer maxAmount, String shareEvaluation, String groupEvaluation, String companyEvaluation) {
         return subcontractorMapper.listForPageSize(name,type,professionType,minAmount,maxAmount,shareEvaluation,
                 groupEvaluation,companyEvaluation);
+    }
+
+    @Override
+    public List<Subcontractor> selectSubcontractorByName(String subcontractorName) {
+        return subcontractorMapper.selectSubcontractorByName(subcontractorName);
+    }
+
+    @Override
+    public boolean isCanAdd(Subcontractor subcontractor) {
+        List<Subcontractor> subcontractorList = selectSubcontractorByName(subcontractor.getName().trim());
+        if (subcontractorList != null && subcontractorList.size() > 0){
+            return false;
+        }
+        return true;
     }
 }

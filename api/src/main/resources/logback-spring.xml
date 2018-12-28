@@ -7,6 +7,10 @@
         </encoder>
     </appender>
 
+<!--
+    <property name="LOG_PATH" value="/var/log/crcc_test" />
+-->
+
     <appender name="ErrorFile"
               class="ch.qos.logback.core.rolling.RollingFileAppender">
         <file>${LOG_PATH}/error.log</file>

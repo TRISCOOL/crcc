@@ -317,7 +317,8 @@
 
   <select id="getDetails" resultType="com.crcc.common.model.InspectionAccount">
      SELECT
-      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,ac.team_name AS teamName
+      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,ac.team_name AS teamName,
+      s.name AS subcontractorName
     FROM
       inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
     LEFT JOIN
@@ -326,12 +327,15 @@
       labor_account ac ON ic.labor_account_id = ac.id
     LEFT JOIN
       `user` uu ON ic.update_user = uu.id
+    LEFT JOIN
+      subcontractor s ON s.id = ic.subcontractor_id
     WHERE ic.id = #{inspectionAccountId}
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.InspectionAccount">
     SELECT
-      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,ac.team_name AS teamName
+      ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,ac.team_name AS teamName,
+      s.name AS subcontractorName
     FROM
       inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
     LEFT JOIN
@@ -340,6 +344,8 @@
       `user` uu ON ic.update_user = uu.id
     LEFT JOIN
       labor_account ac ON ic.labor_account_id = ac.id
+    LEFT JOIN
+      subcontractor s ON s.id = ic.subcontractor_id
     WHERE 1=1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
