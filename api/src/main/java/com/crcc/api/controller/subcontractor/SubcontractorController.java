@@ -5,10 +5,8 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
-import com.crcc.common.model.ProjectInfo;
-import com.crcc.common.model.ProjectInfoPeople;
-import com.crcc.common.model.Subcontractor;
-import com.crcc.common.model.User;
+import com.crcc.common.model.*;
+import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.SubcontractorService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
@@ -35,6 +33,9 @@ public class SubcontractorController extends BaseController{
 
     @Autowired
     private SubcontractorService subcontractorService;
+
+    @Autowired
+    private ExportConfigService exportConfigService;
 
     @Value("${pdf.cache.address}")
     private String pdfCacheAddress;
@@ -166,15 +167,27 @@ public class SubcontractorController extends BaseController{
                        @RequestParam(value = "shareEvaluation",required = false) String shareEvaluation,
                        @RequestParam(value = "groupEvaluation",required = false) String groupEvaluation,
                        @RequestParam(value = "companyEvaluation",required = false) String companyEvaluation,
+                       @RequestParam(value = "exportType",required = false)String exportType,
+                       @RequestParam(value = "sort",required = false)List<Integer> sort,
                        HttpServletResponse response){
 
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
                 maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,null,null);
+        HSSFWorkbook hssfWorkbook = null;
 
-        String[] titles = {"分包商备案编码","分包商全称","分包商类型","专业类别","纳税人类型","法人","注册资本金（万元）",
-                "资质是否齐全","股份公司综合信誉评价","集团公司综合信誉评价","公司本级综合信誉评价","证件期限","备注"};
+        if (exportType != null && sort != null){
+            List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
+            List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
+            List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
+            hssfWorkbook = ExcelUtils.getStandardExcel(titles,fields,subcontractors,"分包商资质信息");
 
-        HSSFWorkbook hssfWorkbook = ExcelUtils.getSubcontractorExcel("分包商资质信息",titles,subcontractors);
+        }else {
+            String[] titles = {"分包商备案编码","分包商全称","分包商类型","专业类别","纳税人类型","法人","注册资本金（万元）",
+                    "资质是否齐全","股份公司综合信誉评价","集团公司综合信誉评价","公司本级综合信誉评价","证件期限","备注"};
+
+            hssfWorkbook = ExcelUtils.getSubcontractorExcel("分包商资质信息",titles,subcontractors);
+
+        }
         OutputStream out = null;
         try {
             out = response.getOutputStream();

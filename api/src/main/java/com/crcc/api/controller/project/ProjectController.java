@@ -8,6 +8,7 @@ import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.*;
 import com.crcc.common.service.DictService;
+import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.ProjectService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
@@ -40,6 +41,9 @@ public class ProjectController extends BaseController{
 
     @Autowired
     private DictService dictService;
+
+    @Autowired
+    private ExportConfigService exportConfigService;
 
     @Value("${pdf.cache.address}")
     private String pdfCacheAddress;
@@ -547,21 +551,43 @@ public class ProjectController extends BaseController{
                                       @RequestParam(value = "contractEndTime",required = false) Date contractEndTime,
                                       @RequestParam(value = "realContractStartTime",required = false) Date realContractStartTime,
                                       @RequestParam(value = "realContractEndTime",required = false) Date realContractEndTime,
-                                      @RequestParam("token")String token, HttpServletResponse response) {
+                                      @RequestParam("token")String token,
+                                      @RequestParam(value = "sort",required = false)List<Integer> sort,
+                                      @RequestParam(value = "exportType",required = false)String exportType,
+                                      HttpServletResponse response) {
 
         Long projectId = permissionProjectOnlyToken(token);
         List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,
                 projectManager,projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,null,null);
 
-        OutputStream out = null;
-        try {
+        HSSFWorkbook wb = null;
+
+        if (exportType != null && sort != null){
+            List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
+            List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
+            List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
+            if (sort.contains(2)){
+                projectInfoList.forEach(projectInfo -> {
+                    projectInfo.setManager(ExcelUtils.getProjectNameFirst(projectInfo.getManager()));
+                    projectInfo.setSecretary(ExcelUtils.getProjectNameFirst(projectInfo.getSecretary()));
+                    projectInfo.setEngineer(ExcelUtils.getProjectNameFirst(projectInfo.getEngineer()));
+                });
+            }
+            wb = ExcelUtils.getStandardExcel(titles,fields,projectInfoList,"工程信息卡");
+        }else {
 
             String[] titles = {"项目编码","项目名称","工程状态","合同开工日期","合同完工日期","实际开工日期","实际完工日期",
                     "暂估合同额","有效合同额","项目经理","项目书记","总工"};
 
+            wb = ExcelUtils.getHSSFWorkbookForProjectInfo("工程信息卡",titles,projectInfoList);
+        }
+
+        OutputStream out = null;
+        try {
+
+
             out = response.getOutputStream();
-            HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForProjectInfo("工程信息卡",titles,projectInfoList);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             response.setHeader("Content-disposition", "attachment; filename="+new String("工程信息卡".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
             response.setContentType("application/msexcel");

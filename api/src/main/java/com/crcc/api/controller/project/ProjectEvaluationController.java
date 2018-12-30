@@ -4,10 +4,13 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.ExportConfig;
 import com.crcc.common.model.ProjectEvaluation;
 import com.crcc.common.model.User;
+import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.ProjectEvaluationService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,6 +30,9 @@ public class ProjectEvaluationController extends BaseController{
 
     @Autowired
     private ProjectEvaluationService projectEvaluationService;
+
+    @Autowired
+    private ExportConfigService exportConfigService;
 
     /**
      * 新增项目评价
@@ -107,16 +113,26 @@ public class ProjectEvaluationController extends BaseController{
                        @RequestParam(value = "isSign",required = false) String isSign,
                        @RequestParam(value = "isResponsibility",required = false) Integer isResponsibility,
                        @RequestParam("token")String token,
+                       @RequestParam(value = "exportType",required = false)String exportType,
+                       @RequestParam(value = "sort",required = false)List<Integer> sort,
                        HttpServletResponse response){
 
         Long projectId = permissionProjectOnlyToken(token);
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
                 engineeringStatus,isSign,isResponsibility,null,null);
+        HSSFWorkbook hb = null;
+        if (exportType != null && sort != null){
+            List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
+            List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
+            List<String> fields  = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
+            hb = ExcelUtils.getStandardExcel(titles,fields,projectEvaluations,"所属队伍台账");
+        }else {
+            String[] titles = {"序号","项目名称","工程类别","评估状态","工程状态","中标","有效收入","是否签订",
+                    "签订日期","合同开工时间","合同竣工时间","工期（月）","评估时间","评估效益点（%)","含分包差及经营费（%）","评估编号",
+                    "附件","效益点","是否含分包差及经营费","上会时间","附件","效益点","签订时间","项目经理","项目书记","附件"};
+            hb = ExcelUtils.getProjectEvaluationExcel("所属队伍台账",titles,projectEvaluations);
+        }
 
-        String[] titles = {"序号","项目名称","工程类别","评估状态","项目状态","中标","有效收入","是否签订",
-                "签订日期","合同开工时间","合同竣工时间","工期（月）","评估时间","评估效益点（%)","含分包差及经营费（%）","评估编号",
-                "附件","效益点","是否含分包差及经营费","上会时间","附件","效益点","签订时间","项目经理","项目书记","附件"};
-        HSSFWorkbook hb = ExcelUtils.getProjectEvaluationExcel("所属队伍台账",titles,projectEvaluations);
         OutputStream out = null;
         try {
             out = response.getOutputStream();

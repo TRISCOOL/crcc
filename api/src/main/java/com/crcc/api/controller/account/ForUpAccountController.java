@@ -4,10 +4,13 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.ExportConfig;
 import com.crcc.common.model.MeteringAccount;
 import com.crcc.common.model.User;
+import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.ForUpAccountService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
@@ -29,6 +32,9 @@ public class ForUpAccountController extends BaseController{
 
     @Autowired
     private ForUpAccountService forUpAccountService;
+
+    @Autowired
+    private ExportConfigService exportConfigService;
 
     /**
      * 添加一条对上计量台账
@@ -136,20 +142,31 @@ public class ForUpAccountController extends BaseController{
                                   @RequestParam(value = "maxPayProportion",required = false)Double maxPayProportion,
                                   @RequestParam(value = "minProductionValue",required = false)Double minProductionValue,
                                   @RequestParam(value = "maxProductionValue",required = false)Double maxProductionValue,
-                                  @RequestParam("token")String token,HttpServletResponse response){
+                                  @RequestParam("token")String token,HttpServletResponse response,
+                                  @RequestParam(value = "exportType",required = false)String exportType,
+                            @RequestParam(value = "sort",required = false)List<Integer> sort){
         Long projectId = permissionProjectOnlyToken(token);
 
         List<MeteringAccount> meteringAccounts = forUpAccountService.listForPage(projectId,projectName,meteringTime,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,null,null);
 
         OutputStream out = null;
-        try {
+        HSSFWorkbook wb = null;
+        if (exportType != null && sort != null){
+            List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
+            List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
+            List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
+            wb = ExcelUtils.getStandardExcel(titles,fields,meteringAccounts,"对上计量台账");
+        }else {
 
             String[] titles = {"序号","项目名称","计量期数","计量日期","预付款","含税","税率（%）",
                     "不含税","含税","不含税","已支付金额","未支付金额","拨付率(%)","超计价","已完未计","产值计价率","备注"};
+            wb = ExcelUtils.getExcelForUpAccount("对上计量台账",titles,meteringAccounts);
+
+        }
+        try {
 
             out = response.getOutputStream();
-            HSSFWorkbook wb = ExcelUtils.getExcelForUpAccount("对上计量台账",titles,meteringAccounts);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             response.setHeader("Content-disposition", "attachment; filename="+
                     new String("对上计量台账".getBytes( "utf-8" ), "ISO8859-1" )+".xls");

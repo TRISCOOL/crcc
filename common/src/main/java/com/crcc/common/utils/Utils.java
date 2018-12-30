@@ -1,5 +1,6 @@
 package com.crcc.common.utils;
 
+import com.crcc.common.model.ExportConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.itextpdf.text.Image;
@@ -10,7 +11,7 @@ import org.springframework.util.StringUtils;
 
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
-import java.util.UUID;
+import java.util.*;
 
 public class Utils {
 
@@ -26,6 +27,9 @@ public class Utils {
     private static final String telReg = "^1([3578][0-9]|4[579]|66|7[0135678]|9[89])[0-9]{8}$";
 
     private static final String vinReg = "^[0-9a-zA-Z]{17}$";
+
+    public static final String EXPORT_CONFIG_KEY_TITLE = "title";
+    public static final String EXPORT_CONFIG_KEY_FIELD = "field";
 
     public static String toHex(byte[] bytes) {
         StringBuilder ret = new StringBuilder(bytes.length * 2);
@@ -178,4 +182,19 @@ public class Utils {
 
         return cell;
     }
+
+    public static List<String> getField(String type, List<ExportConfig> exportConfigs){
+        List<String> result = new ArrayList<String>();
+        if ("title".equals(type)){
+            exportConfigs.forEach(exportConfig -> {
+                result.add(exportConfig.getTitle());
+            });
+        }else if ("field".equals(type)){
+            exportConfigs.forEach(exportConfig -> {
+                result.add(exportConfig.getFieldName());
+            });
+        }
+        return result;
+    }
+
 }

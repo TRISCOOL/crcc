@@ -64,11 +64,11 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
     private void supplement(MeteringAccount meteringAccount){
         if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getTax() != null){
             meteringAccount.setValuationAmountNotTax(computerNotTax(meteringAccount.getValuationAmountTax(),
-                    meteringAccount.getTax()));
+                    meteringAccount.getTax().divide(new BigDecimal(100))));
         }
 
         if (meteringAccount.getRealAmountTax() != null && meteringAccount.getTax() != null){
-            meteringAccount.setRealAmount(computerNotTax(meteringAccount.getRealAmountTax(),meteringAccount.getTax()));
+            meteringAccount.setRealAmount(computerNotTax(meteringAccount.getRealAmountTax(),meteringAccount.getTax().divide(new BigDecimal(100))));
         }
 
         if (meteringAccount.getAlreadyPaidAmount() != null && meteringAccount.getRealAmountTax() != null){

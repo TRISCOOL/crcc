@@ -6,8 +6,11 @@ import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 
+import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 public class ExcelUtils {
 
@@ -166,7 +169,7 @@ public class ExcelUtils {
         return wb;
     }
 
-    private static String getProjectNameFirst(String value){
+    public static String getProjectNameFirst(String value){
         List<ProjectInfoPeople> projectInfoPeople = Utils.fromJson(value,new TypeToken<List<ProjectInfoPeople>>(){});
         if (projectInfoPeople == null)
             return "";
@@ -808,7 +811,7 @@ public class ExcelUtils {
     }
 
     //队伍状态(0-正在施工，1-完工待结算，2-已结算)
-    private static String getTeamStatus(Integer status){
+    public static String getTeamStatus(Integer status){
         String result = "未定义的状态";
         switch (status){
             case 0:
@@ -824,5 +827,73 @@ public class ExcelUtils {
                 break;
         }
         return result;
+    }
+
+    public static HSSFWorkbook getStandardExcel(List<String> titles, List<String> fields, List values, String sheetName){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 0;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFCell cell = null;
+        for(int i=0;i< titles.size();i++){
+            cell = row.createCell(i);
+            cell.setCellValue(titles.get(i));
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        for (Object value: values){
+            HSSFRow contextRow = sheet.createRow(num);
+            Class<? extends Object> targetObject = value.getClass();
+            int cellNum = 0;
+            for (String field : fields){
+                try {
+                    Field targetField = targetObject.getDeclaredField(field);
+                    targetField.setAccessible(true);
+                    if (targetField == null)
+                        continue;
+                    Class targetType = targetField.getType();
+                    String result = null;
+                    try {
+                        if (targetType == BigDecimal.class){
+                            BigDecimal bigDecimal = (BigDecimal)targetField.get(value);
+                            if (bigDecimal != null){
+                                bigDecimal.setScale(2,BigDecimal.ROUND_DOWN);
+                                result = bigDecimal.doubleValue()+"";
+                            }
+                        }else if (targetType == Double.class){
+                            Double d = targetField.getDouble(value);
+                            if (d != null){
+                                result = new BigDecimal(d).setScale(2,BigDecimal.ROUND_DOWN).doubleValue()+"";
+                            }
+                        }else if (targetType == Date.class){
+                            Date time = (Date) targetField.get(value);
+                            result = DateTimeUtil.getYYYYMMDD(time);
+                        }else {
+                            result = targetField.get(value) == null?"":targetField.get(value).toString();
+                        }
+                    }catch (Exception e){
+                        e.printStackTrace();
+                    }
+                    contextRow.createCell(cellNum).setCellValue(result);
+                    targetField.setAccessible(false);
+                } catch (NoSuchFieldException e) {
+                    e.printStackTrace();
+                }
+                cellNum ++ ;
+            }
+            num ++;
+        }
+        return wb;
     }
 }

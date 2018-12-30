@@ -4,10 +4,13 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.ExportConfig;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.model.User;
+import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -26,6 +29,9 @@ public class ForDownAccountTeamController extends BaseController{
 
     @Autowired
     private LaborAccountService laborAccountService;
+
+    @Autowired
+    private ExportConfigService exportConfigService;
 
     /**
      * 新增所属队伍台账
@@ -117,15 +123,27 @@ public class ForDownAccountTeamController extends BaseController{
                              @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
                              @RequestParam(value = "status",required = false) Integer status,
                              @RequestParam(value = "approval",required = false) Integer approval,
-                             @RequestParam("token")String token,HttpServletResponse response){
+                             @RequestParam("token")String token,HttpServletResponse response,
+                       @RequestParam(value = "exportType",required = false)String exportType,
+                       @RequestParam(value = "sort",required = false)List<Integer> sort){
 
         Long projectId = permissionProjectOnlyToken(token);
         List<LaborAccount> laborAccountList = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
                 status,approval,null,null);
+        HSSFWorkbook hb = null;
+        if (exportType != null && sort != null){
+            List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
+            List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
+            List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
+            hb = ExcelUtils.getStandardExcel(titles,fields,laborAccountList,"所属队伍台账");
+        }else {
+            String[] titles = {"项目名称","合同编码","分包商名称","队伍名称","队伍状态","合同签订日期","预计合同金额","施工范围",
+                    "应缴金额（万元）","实缴金额（万元）","合同签订人","联系方式","结算金额","备注","日期","日期","是否备案","日期","备注"};
 
-        String[] titles = {"项目名称","合同编码","分包商名称","队伍名称","队伍状态","合同签订日期","预计合同金额","施工范围",
-                "应缴金额（万元）","实缴金额（万元）","合同签订人","联系方式","结算金额","备注","日期","日期","是否备案","日期","备注"};
-        HSSFWorkbook hb = ExcelUtils.getLaborAccountExcel("所属队伍台账",titles,laborAccountList);
+            hb = ExcelUtils.getLaborAccountExcel("所属队伍台账",titles,laborAccountList);
+
+        }
+
         OutputStream out = null;
         try {
             out = response.getOutputStream();

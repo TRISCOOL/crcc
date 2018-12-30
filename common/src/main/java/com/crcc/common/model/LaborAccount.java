@@ -1,5 +1,7 @@
 package com.crcc.common.model;
 
+import com.crcc.common.utils.ExcelUtils;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
@@ -73,6 +75,26 @@ public class LaborAccount {
 
     private String contractNumber;
 
+    public String getSettlementFilingStr() {
+        return settlementFilingStr;
+    }
+
+    public void setSettlementFilingStr(String settlementFilingStr) {
+        this.settlementFilingStr = settlementFilingStr;
+    }
+
+    private String settlementFilingStr;
+
+    public String getStatusStr() {
+        return statusStr;
+    }
+
+    public void setStatusStr(String statusStr) {
+        this.statusStr = statusStr;
+    }
+
+    private String statusStr;
+
     public String getContractNumber() {
         return contractNumber;
     }
@@ -118,6 +140,9 @@ public class LaborAccount {
     }
 
     public void setStatus(Integer status) {
+        if (status != null){
+            setStatusStr(ExcelUtils.getTeamStatus(status));
+        }
         this.status = status;
     }
 
@@ -318,6 +343,11 @@ public class LaborAccount {
     }
 
     public void setSettlementFiling(Integer settlementFiling) {
+        if (settlementFiling != null && settlementFiling == 1){
+            setSettlementFilingStr("是");
+        }else {
+            setSettlementFilingStr("否");
+        }
         this.settlementFiling = settlementFiling;
     }
 

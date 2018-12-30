@@ -68,13 +68,65 @@ public class ProjectEvaluation {
 
     private String projectStatusStr;
 
+    //工程状态(0-在建，1-完工未结算，2-完工以结算，3-停工)
     private String engineeringStatus;
+
+    private String evaluationBenefitStr;
+    private String jointHearingBenefitStr;
+    private String responsibilityBenefiyStr;
+    private String engineeringStatusStr;
+
+    public String getEngineeringStatusStr() {
+        return engineeringStatusStr;
+    }
+
+    public void setEngineeringStatusStr(String engineeringStatusStr) {
+        this.engineeringStatusStr = engineeringStatusStr;
+    }
+
+    public String getEvaluationBenefitStr() {
+        return evaluationBenefitStr;
+    }
+
+    public void setEvaluationBenefitStr(String evaluationBenefitStr) {
+        this.evaluationBenefitStr = evaluationBenefitStr;
+    }
+
+    public String getJointHearingBenefitStr() {
+        return jointHearingBenefitStr;
+    }
+
+    public void setJointHearingBenefitStr(String jointHearingBenefitStr) {
+        this.jointHearingBenefitStr = jointHearingBenefitStr;
+    }
+
+    public String getResponsibilityBenefiyStr() {
+        return responsibilityBenefiyStr;
+    }
+
+    public void setResponsibilityBenefiyStr(String responsibilityBenefiyStr) {
+        this.responsibilityBenefiyStr = responsibilityBenefiyStr;
+    }
 
     public String getEngineeringStatus() {
         return engineeringStatus;
     }
 
     public void setEngineeringStatus(String engineeringStatus) {
+        if (engineeringStatus != null){ //工程状态(0-在建，1-完工未结算，2-完工以结算，3-停工)
+            String result = "";
+            if ("0".equals(engineeringStatus)){
+                result = "在建";
+            }else if ("1".equals(engineeringStatus)){
+                result = "完工未结算";
+            }else if ("2".equals(engineeringStatus)){
+                result = "完工以结算";
+            }else if ("3".equals(engineeringStatus)){
+                result = "停工";
+            }
+            setEngineeringStatusStr(result);
+
+        }
         this.engineeringStatus = engineeringStatus;
     }
 
@@ -261,6 +313,9 @@ public class ProjectEvaluation {
     }
 
     public void setEvaluationBenefit(BigDecimal evaluationBenefit) {
+        if (evaluationBenefit != null){
+            setEvaluationBenefitStr(evaluationBenefit.doubleValue()*100+"%");
+        }
         this.evaluationBenefit = evaluationBenefit;
     }
 
@@ -293,6 +348,9 @@ public class ProjectEvaluation {
     }
 
     public void setJointHearingBenefit(BigDecimal jointHearingBenefit) {
+        if (jointHearingBenefit != null){
+            setJointHearingBenefitStr(jointHearingBenefit.doubleValue()*100+"%");
+        }
         this.jointHearingBenefit = jointHearingBenefit;
     }
 
@@ -325,6 +383,9 @@ public class ProjectEvaluation {
     }
 
     public void setResponsibilityBenefiy(BigDecimal responsibilityBenefiy) {
+        if (responsibilityBenefiy != null){
+            setResponsibilityBenefiyStr(responsibilityBenefiy.doubleValue()*100+"%");
+        }
         this.responsibilityBenefiy = responsibilityBenefiy;
     }
 

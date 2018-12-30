@@ -1,0 +1,124 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.ExportConfigMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.ExportConfig" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="type" property="type" jdbcType="CHAR" />
+    <result column="title" property="title" jdbcType="VARCHAR" />
+    <result column="field_name" property="fieldName" jdbcType="VARCHAR" />
+    <result column="sort" property="sort" jdbcType="TINYINT" />
+    <result column="order" property="order" jdbcType="TINYINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, type, title, field_name, sort, order
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from export_config
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from export_config
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.ExportConfig" >
+    insert into export_config (id, type, title, 
+      field_name, sort, order
+      )
+    values (#{id,jdbcType=BIGINT}, #{type,jdbcType=CHAR}, #{title,jdbcType=VARCHAR}, 
+      #{fieldName,jdbcType=VARCHAR}, #{sort,jdbcType=TINYINT}, #{order,jdbcType=TINYINT}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.ExportConfig" >
+    insert into export_config
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="type != null" >
+        type,
+      </if>
+      <if test="title != null" >
+        title,
+      </if>
+      <if test="fieldName != null" >
+        field_name,
+      </if>
+      <if test="sort != null" >
+        sort,
+      </if>
+      <if test="order != null" >
+        order,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="type != null" >
+        #{type,jdbcType=CHAR},
+      </if>
+      <if test="title != null" >
+        #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldName != null" >
+        #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="order != null" >
+        #{order,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.ExportConfig" >
+    update export_config
+    <set >
+      <if test="type != null" >
+        type = #{type,jdbcType=CHAR},
+      </if>
+      <if test="title != null" >
+        title = #{title,jdbcType=VARCHAR},
+      </if>
+      <if test="fieldName != null" >
+        field_name = #{fieldName,jdbcType=VARCHAR},
+      </if>
+      <if test="sort != null" >
+        sort = #{sort,jdbcType=TINYINT},
+      </if>
+      <if test="order != null" >
+        order = #{order,jdbcType=TINYINT},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.ExportConfig" >
+    update export_config
+    set type = #{type,jdbcType=CHAR},
+      title = #{title,jdbcType=VARCHAR},
+      field_name = #{fieldName,jdbcType=VARCHAR},
+      sort = #{sort,jdbcType=TINYINT},
+      order = #{order,jdbcType=TINYINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="findExportConfigs" resultType="com.crcc.common.model.ExportConfig">
+    SELECT
+      *
+    FROM
+      export_config
+    WHERE `type` = #{exportType}
+    <if test="sorts != null">
+      AND sort IN
+      <foreach collection="sorts" separator="," open="(" close=")" item="sort">
+        #{sort}
+      </foreach>
+    </if>
+    GROUP BY title , field_name
+    ORDER BY sort , `order`
+  </select>
+
+
+</mapper>

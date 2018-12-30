@@ -55,11 +55,44 @@ public class MeteringAccount {
 
     private BigDecimal prepaymentAmount;
 
+    private String productionValueStr;
+
+    private String taxStr;
+
+    private String prepaymentAmountStr;
+
+    public String getPrepaymentAmountStr() {
+        return prepaymentAmountStr;
+    }
+
+    public void setPrepaymentAmountStr(String prepaymentAmountStr) {
+        this.prepaymentAmountStr = prepaymentAmountStr;
+    }
+
+    public String getTaxStr() {
+        return taxStr;
+    }
+
+    public void setTaxStr(String taxStr) {
+        this.taxStr = taxStr;
+    }
+
+    public String getProductionValueStr() {
+        return productionValueStr;
+    }
+
+    public void setProductionValueStr(String productionValueStr) {
+        this.productionValueStr = productionValueStr;
+    }
+
     public BigDecimal getPrepaymentAmount() {
         return prepaymentAmount;
     }
 
     public void setPrepaymentAmount(BigDecimal prepaymentAmount) {
+        if (prepaymentAmount != null){
+            setPrepaymentAmountStr(prepaymentAmount.doubleValue() * 100+"%");
+        }
         this.prepaymentAmount = prepaymentAmount;
     }
 
@@ -84,6 +117,9 @@ public class MeteringAccount {
     }
 
     public void setProductionValue(BigDecimal productionValue) {
+        if (productionValue != null){
+            setProductionValueStr(productionValue.doubleValue()*100+"%");
+        }
         this.productionValue = productionValue;
     }
 
@@ -172,6 +208,9 @@ public class MeteringAccount {
     }
 
     public void setTax(BigDecimal tax) {
+        if (tax != null){
+            setTaxStr(tax.doubleValue() + "%");
+        }
         this.tax = tax;
     }
 
