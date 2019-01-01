@@ -763,6 +763,7 @@ public class ExcelUtils {
             contentRow.createCell(12).setCellValue(personnel.getCertificate());
             contentRow.createCell(13).setCellValue(personnel.getJiguan());
             contentRow.createCell(14).setCellValue(personnel.getCreateTime() == null?"":DateTimeUtil.getYYYYMMDD(personnel.getCreateTime()));
+            contentRow.createCell(15).setCellValue(personnel.getRemark());
             num++;
 
         }

@@ -61,6 +61,16 @@ public class MeteringAccount {
 
     private String prepaymentAmountStr;
 
+    private String payProportionStr;
+
+    public String getPayProportionStr() {
+        return payProportionStr;
+    }
+
+    public void setPayProportionStr(String payProportionStr) {
+        this.payProportionStr = payProportionStr;
+    }
+
     public String getPrepaymentAmountStr() {
         return prepaymentAmountStr;
     }
@@ -251,6 +261,9 @@ public class MeteringAccount {
     }
 
     public void setpayProportion(BigDecimal payProportion) {
+        if (payProportion != null){
+            setPayProportionStr(payProportion.doubleValue()*100+"%");
+        }
         this.payProportion = payProportion;
     }
 
