@@ -36,7 +36,7 @@ public class LaborAccountServiceImpl implements LaborAccountService{
         }
 
         String label = "";
-        Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY,1);
+        Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY+laborAccount.getContractCode(),1);
         if (num<10)
             label = "00"+num;
 
@@ -46,7 +46,7 @@ public class LaborAccountServiceImpl implements LaborAccountService{
         if (num>=100)
             label = num+"";
 
-        return laborAccount.getContractCode()+label;
+        return laborAccount.getContractCode()+"-"+label;
     }
 
     @Override
