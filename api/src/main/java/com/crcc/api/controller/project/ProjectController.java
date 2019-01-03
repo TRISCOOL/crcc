@@ -574,7 +574,7 @@ public class ProjectController extends BaseController{
                     projectInfo.setEngineer(ExcelUtils.getProjectNameFirst(projectInfo.getEngineer()));
                 });
             }
-            wb = ExcelUtils.getStandardExcel(titles,fields,projectInfoList,"工程信息卡");
+            wb = ExcelUtils.getStandardExcel("工程信息卡",titles,fields,projectInfoList,"工程信息卡");
         }else {
 
             String[] titles = {"项目编码","项目名称","工程状态","合同开工日期","合同完工日期","实际开工日期","实际完工日期",

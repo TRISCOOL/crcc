@@ -179,13 +179,13 @@ public class SubcontractorController extends BaseController{
             List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
             List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
             List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
-            hssfWorkbook = ExcelUtils.getStandardExcel(titles,fields,subcontractors,"分包商资质信息");
+            hssfWorkbook = ExcelUtils.getStandardExcel("分包商资质信息",titles,fields,subcontractors,"分包商资质信息");
 
         }else {
             String[] titles = {"分包商备案编码","分包商全称","分包商类型","专业类别","纳税人类型","法人","注册资本金（万元）",
                     "资质是否齐全","股份公司综合信誉评价","集团公司综合信誉评价","公司本级综合信誉评价","证件期限","备注"};
 
-            hssfWorkbook = ExcelUtils.getSubcontractorExcel("分包商资质信息",titles,subcontractors);
+            hssfWorkbook = ExcelUtils.getSubcontractorExcel("分包商资质信息","分包商资质信息",titles,subcontractors);
 
         }
         OutputStream out = null;

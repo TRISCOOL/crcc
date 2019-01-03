@@ -32,6 +32,7 @@
     <result column="create_user" property="createUser" jdbcType="BIGINT" />
     <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+    <result column="isResponsibility" property="isResponsibility" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, engineering_type, evaluation_status, project_status, winning_bid, 
@@ -39,7 +40,7 @@
     evaluation_time, evaluation_benefit, evaluation_cost, evaluation_code, evaluation_annex, 
     joint_hearing_benefit, joint_hearing_cost, joint_hearing_time, joint_hearing_annex, 
     responsibility_benefiy, responsibility_time, responsibility_people, responsibility_secretary, 
-    responsibility_annex,create_time,create_user,update_time,update_user
+    responsibility_annex,create_time,create_user,update_time,update_user,isResponsibility
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -62,7 +63,7 @@
       joint_hearing_time, joint_hearing_annex, 
       responsibility_benefiy, responsibility_time, 
       responsibility_people, responsibility_secretary, 
-      responsibility_annex,create_time,create_user,update_time,update_user)
+      responsibility_annex,create_time,create_user,update_time,update_user,isResponsibility)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{engineeringType,jdbcType=VARCHAR}, 
       #{evaluationStatus,jdbcType=VARCHAR}, #{projectStatus,jdbcType=VARCHAR}, #{winningBid,jdbcType=DECIMAL}, 
       #{effectiveIncome,jdbcType=DECIMAL}, #{isSign,jdbcType=VARCHAR}, #{signTime,jdbcType=TIMESTAMP}, 
@@ -73,7 +74,7 @@
       #{jointHearingTime,jdbcType=TIMESTAMP}, #{jointHearingAnnex,jdbcType=VARCHAR}, 
       #{responsibilityBenefiy,jdbcType=DECIMAL}, #{responsibilityTime,jdbcType=TIMESTAMP}, 
       #{responsibilityPeople,jdbcType=VARCHAR}, #{responsibilitySecretary,jdbcType=VARCHAR}, 
-      #{responsibilityAnnex,jdbcType=VARCHAR},#{createTime},#{createUser},#{updateTime},#{updateUser})
+      #{responsibilityAnnex,jdbcType=VARCHAR},#{createTime},#{createUser},#{updateTime},#{updateUser},#{isResponsibility})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.ProjectEvaluation" keyProperty="id" useGeneratedKeys="true">
     insert into project_evaluation
@@ -168,6 +169,9 @@
       <if test="updateUser != null">
         update_user,
       </if>
+      <if test="isResponsibility != null">
+        isResponsibility,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -259,6 +263,9 @@
       </if>
       <if test="updateUser != null">
         #{updateUser},
+      </if>
+      <if test="isResponsibility != null">
+        #{isResponsibility},
       </if>
     </trim>
   </insert>
@@ -352,6 +359,9 @@
       <if test="updateUser != null">
         update_user = #{updateUser},
       </if>
+      <if test="isResponsibility != null">
+        isResponsibility = #{isResponsibility},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -381,7 +391,8 @@
       responsibility_time = #{responsibilityTime,jdbcType=TIMESTAMP},
       responsibility_people = #{responsibilityPeople,jdbcType=VARCHAR},
       responsibility_secretary = #{responsibilitySecretary,jdbcType=VARCHAR},
-      responsibility_annex = #{responsibilityAnnex,jdbcType=VARCHAR}
+      responsibility_annex = #{responsibilityAnnex,jdbcType=VARCHAR},
+      isResponsibility = #{isResponsibility}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

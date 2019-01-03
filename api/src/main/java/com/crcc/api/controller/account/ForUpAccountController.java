@@ -156,12 +156,12 @@ public class ForUpAccountController extends BaseController{
             List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
             List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
             List<String> fields = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
-            wb = ExcelUtils.getStandardExcel(titles,fields,meteringAccounts,"对上计量台账");
+            wb = ExcelUtils.getStandardExcel("对上计量台账",titles,fields,meteringAccounts,"对上计量台账");
         }else {
 
             String[] titles = {"序号","项目名称","计量期数","计量日期","预付款","含税","税率（%）",
                     "不含税","含税","不含税","已支付金额","未支付金额","拨付率(%)","超计价","已完未计","产值计价率","备注"};
-            wb = ExcelUtils.getExcelForUpAccount("对上计量台账",titles,meteringAccounts);
+            wb = ExcelUtils.getExcelForUpAccount("对上计量台账","对上计量台账",titles,meteringAccounts);
 
         }
         try {

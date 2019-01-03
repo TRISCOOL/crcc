@@ -28,7 +28,7 @@ public class DateTimeUtil {
     public static final SimpleDateFormat DATA_FORMAT_YYMMDDHHMMSS = new SimpleDateFormat("yyMMddHHmmss");
     public static final SimpleDateFormat DATA_FORMAT_YYYY_MM_DD_HH_MM_SS = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
     public static final SimpleDateFormat DATA_FORMAT_YYYY_MM_DD = new SimpleDateFormat("yyyy-MM-dd");
-    public static final SimpleDateFormat DATA_FORMAT_YYYYMM = new SimpleDateFormat("yyyyMM");
+    public static final SimpleDateFormat DATA_FORMAT_YYYYMM = new SimpleDateFormat("yyyy-MM");
     public static final SimpleDateFormat DATA_FORMAT_YYMMDD = new SimpleDateFormat("yyMMdd");
     public static final SimpleDateFormat DATA_FORMAT_HHMMSS = new SimpleDateFormat("HHmmss");
     public static final SimpleDateFormat DATA_FORMAT_HH_MM_SS = new SimpleDateFormat("HH:mm:ss");
@@ -2200,12 +2200,15 @@ public class DateTimeUtil {
     }
 
     /**
-     * 计算两个时间之间差了几个月，要求：2018-11-29 与 2018-12-01 之间相差一个月
+     * 计算两个时间之间差了几个月，要求：2018-11-29 与 2018-12-01 之间相差两个月
      * @param startTime
      * @param endTime
      * @return
      */
     public static Integer getDistanceMonthByDate(Date startTime,Date endTime){
+
+        Integer result = 0;
+
         if (startTime == null || endTime == null)
             return null;
 
@@ -2223,16 +2226,17 @@ public class DateTimeUtil {
 
         //同一年的情况
         if (startYear.equals(endYear)){
-            return endMonth - startMonth;
+            result = endMonth - startMonth;
         }
 
         //非同一年情况
         Integer distance = endYear - startYear;
         if (distance <= 1){
-            return (12-startMonth) + (endMonth-0);
+            result = (12-startMonth) + (endMonth-0);
         }else {
-            return (12-startMonth) + (endMonth-0) + 12*distance;
+            result =  (12-startMonth) + (endMonth-0) + 12*distance;
         }
 
+        return result+1;
     }
 }

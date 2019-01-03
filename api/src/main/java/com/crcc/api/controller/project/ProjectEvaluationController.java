@@ -125,12 +125,12 @@ public class ProjectEvaluationController extends BaseController{
             List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
             List<String> titles = Utils.getField(Utils.EXPORT_CONFIG_KEY_TITLE,exportConfigs);
             List<String> fields  = Utils.getField(Utils.EXPORT_CONFIG_KEY_FIELD,exportConfigs);
-            hb = ExcelUtils.getStandardExcel(titles,fields,projectEvaluations,"所属队伍台账");
+            hb = ExcelUtils.getStandardExcel("项目评估",titles,fields,projectEvaluations,"项目评估");
         }else {
             String[] titles = {"序号","项目名称","工程类别","评估状态","工程状态","中标","有效收入","是否签订",
                     "签订日期","合同开工时间","合同竣工时间","工期（月）","评估时间","评估效益点（%)","含分包差及经营费（%）","评估编号",
                     "附件","效益点","是否含分包差及经营费","上会时间","附件","效益点","签订时间","项目经理","项目书记","附件"};
-            hb = ExcelUtils.getProjectEvaluationExcel("所属队伍台账",titles,projectEvaluations);
+            hb = ExcelUtils.getProjectEvaluationExcel("项目评估","项目评估",titles,projectEvaluations);
         }
 
         OutputStream out = null;

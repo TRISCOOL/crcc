@@ -5,6 +5,7 @@ import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.MeteringAccountMapper;
 import com.crcc.common.model.MeteringAccount;
 import com.crcc.common.service.ForUpAccountService;
+import com.crcc.common.utils.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -51,13 +52,15 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
                                              Double maxPayProportion, Double minProductionValue,
                                              Double maxProductionValue, Integer offset, Integer length) {
 
-        return meteringAccountMapper.listMeteringAccountForPage(projectId,projectName,meteringNum,
+        String time = DateTimeUtil.getYYYYMM(meteringNum);
+        return meteringAccountMapper.listMeteringAccountForPage(projectId,projectName,time,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,offset,length);
     }
 
     @Override
     public Integer listForPageSize(Long projectId, String projectName, Date meteringNum, Double minPayProportion, Double maxPayProportion, Double minProductionValue, Double maxProductionValue) {
-        return meteringAccountMapper.listMeteringAccountForPageSize(projectId,projectName,meteringNum,
+        String time = DateTimeUtil.getYYYYMM(meteringNum);
+        return meteringAccountMapper.listMeteringAccountForPageSize(projectId,projectName,time,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue);
     }
 

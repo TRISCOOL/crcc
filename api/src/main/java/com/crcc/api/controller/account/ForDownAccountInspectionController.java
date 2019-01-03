@@ -133,7 +133,7 @@ public class ForDownAccountInspectionController extends BaseController{
                 subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate);
         String[] title = {"项目名称","分包商名称","队伍名称","合同金额","计价期数","计价日期","计价类型","计价总金额","扣款",
                 "扣除质保金","扣除履约保证金","计日工及补偿费用","应支付金额","已完未计","对下计价率","计价负责人","备注"};
-        HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForInspectionAccount("对下验工计价台账",title,inspectionAccounts);
+        HSSFWorkbook wb = ExcelUtils.getHSSFWorkbookForInspectionAccount("对下验工计价台账","对下验工计价台账",title,inspectionAccounts);
         OutputStream out = null;
         try {
             out = response.getOutputStream();

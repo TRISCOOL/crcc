@@ -76,6 +76,16 @@ public class ProjectEvaluation {
     private String responsibilityBenefiyStr;
     private String engineeringStatusStr;
 
+    private Integer isResponsibility;
+
+    public Integer getIsResponsibility() {
+        return isResponsibility;
+    }
+
+    public void setIsResponsibility(Integer isResponsibility) {
+        this.isResponsibility = isResponsibility;
+    }
+
     public String getEngineeringStatusStr() {
         return engineeringStatusStr;
     }

@@ -8,6 +8,7 @@ import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
+import java.text.NumberFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Map;
@@ -177,10 +178,10 @@ public class ExcelUtils {
         return projectInfoPeople.get(projectInfoPeople.size()-1).getName();
     }
 
-    public static HSSFWorkbook getProjectEvaluationExcel(String sheetName,String[] title,List<ProjectEvaluation> projectEvaluations){
+    public static HSSFWorkbook getProjectEvaluationExcel(String titleValue,String sheetName,String[] title,List<ProjectEvaluation> projectEvaluations){
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -192,6 +193,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -214,11 +227,11 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress merge1 = new CellRangeAddress(0,0,5,6);
-        CellRangeAddress merge2 = new CellRangeAddress(0,0,7,8);
-        CellRangeAddress merge3 = new CellRangeAddress(0,0,12,16);
-        CellRangeAddress merge4 = new CellRangeAddress(0,0,17,20);
-        CellRangeAddress merge5 = new CellRangeAddress(0,0,21,25);
+        CellRangeAddress merge1 = new CellRangeAddress(1,1,5,6);
+        CellRangeAddress merge2 = new CellRangeAddress(1,1,7,8);
+        CellRangeAddress merge3 = new CellRangeAddress(1,1,12,16);
+        CellRangeAddress merge4 = new CellRangeAddress(1,1,17,20);
+        CellRangeAddress merge5 = new CellRangeAddress(1,1,21,25);
         sheet.addMergedRegion(merge1);
         sheet.addMergedRegion(merge2);
         sheet.addMergedRegion(merge3);
@@ -285,9 +298,9 @@ public class ExcelUtils {
 
     }
 
-    public static HSSFWorkbook getExcelForUpAccount(String sheetName,String[] title, List<MeteringAccount> meteringAccounts){
+    public static HSSFWorkbook getExcelForUpAccount(String titleValue,String sheetName,String[] title, List<MeteringAccount> meteringAccounts){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -299,6 +312,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -317,10 +342,10 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress addressPlane = new CellRangeAddress(0,0,5,7);
-        CellRangeAddress addressRealTime = new CellRangeAddress(0,0,8,9);
-        CellRangeAddress addressContract = new CellRangeAddress(0,0,10,12);
-        CellRangeAddress address = new CellRangeAddress(0,0,13,14);
+        CellRangeAddress addressPlane = new CellRangeAddress(2,2,5,7);
+        CellRangeAddress addressRealTime = new CellRangeAddress(2,2,8,9);
+        CellRangeAddress addressContract = new CellRangeAddress(2,2,10,12);
+        CellRangeAddress address = new CellRangeAddress(2,2,13,14);
         sheet.addMergedRegion(addressPlane);
         sheet.addMergedRegion(addressRealTime);
         sheet.addMergedRegion(addressContract);
@@ -437,9 +462,9 @@ public class ExcelUtils {
         return sum;
     }
 
-    public static HSSFWorkbook getSubcontractorExcel(String sheetName,String[] title, List<Subcontractor> subcontractors){
+    public static HSSFWorkbook getSubcontractorExcel(String titleValue,String sheetName,String[] title, List<Subcontractor> subcontractors){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -451,6 +476,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -487,9 +524,9 @@ public class ExcelUtils {
         return wb;
     }
 
-    public static HSSFWorkbook getResumeExcel(String sheetName,String[] title, List<SubcontractorResume> subcontractorResumes){
+    public static HSSFWorkbook getResumeExcel(String titleValue,String sheetName,String[] title, List<SubcontractorResume> subcontractorResumes){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -501,6 +538,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -535,9 +584,9 @@ public class ExcelUtils {
         return wb;
     }
 
-    public static HSSFWorkbook getLaborAccountExcel(String sheetName,String[] title, List<LaborAccount> laborAccounts){
+    public static HSSFWorkbook getLaborAccountExcel(String titleValue,String sheetName,String[] title, List<LaborAccount> laborAccounts){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -549,6 +598,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -563,8 +624,8 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress address1 = new CellRangeAddress(0,0,0,13);
-        CellRangeAddress address2 = new CellRangeAddress(0,0,14,18);
+        CellRangeAddress address1 = new CellRangeAddress(1,1,0,13);
+        CellRangeAddress address2 = new CellRangeAddress(1,1,14,18);
         sheet.addMergedRegion(address1);
         sheet.addMergedRegion(address2);
 
@@ -587,9 +648,9 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress address3 = new CellRangeAddress(1,1,8,9);
-        CellRangeAddress address4 = new CellRangeAddress(1,1,10,11);
-        CellRangeAddress address5 = new CellRangeAddress(1,1,15,16);
+        CellRangeAddress address3 = new CellRangeAddress(2,2,8,9);
+        CellRangeAddress address4 = new CellRangeAddress(2,2,10,11);
+        CellRangeAddress address5 = new CellRangeAddress(2,2,15,16);
         sheet.addMergedRegion(address3);
         sheet.addMergedRegion(address4);
         sheet.addMergedRegion(address5);
@@ -635,11 +696,11 @@ public class ExcelUtils {
         return wb;
     }
 
-    public static HSSFWorkbook getHSSFWorkbookForInspectionAccount(String sheetName, String[] title,
+    public static HSSFWorkbook getHSSFWorkbookForInspectionAccount(String titleValue,String sheetName, String[] title,
                                                                    List<InspectionAccount> inspectionAccounts){
 
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -652,6 +713,18 @@ public class ExcelUtils {
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
 
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
         //声明列对象
         HSSFCell cell = null;
         for(int i=0;i<title.length;i++){
@@ -663,7 +736,7 @@ public class ExcelUtils {
             }
             cell.setCellStyle(style);
         }
-        CellRangeAddress addressPlane = new CellRangeAddress(0,0,7,13);
+        CellRangeAddress addressPlane = new CellRangeAddress(1,1,7,13);
         sheet.addMergedRegion(addressPlane);
 
         //创建标题
@@ -719,9 +792,9 @@ public class ExcelUtils {
         return value.setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
     }
 
-    public static HSSFWorkbook getPersonnelExcel(String sheetName,String[] title, List<Personnel> personnels){
+    public static HSSFWorkbook getPersonnelExcel(String titleValue,String sheetName,String[] title, List<Personnel> personnels){
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -733,6 +806,18 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
 
         //声明列对象
         HSSFCell cell = null;
@@ -830,9 +915,10 @@ public class ExcelUtils {
         return result;
     }
 
-    public static HSSFWorkbook getStandardExcel(List<String> titles, List<String> fields, List values, String sheetName){
+    public static HSSFWorkbook getStandardExcel(String title,List<String> titles, List<String> fields, List values, String sheetName){
+
         // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
-        int num = 0;
+        int num = 1;
         HSSFWorkbook wb = new HSSFWorkbook();
 
         // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
@@ -844,6 +930,24 @@ public class ExcelUtils {
         // 第四步，创建单元格，并设置值表头 设置表头居中
         HSSFCellStyle style = wb.createCellStyle();
         style.setAlignment(HorizontalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<titles.size();i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(style);
+            if (i == 0){
+                titleCell.setCellValue(title);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,titles.size());
+        sheet.addMergedRegion(merge);
+
+
+
+/*        HSSFCellStyle style2 = wb.createCellStyle();
+        HSSFDataFormat format = wb.createDataFormat();
+        style2.setDataFormat(format.getFormat("@"));*/
 
         HSSFCell cell = null;
         for(int i=0;i< titles.size();i++){
@@ -870,12 +974,13 @@ public class ExcelUtils {
                             BigDecimal bigDecimal = (BigDecimal)targetField.get(value);
                             if (bigDecimal != null){
                                 bigDecimal.setScale(2,BigDecimal.ROUND_DOWN);
-                                result = bigDecimal.doubleValue()+"";
+                                result = transformationFromDoubleToString(bigDecimal.doubleValue());//解除科学记数法在excel中
                             }
                         }else if (targetType == Double.class){
                             Double d = targetField.getDouble(value);
                             if (d != null){
-                                result = new BigDecimal(d).setScale(2,BigDecimal.ROUND_DOWN).doubleValue()+"";
+                                result = transformationFromDoubleToString(new BigDecimal(d).
+                                        setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
                             }
                         }else if (targetType == Date.class){
                             Date time = (Date) targetField.get(value);
@@ -886,7 +991,9 @@ public class ExcelUtils {
                     }catch (Exception e){
                         e.printStackTrace();
                     }
-                    contextRow.createCell(cellNum).setCellValue(result);
+                    HSSFCell resultCell = contextRow.createCell(cellNum);
+                    /*resultCell.setCellStyle(style2);*/
+                    resultCell.setCellValue(result);
                     targetField.setAccessible(false);
                 } catch (NoSuchFieldException e) {
                     e.printStackTrace();
@@ -896,5 +1003,16 @@ public class ExcelUtils {
             num ++;
         }
         return wb;
+    }
+
+    //消除科学记数法
+    private static String transformationFromDoubleToString(Double value){
+        NumberFormat nf = NumberFormat.getInstance();
+        //保留小数位4位
+        nf.setMaximumFractionDigits(2);
+        //是否保留千分位
+        nf.setGroupingUsed(false);
+
+        return nf.format(value);
     }
 }

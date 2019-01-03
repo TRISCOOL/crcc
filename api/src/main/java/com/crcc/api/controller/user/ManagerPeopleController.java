@@ -141,7 +141,7 @@ public class ManagerPeopleController extends BaseController{
 
         List<Personnel> personnelList = personnelService.listForPage(name,projectName,position,firstDegreeLevel,
                 secondDegreeLevel,workTime,null,null);
-        HSSFWorkbook wb = ExcelUtils.getPersonnelExcel("经管人员",titles,personnelList);
+        HSSFWorkbook wb = ExcelUtils.getPersonnelExcel("经管人员","经管人员",titles,personnelList);
         OutputStream out = null;
         try {
             out = response.getOutputStream();

@@ -46,7 +46,7 @@ public class LaborAccountServiceImpl implements LaborAccountService{
         if (num>=100)
             label = num+"";
 
-        return laborAccount.getContractCode()+"-"+label;
+        return laborAccount.getContractCode()+"-补"+label;
     }
 
     @Override

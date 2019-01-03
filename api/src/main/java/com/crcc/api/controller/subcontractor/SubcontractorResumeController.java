@@ -132,7 +132,7 @@ public class SubcontractorResumeController extends BaseController{
         String[] titles = {"分包商备案编码","分包商全称","队伍名称","施工规模","开始日期","结束日期","该时间段所属项目部",
         "合同签订人","合同签订人联系方式","合同金额","结算金额","项目部评价","项目部评价"};
 
-        HSSFWorkbook wb = ExcelUtils.getResumeExcel("分包商履历",titles,subcontractorResumeList);
+        HSSFWorkbook wb = ExcelUtils.getResumeExcel("分包商履历","分包商履历",titles,subcontractorResumeList);
         OutputStream out = null;
         try {
             out = response.getOutputStream();

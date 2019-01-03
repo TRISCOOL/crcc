@@ -348,7 +348,7 @@
       AND p.name = #{projectName}
     </if>
     <if test="meteringTime != null">
-      AND mc.metering_time = #{meteringTime}
+      AND date_format(mc.metering_time,'%Y-%m') = #{meteringTime}
     </if>
     <if test="minPayProportion != null and maxPayProportion != null">
       AND mc.pay_proportion &gt;= #{minPayProportion} AND  mc.pay_proportion &lt;= #{maxPayProportion}

@@ -23,7 +23,7 @@ public interface MeteringAccountMapper {
 
     List<MeteringAccount> listMeteringAccountForPage(@Param("projectId") Long projectId,
                                                      @Param("projectName") String projectName,
-                                                     @Param("meteringTime") Date meteringTime,
+                                                     @Param("meteringTime") String meteringTime,
                                                      @Param("minPayProportion") Double minPayProportion,
                                                      @Param("maxPayProportion") Double maxPayProportion,
                                                      @Param("minProductionValue") Double minProductionValue,
@@ -32,7 +32,7 @@ public interface MeteringAccountMapper {
 
     Integer listMeteringAccountForPageSize(@Param("projectId") Long projectId,
                                            @Param("projectName") String projectName,
-                                           @Param("meteringTime") Date meteringTime,
+                                           @Param("meteringTime") String meteringTime,
                                            @Param("minPayProportion") Double minPayProportion,
                                            @Param("maxPayProportion") Double maxPayProportion,
                                            @Param("minProductionValue") Double minProductionValue,
