@@ -80,7 +80,7 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
         }
 
         if (meteringAccount.getAlreadyPaidAmount() != null && meteringAccount.getRealAmountTax() != null){
-            meteringAccount.setpayProportion(computerDivide(meteringAccount.getAlreadyPaidAmount(),meteringAccount.getRealAmountTax()));
+            meteringAccount.setpayProportion(computerDivide(meteringAccount.getAlreadyPaidAmount(),meteringAccount.getRealAmountTax(),4));
         }
 
         if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getExtraAmount() != null
@@ -88,24 +88,24 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
             BigDecimal midValue = add(meteringAccount.getExtraAmount(),
                     meteringAccount.getNotCalculatedAmount(),
                     meteringAccount.getValuationAmountTax());
-            meteringAccount.setProductionValue(computerDivide(meteringAccount.getValuationAmountTax(),midValue));
+            meteringAccount.setProductionValue(computerDivide(meteringAccount.getValuationAmountTax(),midValue,4));
         }
     }
 
     private BigDecimal computerNotTax(BigDecimal amount,BigDecimal tax){
         BigDecimal realTax = tax.add(new BigDecimal(1));
-        return amount.divide(realTax,2,BigDecimal.ROUND_HALF_DOWN);
+        return amount.divide(realTax,2,BigDecimal.ROUND_HALF_UP);
     }
 
     private BigDecimal computerReduce(BigDecimal first,BigDecimal second){
         return first.subtract(second);
     }
 
-    private BigDecimal computerDivide(BigDecimal bcs,BigDecimal cs){
+    private BigDecimal computerDivide(BigDecimal bcs,BigDecimal cs,int decimalPoint){
         if (bcs.doubleValue() == 0d)
             return new BigDecimal(0);
 
-        return bcs.divide(cs,2,BigDecimal.ROUND_HALF_DOWN);
+        return bcs.divide(cs,decimalPoint,BigDecimal.ROUND_HALF_UP);
     }
 
     private BigDecimal add(BigDecimal first,BigDecimal second,BigDecimal third){

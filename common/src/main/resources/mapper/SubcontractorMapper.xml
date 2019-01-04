@@ -558,7 +558,7 @@
       AND s.type = #{type}
     </if>
     <if test="professionType != null">
-      AND s.profession_type = #{professionType}
+      AND s.profession_type LIKE concat('%',#{professionType},'%')
     </if>
     <if test="minAmount != null and maxAmount != null">
       AND s.registered_capital &lt;= #{maxAmount} AND s.registered_capital &gt;= #{minAmount}
@@ -571,6 +571,18 @@
     </if>
     <if test="companyEvaluation != null">
       AND s.company_evaluation = #{companyEvaluation}
+    </if>
+    <if test="isValid != null">
+      <if test="isValid == 0">
+        AND datediff(s.business_license_validity_period,now()) &gt;= 90 AND datediff(s.qualification_validity_period,now()) &gt;= 90 AND datediff(s.safety_validity_period,now()) &gt;= 90
+      </if>
+      <if test="isValid == 1">
+        AND datediff(s.business_license_validity_period,now()) &gt; 0 AND datediff(s.qualification_validity_period,now()) &gt; 0 AND datediff(s.safety_validity_period,now()) &gt; 0
+        AND (datediff(s.business_license_validity_period,now()) &lt; 90 OR datediff(s.qualification_validity_period,now()) &lt; 90 OR  datediff(s.safety_validity_period,now()) &lt; 90)
+      </if>
+      <if test="isValid == 2">
+        AND (datediff(s.business_license_validity_period,now()) &lt;= 0 OR datediff(s.qualification_validity_period,now()) &lt;= 0 OR  datediff(s.safety_validity_period,now()) &lt;= 0)
+      </if>
     </if>
     ORDER BY s.id DESC
     <if test="offset != null and length != null">
@@ -591,7 +603,7 @@
       AND s.type = #{type}
     </if>
     <if test="professionType != null">
-      AND s.profession_type = #{professionType}
+      AND s.profession_type LIKE concat('%',#{professionType},'%')
     </if>
     <if test="minAmount != null and maxAmount != null">
       AND s.registered_capital &lt;= #{maxAmount} AND s.registered_capital &gt;= #{minAmount}
@@ -604,6 +616,18 @@
     </if>
     <if test="companyEvaluation != null">
       AND s.company_evaluation = #{companyEvaluation}
+    </if>
+    <if test="isValid != null">
+      <if test="isValid == 0">
+        AND datediff(s.business_license_validity_period,now()) &gt;= 90 AND datediff(s.qualification_validity_period,now()) &gt;= 90 AND datediff(s.safety_validity_period,now()) &gt;= 90
+      </if>
+      <if test="isValid == 1">
+        AND datediff(s.business_license_validity_period,now()) &gt; 0 AND datediff(s.qualification_validity_period,now()) &gt; 0 AND datediff(s.safety_validity_period,now()) &gt; 0
+        AND (datediff(s.business_license_validity_period,now()) &lt; 90 OR datediff(s.qualification_validity_period,now()) &lt; 90 OR  datediff(s.safety_validity_period,now()) &lt; 90)
+      </if>
+      <if test="isValid == 2">
+        AND (datediff(s.business_license_validity_period,now()) &lt;= 0 OR datediff(s.qualification_validity_period,now()) &lt;= 0 OR  datediff(s.safety_validity_period,now()) &lt;= 0)
+      </if>
     </if>
   </select>
 

@@ -501,8 +501,15 @@
       remark = #{remark,jdbcType=VARCHAR},
       award = #{award,jdbcType=VARCHAR},
       head_url = #{headUrl,jdbcType=VARCHAR},
+      education = #{education},
+      create_time = #{createTime},
+      create_user = #{createUser},
+      update_time = #{updateTime},
+      update_user = #{updateUser},
+      `name` = #{name},
       code = #{code},
-      email = #{email}
+      project_id = #{projectId},
+      email = #{email},
     where id = #{id,jdbcType=BIGINT}
   </update>
 

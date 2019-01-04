@@ -31,7 +31,7 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
             BigDecimal midValue = inspectionAccount.getValuationPrice().add(inspectionAccount.getEndedPrice());
             if (midValue.doubleValue() != 0d){
                 inspectionAccount.setUnderRate(inspectionAccount.getValuationPrice().divide(
-                        midValue,2,BigDecimal.ROUND_HALF_DOWN));
+                        midValue,4,BigDecimal.ROUND_HALF_UP));
             }
         }
 
@@ -40,7 +40,7 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
             LaborAccount laborAccount = new LaborAccount();
             laborAccount.setId(inspectionAccount.getLaborAccountId());
             laborAccount.setSettlementAmount(inspectionAccount.getValuationPrice() != null?inspectionAccount.getValuationPrice():new BigDecimal(0));
-            laborAccountService.update(laborAccount);
+            laborAccountService.updateSective(laborAccount);
         }
 
         return inspectionAccount.getId();
@@ -48,7 +48,7 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
 
     @Override
     public boolean update(InspectionAccount inspectionAccount) {
-        int result = inspectionAccountMapper.updateByPrimaryKeySelective(inspectionAccount);
+        int result = inspectionAccountMapper.updateByPrimaryKey(inspectionAccount);
         if (result != 0)
             return true;
         return false;

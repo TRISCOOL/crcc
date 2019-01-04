@@ -101,7 +101,7 @@ public class ProjectServiceImpl implements ProjectService{
     @Override
     public boolean updateProjectInfo(ProjectInfo projectInfo) {
         projectInfo.setUpdateTime(new Date());
-        int result = projectInfoMapper.updateByPrimaryKeySelective(projectInfo);
+        int result = projectInfoMapper.updateByPrimaryKey(projectInfo);
         if (result != 0){
             return true;
         }

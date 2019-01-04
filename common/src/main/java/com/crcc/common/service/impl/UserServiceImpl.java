@@ -53,9 +53,11 @@ public class UserServiceImpl implements UserService{
         if (!existUser.getPassword().equals(password))
             throw new CrccException(ResponseCode.PASSWORD_ERROR);
 
-        //删除原来的token
+        //检查是否已经登录，如果已登录，就不能再登录
         if (existUser != null && existUser.getToken() != null){
-            redisService.delStr(existUser.getToken());
+            boolean isExist = redisService.exists(existUser.getToken());
+            if (isExist)
+                throw new CrccException(ResponseCode.USER_IS_ALREADY_LOGIN);
         }
 
         String token = Utils.getUuid(true);
@@ -73,6 +75,7 @@ public class UserServiceImpl implements UserService{
             user.setPermissionsMap(mapPermission(resouceList));
             user.setAccount(existUser.getAccount());
             redisService.setStr(token,Utils.toJson(user));
+            redisService.setExpire(token,1*60*60*4L);
             return user;
         }
 

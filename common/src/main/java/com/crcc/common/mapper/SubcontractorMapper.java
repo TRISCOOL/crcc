@@ -26,14 +26,16 @@ public interface SubcontractorMapper {
                                     @Param("shareEvaluation") String shareEvaluation,
                                     @Param("groupEvaluation") String groupEvaluation,
                                     @Param("companyEvaluation") String companyEvaluation,
-                                    @Param("offset") Integer offset,@Param("length") Integer length);
+                                    @Param("offset") Integer offset,@Param("length") Integer length,
+                                    @Param("isValid")Integer isValid);
 
     Integer listForPageSize(@Param("name") String name,@Param("type") String type,
                             @Param("professionType") String professionType,@Param("minAmount") Integer minAmount,
                             @Param("maxAmount") Integer maxAmount,
                             @Param("shareEvaluation") String shareEvaluation,
                             @Param("groupEvaluation") String groupEvaluation,
-                            @Param("companyEvaluation") String companyEvaluation);
+                            @Param("companyEvaluation") String companyEvaluation,
+                            @Param("isValid")Integer isValid);
 
     List<Subcontractor> selectSubcontractorByName(@Param("subcontractorName")String subcontractorName);
 }

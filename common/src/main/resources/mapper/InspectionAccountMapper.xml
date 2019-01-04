@@ -311,7 +311,10 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser,jdbcType=BIGINT},
       update_time = #{updateTime,jdbcType=TIMESTAMP},
-      update_user = #{updateUser,jdbcType=BIGINT}
+      update_user = #{updateUser,jdbcType=BIGINT},
+      ended_price = #{endedPrice},
+      under_rate = #{underRate},
+      labor_account_id = #{laborAccountId}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

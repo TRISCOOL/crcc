@@ -52,6 +52,15 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Override
     public boolean update(LaborAccount laborAccount) {
         laborAccount.setUpdateTime(new Date());
+        int result = laborAccountMapper.updateByPrimaryKey(laborAccount);
+        if (result != 0)
+            return true;
+        return false;
+    }
+
+    @Override
+    public boolean updateSective(LaborAccount laborAccount) {
+        laborAccount.setUpdateTime(new Date());
         int result = laborAccountMapper.updateByPrimaryKeySelective(laborAccount);
         if (result != 0)
             return true;

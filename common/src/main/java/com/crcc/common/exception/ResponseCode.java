@@ -10,6 +10,7 @@ public enum ResponseCode {
     PARAM_ILLEGAL("420","param is illegal"),
     NOT_FOUND_USER("421","not found this user"),
     PASSWORD_ERROR("422","password is error"),
+    USER_IS_ALREADY_LOGIN("423","user is already login"),
     //500-600
     SERVER_ERROR("500","server error"),
     PROJECT_INFO_EXIST("600","this project had projectInfo"),

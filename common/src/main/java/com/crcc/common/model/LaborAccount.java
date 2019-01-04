@@ -75,6 +75,16 @@ public class LaborAccount {
 
     private String contractNumber;
 
+    private String annexUrlSq;
+
+    public String getAnnexUrlSq() {
+        return annexUrlSq;
+    }
+
+    public void setAnnexUrlSq(String annexUrlSq) {
+        this.annexUrlSq = annexUrlSq;
+    }
+
     public String getSettlementFilingStr() {
         return settlementFilingStr;
     }

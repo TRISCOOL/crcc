@@ -392,6 +392,10 @@
       responsibility_people = #{responsibilityPeople,jdbcType=VARCHAR},
       responsibility_secretary = #{responsibilitySecretary,jdbcType=VARCHAR},
       responsibility_annex = #{responsibilityAnnex,jdbcType=VARCHAR},
+      create_time = #{createTime},
+      create_user = #{createUser},
+      update_time = #{updateTime},
+      update_user = #{updateUser},
       isResponsibility = #{isResponsibility}
     where id = #{id,jdbcType=BIGINT}
   </update>

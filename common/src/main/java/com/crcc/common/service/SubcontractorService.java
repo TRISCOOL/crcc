@@ -13,10 +13,10 @@ public interface SubcontractorService {
 
     List<Subcontractor> listSubcontractor(String name,String type,String professionType,Integer minAmount,Integer maxAmount,
                                           String shareEvaluation,String groupEvaluation,String companyEvaluation,
-                                          Integer offset,Integer length);
+                                          Integer offset,Integer length,Integer isValid);
 
     Integer listSubcontractorSize(String name,String type,String professionType,Integer minAmount,Integer maxAmount,
-                                  String shareEvaluation,String groupEvaluation,String companyEvaluation);
+                                  String shareEvaluation,String groupEvaluation,String companyEvaluation,Integer isValid);
 
     List<Subcontractor> selectSubcontractorByName(String subcontractorName);
 

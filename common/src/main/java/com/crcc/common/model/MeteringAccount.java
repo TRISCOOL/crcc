@@ -10,6 +10,7 @@ public class MeteringAccount {
 
     private Integer meteringNum;
 
+    @DateTimeFormat(pattern = "yyyy-MM")
     private Date meteringTime;
 
     private BigDecimal valuationAmountTax;

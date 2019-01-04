@@ -76,15 +76,15 @@ public class SubcontractorServiceImpl implements SubcontractorService{
     @Override
     public List<Subcontractor> listSubcontractor(String name, String type, String professionType, Integer minAmount,
                                                  Integer maxAmount, String shareEvaluation, String groupEvaluation,
-                                                 String companyEvaluation, Integer offset, Integer length) {
+                                                 String companyEvaluation, Integer offset, Integer length,Integer isValid) {
         return subcontractorMapper.listForPage(name,type,professionType,minAmount,maxAmount,shareEvaluation,
-                groupEvaluation,companyEvaluation,offset,length);
+                groupEvaluation,companyEvaluation,offset,length,isValid);
     }
 
     @Override
-    public Integer listSubcontractorSize(String name, String type, String professionType, Integer minAmount, Integer maxAmount, String shareEvaluation, String groupEvaluation, String companyEvaluation) {
+    public Integer listSubcontractorSize(String name, String type, String professionType, Integer minAmount, Integer maxAmount, String shareEvaluation, String groupEvaluation, String companyEvaluation,Integer isValid) {
         return subcontractorMapper.listForPageSize(name,type,professionType,minAmount,maxAmount,shareEvaluation,
-                groupEvaluation,companyEvaluation);
+                groupEvaluation,companyEvaluation,isValid);
     }
 
     @Override

@@ -110,14 +110,15 @@ public class SubcontractorController extends BaseController{
                            @RequestParam(value = "shareEvaluation",required = false) String shareEvaluation,
                            @RequestParam(value = "groupEvaluation",required = false) String groupEvaluation,
                            @RequestParam(value = "companyEvaluation",required = false) String companyEvaluation,
+                           @RequestParam(value = "isValid",required = false)Integer isValid,
                            @RequestParam("page") Integer page,@RequestParam("pageSize") Integer pageSize){
 
         Integer offset = page - 1 < 0 ? 0 : page - 1;
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
-                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,offset*pageSize,pageSize);
+                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,offset*pageSize,pageSize,isValid);
 
         Integer total = subcontractorService.listSubcontractorSize(name,type,professionType,minAmount,
-                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation);
+                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,isValid);
 
         return ResponseVo.ok(total,page,pageSize,subcontractors);
 

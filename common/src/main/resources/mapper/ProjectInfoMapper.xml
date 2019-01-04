@@ -561,7 +561,11 @@
       create_time = #{createTime,jdbcType=TIMESTAMP},
       create_user = #{createUser},
       update_time = #{updateTime},
-      update_user = #{updateUser}
+      update_user = #{updateUser},
+      temporarily_price = #{temporarilyPrice},
+      manager = #{manager},
+      secretary = #{secretary},
+      engineer = #{engineer}
     where id = #{id,jdbcType=BIGINT}
   </update>
 

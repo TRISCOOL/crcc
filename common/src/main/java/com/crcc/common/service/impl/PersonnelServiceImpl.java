@@ -57,7 +57,7 @@ public class PersonnelServiceImpl implements PersonnelService{
     @Override
     public boolean updatePersonnel(Personnel personnel) {
         personnel.setUpdateTime(new Date());
-        int result = personnelMapper.updateByPrimaryKeySelective(personnel);
+        int result = personnelMapper.updateByPrimaryKey(personnel);
         if (result != 0)
             return true;
         return false;

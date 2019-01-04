@@ -5,6 +5,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.User;
+import com.crcc.common.service.RedisService;
 import com.crcc.common.service.UserService;
 import com.crcc.common.utils.ExcelUtils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
@@ -27,6 +28,9 @@ public class UserController extends BaseController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private RedisService redisService;
+
     @PostMapping("/login/v1.1")
     public ResponseVo login(@RequestBody User user){
         String account = user.getAccount();
@@ -37,6 +41,23 @@ public class UserController extends BaseController {
 
         User result = userService.login(account,password);
         return ResponseVo.ok(result);
+    }
+
+    /**
+     * 退出登录
+     * @param request
+     * @return
+     */
+    @GetMapping("/login_out/v1.1")
+    @AuthRequire
+    public ResponseVo loginOut(HttpServletRequest request){
+        User user = curUser(request);
+        if (user != null && user.getToken() != null){
+            redisService.delStr(user.getToken());
+            return ResponseVo.ok();
+        }
+
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
     }
 
     /**

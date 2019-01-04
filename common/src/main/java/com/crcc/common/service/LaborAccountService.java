@@ -10,6 +10,8 @@ public interface LaborAccountService {
 
     boolean update(LaborAccount laborAccount);
 
+    boolean updateSective(LaborAccount laborAccount);
+
     LaborAccount getDetails(Long laborAccountId);
 
     List<LaborAccount> listLaborAccount(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval,

@@ -379,38 +379,27 @@ public class ExcelUtils {
             contentRow.createCell(3).setCellValue(DateTimeUtil.getYYYYMMDD(meteringAccount.getMeteringTime()));
             contentRow.createCell(4).setCellValue(meteringAccount.getPrepaymentAmount().setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
             //计价金额含税
-            contentRow.createCell(5).setCellValue(meteringAccount.getValuationAmountTax()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(5).setCellValue(meteringAccount.getValuationAmountTax().doubleValue());
             //计价金额税率
-            contentRow.createCell(6).setCellValue(meteringAccount.getTax()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(6).setCellValue(meteringAccount.getTax().doubleValue());
             //计价金额不含税
-            contentRow.createCell(7).setCellValue(meteringAccount.getValuationAmountNotTax()
-                    .setScale(2, BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(7).setCellValue(meteringAccount.getValuationAmountNotTax().doubleValue());
             //实际支付金额含税
-            contentRow.createCell(8).setCellValue(meteringAccount.getRealAmountTax()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(8).setCellValue(meteringAccount.getRealAmountTax().doubleValue());
             //实际支付金额不含税
-            contentRow.createCell(9).setCellValue(meteringAccount.getRealAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(9).setCellValue(meteringAccount.getRealAmount().doubleValue());
             //已经支付金额
-            contentRow.createCell(10).setCellValue(meteringAccount.getAlreadyPaidAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(10).setCellValue(meteringAccount.getAlreadyPaidAmount().doubleValue());
             //未支付金额
-            contentRow.createCell(11).setCellValue(meteringAccount.getUnpaidAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(11).setCellValue(meteringAccount.getUnpaidAmount().doubleValue());
             //拨付率
-            contentRow.createCell(12).setCellValue(meteringAccount.getPayProportion()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue()*100+"%");
+            contentRow.createCell(12).setCellValue(meteringAccount.getPayProportion().doubleValue()*100+"%");
             //超计价
-            contentRow.createCell(13).setCellValue(meteringAccount.getExtraAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(13).setCellValue(meteringAccount.getExtraAmount().doubleValue());
             //已完未计
-            contentRow.createCell(14).setCellValue(meteringAccount.getNotCalculatedAmount()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue());
+            contentRow.createCell(14).setCellValue(meteringAccount.getNotCalculatedAmount().doubleValue());
             //产值计价率
-            contentRow.createCell(15).setCellValue(meteringAccount.getProductionValue()
-                    .setScale(2,BigDecimal.ROUND_DOWN).doubleValue()*100+"%");
+            contentRow.createCell(15).setCellValue(meteringAccount.getProductionValue().doubleValue()*100+"%");
             contentRow.createCell(16).setCellValue(meteringAccount.getRemark());
 
             sumAlreadyAmount = addAmount(sumAlreadyAmount,meteringAccount.getAlreadyPaidAmount());
@@ -437,20 +426,20 @@ public class ExcelUtils {
         contentRow.createCell(10).setCellValue(sumAlreadyAmount);
         contentRow.createCell(11).setCellValue(sumUnpaidAmount);
         contentRow.createCell(12).setCellValue(
-                computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount))*100+"%"
+                computerDivide(new BigDecimal(sumRealTaxAmount),new BigDecimal(sumAlreadyAmount),4)*100+"%"
         );
         contentRow.createCell(13).setCellValue(sumExtraAmount);
         contentRow.createCell(14).setCellValue(sumEndAmount);
         contentRow.createCell(15).setCellValue(
-                computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount))*100+"%");
+                computerDivide(new BigDecimal(sumTaxAmount),new BigDecimal(sumTaxAmount+sumEndAmount+sumExtraAmount),4)*100+"%");
         return wb;
     }
 
-    private static Double computerDivide(BigDecimal bcs,BigDecimal cs){
+    private static Double computerDivide(BigDecimal bcs,BigDecimal cs,int decimalPoint){
         if (bcs.doubleValue() == 0d)
             return 0d;
 
-        return bcs.divide(cs,2,BigDecimal.ROUND_HALF_DOWN).setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
+        return bcs.divide(cs,decimalPoint,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     private static Double addAmount(Double sum,BigDecimal value){
@@ -768,7 +757,7 @@ public class ExcelUtils {
             contentRow.createCell(11).setCellValue(isNull(inspectionAccount.getCompensation()));
             contentRow.createCell(12).setCellValue(isNull(inspectionAccount.getShouldAmount()));
             contentRow.createCell(13).setCellValue(isNull(inspectionAccount.getEndedPrice()));
-            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate())+"%");
+            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate())*100+"%");
             contentRow.createCell(15).setCellValue(inspectionAccount.getValuationPerson());
             contentRow.createCell(16).setCellValue(inspectionAccount.getRemark());
             sumPrice = addAmount(sumPrice,inspectionAccount.getValuationPrice());
@@ -779,7 +768,7 @@ public class ExcelUtils {
         HSSFRow contentRow = sheet.createRow(num);
         contentRow.createCell(0).setCellValue("合计");
         contentRow.createCell(14).setCellValue(
-                computerDivide(new BigDecimal(sumPrice),new BigDecimal(sumPrice+sumEndPrice))+"%"
+                computerDivide(new BigDecimal(sumPrice),new BigDecimal(sumPrice+sumEndPrice),4)+"%"
         );
         return wb;
     }
