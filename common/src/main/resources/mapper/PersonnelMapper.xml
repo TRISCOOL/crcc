@@ -509,7 +509,7 @@
       `name` = #{name},
       code = #{code},
       project_id = #{projectId},
-      email = #{email},
+      email = #{email}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
