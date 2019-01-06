@@ -338,7 +338,7 @@
   <select id="listForPage" resultType="com.crcc.common.model.InspectionAccount">
     SELECT
       ic.*,p.name AS projectName,cu.name AS createUserStr,uu.name AS updateUserStr,ac.team_name AS teamName,
-      s.name AS subcontractorName
+      s.name AS subcontractorName,sum(ac2.estimated_contract_amount) AS sumContractAmount
     FROM
       inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
     LEFT JOIN
@@ -349,6 +349,8 @@
       labor_account ac ON ic.labor_account_id = ac.id
     LEFT JOIN
       subcontractor s ON s.id = ic.subcontractor_id
+    LEFT JOIN
+      labor_account ac2 on  ac.team_name = ac2.team_name AND ac2.project_id = ic.project_id and ac2.subcontractor_id = ic.subcontractor_id
     WHERE 1=1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
@@ -368,7 +370,7 @@
     <if test="minUnderRate != null and maxUnderRate != null">
       AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
     </if>
-    ORDER BY ic.id DESC
+    GROUP BY ac2.team_name ORDER BY ic.id DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>

@@ -186,7 +186,7 @@ public class ManagerPeopleController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(450, 750);
+        img.setAbsolutePosition(400, 720);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -201,26 +201,30 @@ public class ManagerPeopleController extends BaseController{
         BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
         Font font = new Font(bfChinese, 12,Font.NORMAL);
 
-        Paragraph title = new Paragraph(personnel.getName()+"个人履历表",font);
+        Font titleFont = new Font(bfChinese,12,Font.BOLD);
+
+        Paragraph title = new Paragraph(personnel.getName()+"个人履历表",titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         Paragraph kb1 = new Paragraph(" ");
-        Paragraph kb2 = new Paragraph(" ");
+
         document.add(title);
         document.add(kb1);
-        document.add(kb2);
 
-        float[] widths = {0.1f, 0.1f, 0.1f,0.1f, 0.1f,0.1f,0.3f};
+        float[] widths = {70, 70, 70,70, 70,70,70};
         PdfPTable table = new PdfPTable(widths);
+        table.setLockedWidth(true);
+        table.setTotalWidth(490);
+
         PdfPCell cell;
-        cell = Utils.getNewCell(getTitle("姓名",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("姓名",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getName(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("性别",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("性别",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSex(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("出生年月",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("出生年月",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getBrithday()),font),1,null,true,false);
         table.addCell(cell);
@@ -228,119 +232,119 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getImageCell(headImg,1,4,false,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("名族",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("名族",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFamousFamily(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("籍贯",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("籍贯",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getJiguan(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("出生地",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("出生地",titleFont),1,null,true,false);
         cell.setColspan(1);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getBirthplace(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("入党时间",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("入党时间",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getJoinAssociationTime()),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("参加工作时间",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("参加工作时间",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getWorkTime()+"年",font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("健康状况",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("健康状况",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getHealth(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("专业职务",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("专业职务",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getPosition(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("职称",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("职称",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getJobTitle(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(getTitle("有何特长",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("有何特长",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSpecialty(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("第一学历",font),1,2,true,false);
+        cell = Utils.getNewCell(getTitle("第一学历",titleFont),1,2,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业院校",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeSchool(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("专业",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("专业",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeProfession(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业时间",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getFirstDegreeTime()),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("专科/本科",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("专科/本科",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeLevel(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("第二学历",font),1,2,true,true);
+        cell = Utils.getNewCell(getTitle("第二学历",titleFont),1,2,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业院校",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSecondDegreeSchool(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("专业",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("专业",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSecondDegreeProfession(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业时间",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getSecondDegreeTime()),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("专科/本科",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("专科/本科",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSecondDegreeLevel(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("家庭住址",font),1,null,true,true);
+        cell = Utils.getNewCell(new Paragraph("家庭住址",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getHomeAddress(),font),3,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("身份证号",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("身份证号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getIdCard(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("联系电话",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("联系电话",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getPhone(),font),3,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("QQ号",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("QQ号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getQqNumber(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("工作经历",font),1,3,true,true);
+        cell = Utils.getNewCell(new Paragraph("工作经历",titleFont),1,3,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getWorkExperience(),font),6,3,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("职业资格证书取证情况",font),1,2,true,true);
+        cell = Utils.getNewCell(new Paragraph("职业资格证书取证情况",titleFont),1,2,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getCertificate(),font),6,2,true,false);
         table.addCell(cell);
 
 
-        cell = Utils.getNewCell(new Paragraph("学习及培训经历",font),1,2,true,true);
+        cell = Utils.getNewCell(new Paragraph("学习及培训经历",titleFont),1,2,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getTraining(),font),6,2,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("获奖励和受表彰情况",font),1,2,true,true);
+        cell = Utils.getNewCell(new Paragraph("获奖励和受表彰情况",titleFont),1,2,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getAward(),font),6,2,true,false);
         table.addCell(cell);

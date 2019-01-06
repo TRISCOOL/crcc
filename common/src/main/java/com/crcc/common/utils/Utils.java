@@ -3,6 +3,7 @@ package com.crcc.common.utils;
 import com.crcc.common.model.ExportConfig;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
+import com.itextpdf.text.Element;
 import com.itextpdf.text.Image;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.pdf.PdfPCell;
@@ -149,11 +150,14 @@ public class Utils {
         if (isMiddle){
             cell.setUseAscender(true);
             cell.setVerticalAlignment(PdfPHeaderCell.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER); //水平居中
+
         }
 
         if (isFixHeight){
             cell.setFixedHeight(40f);
         }
+        cell.setBorderWidth(1);
 
         return cell;
     }

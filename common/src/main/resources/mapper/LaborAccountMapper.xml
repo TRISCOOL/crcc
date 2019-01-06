@@ -422,7 +422,7 @@
   </select>
 
   <select id="onlyList" resultType="com.crcc.common.model.LaborAccount">
-    SELECT id,team_name,contract_person FROM labor_account;
+    SELECT id,team_name,contract_person FROM labor_account GROUP BY team_name;
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
@@ -488,5 +488,32 @@
     <if test="approvalFiling != null">
       AND la.settlement_filing = #{approvalFiling}
     </if>
+  </select>
+
+  <select id="getSumContractAmount" resultType="java.lang.Double">
+    SELECT
+      SUM(estimated_contract_amount) AS contractAmount
+    FROM
+      labor_account
+    WHERE
+        project_id = #{projectId}
+        AND subcontractor_id = #{subcontractorId}
+        AND team_name = #{teamName};
+  </select>
+
+  <select id="selectSubcontractorByProject" resultType="com.crcc.common.model.Subcontractor">
+    SELECT
+      s.*
+    FROM
+      labor_account lc
+    LEFT JOIN
+      subcontractor s ON lc.subcontractor_id = s.id
+    WHERE
+      lc.project_id = #{projectId}
+    GROUP BY s.id
+  </select>
+
+  <select id="selectTeamByProjectAndSub" resultType="com.crcc.common.model.LaborAccount">
+    select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} group by team_name;
   </select>
 </mapper>

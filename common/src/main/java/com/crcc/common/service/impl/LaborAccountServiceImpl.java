@@ -2,6 +2,7 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.mapper.LaborAccountMapper;
 import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.Subcontractor;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,6 +27,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     public Long addLaborAccount(LaborAccount laborAccount) {
         laborAccount.setCreateTime(new Date());
         laborAccount.setContractCode(getContractCode(laborAccount));
+        if (laborAccount.getTeamName() != null){
+            laborAccount.setTeamName(laborAccount.getTeamName().trim());
+        }
         laborAccountMapper.insertSelective(laborAccount);
         return laborAccount.getId();
     }
@@ -52,6 +56,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Override
     public boolean update(LaborAccount laborAccount) {
         laborAccount.setUpdateTime(new Date());
+        if (laborAccount.getTeamName() != null){
+            laborAccount.setTeamName(laborAccount.getTeamName().trim());
+        }
         int result = laborAccountMapper.updateByPrimaryKey(laborAccount);
         if (result != 0)
             return true;
@@ -85,5 +92,20 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Override
     public List<LaborAccount> onlyLIst() {
         return laborAccountMapper.onlyList();
+    }
+
+    @Override
+    public Double getSumContractAmount(Long projectId, Long subcontractorId, String teamName) {
+        return laborAccountMapper.getSumContractAmount(projectId,subcontractorId,teamName);
+    }
+
+    @Override
+    public List<Subcontractor> selectSubcontractorByProject(Long projectId) {
+        return laborAccountMapper.selectSubcontractorByProject(projectId);
+    }
+
+    @Override
+    public List<LaborAccount> selectTeamByProjectAndSub(Long projectId, Long subcontractorId) {
+        return laborAccountMapper.selectTeamByProjectAndSub(projectId,subcontractorId);
     }
 }

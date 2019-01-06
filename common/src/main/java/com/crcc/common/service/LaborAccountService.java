@@ -1,6 +1,7 @@
 package com.crcc.common.service;
 
 import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.Subcontractor;
 
 import java.util.List;
 
@@ -20,4 +21,10 @@ public interface LaborAccountService {
     Integer listLaborAccountSize(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval);
 
     List<LaborAccount> onlyLIst();
+
+    Double getSumContractAmount(Long projectId,Long subcontractorId,String teamName);
+
+    List<Subcontractor> selectSubcontractorByProject(Long projectId);
+
+    List<LaborAccount> selectTeamByProjectAndSub(Long projectId,Long subcontractorId);
 }

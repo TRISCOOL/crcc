@@ -1,6 +1,7 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.Subcontractor;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -32,4 +33,12 @@ public interface LaborAccountMapper {
                             @Param("approvalFiling") Integer approvalFiling);
 
     List<LaborAccount> onlyList();
+
+    Double getSumContractAmount(@Param("projectId")Long projectId,@Param("subcontractorId")Long subcontractorId,
+                                @Param("teamName")String teamName);
+
+    List<Subcontractor> selectSubcontractorByProject(@Param("projectId")Long projectId);
+
+    List<LaborAccount> selectTeamByProjectAndSub(@Param("projectId")Long projectId,
+                                                 @Param("subcontractorId")Long subcontractorId);
 }

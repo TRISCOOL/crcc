@@ -71,6 +71,14 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
 
     @Override
     public InspectionAccount getDetails(Long inspectionAccountId) {
-        return inspectionAccountMapper.getDetails(inspectionAccountId);
+        InspectionAccount inspectionAccount = inspectionAccountMapper.getDetails(inspectionAccountId);
+        if (inspectionAccount != null){
+            Double sumContract = laborAccountService.getSumContractAmount(inspectionAccount.getProjectId(),
+                    inspectionAccount.getSubcontractorId(),inspectionAccount.getTeamName());
+
+            inspectionAccount.setSumContractAmount(sumContract);
+        }
+
+        return inspectionAccount;
     }
 }

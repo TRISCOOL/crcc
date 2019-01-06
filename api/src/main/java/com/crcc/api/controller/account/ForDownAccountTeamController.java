@@ -160,5 +160,46 @@ public class ForDownAccountTeamController extends BaseController{
         return ResponseVo.ok(laborAccountService.onlyLIst());
     }
 
+    /**
+     * 合同金额
+     * @param projectId
+     * @param subcontractorId
+     * @param teamName
+     * @return
+     */
+    @GetMapping("/contractor_amount/v1.1")
+    public ResponseVo getContractAmount(@RequestParam("projectId")Long projectId,
+                                        @RequestParam("subcontractorId")Long subcontractorId,
+                                        @RequestParam("teamName")String teamName){
+
+        Double sum = laborAccountService.getSumContractAmount(projectId,subcontractorId,teamName.trim());
+        Map<String,Double> result = new HashMap<String, Double>();
+        result.put("sumAmount",sum);
+        return ResponseVo.ok(result);
+
+    }
+
+    /**
+     * 根据项目id选择相应的分包商
+     * @param projectId
+     * @return
+     */
+    @GetMapping("/sub_list/v1.1")
+    public ResponseVo getSubForTeam(@RequestParam("projectId")Long projectId){
+        return ResponseVo.ok(laborAccountService.selectSubcontractorByProject(projectId));
+    }
+
+    /**
+     * 根据项目和分包商选择队伍
+     * @param projectId
+     * @param subcontractorId
+     * @return
+     */
+    @GetMapping("/team_list/v1.1")
+    public ResponseVo getTeamBySubAndProject(@RequestParam("projectId")Long projectId,
+                                             @RequestParam("subcontractorId")Long subcontractorId){
+        return ResponseVo.ok(laborAccountService.selectTeamByProjectAndSub(projectId,subcontractorId));
+    }
+
 
 }

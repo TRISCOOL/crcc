@@ -59,6 +59,16 @@ public class InspectionAccount {
 
     private Long laborAccountId;
 
+    private Double sumContractAmount;
+
+    public Double getSumContractAmount() {
+        return sumContractAmount;
+    }
+
+    public void setSumContractAmount(Double sumContractAmount) {
+        this.sumContractAmount = sumContractAmount;
+    }
+
     public Long getLaborAccountId() {
         return laborAccountId;
     }

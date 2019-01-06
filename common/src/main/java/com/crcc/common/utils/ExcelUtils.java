@@ -746,7 +746,7 @@ public class ExcelUtils {
             contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
             contentRow.createCell(1).setCellValue(inspectionAccount.getSubcontractorName());
             contentRow.createCell(2).setCellValue(inspectionAccount.getTeamName());
-            contentRow.createCell(3).setCellValue(isNull(inspectionAccount.getContractPrice()));
+            contentRow.createCell(3).setCellValue(isNull(new BigDecimal(inspectionAccount.getSumContractAmount())));
             contentRow.createCell(4).setCellValue(inspectionAccount.getValuationPeriod());
             contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(inspectionAccount.getValuationTime()));
             contentRow.createCell(6).setCellValue(getValuationType(inspectionAccount.getValuationType()));

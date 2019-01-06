@@ -132,7 +132,7 @@ public class SubcontractorController extends BaseController{
     public ResponseVo listOnly(){
         List<Subcontractor> subcontractorList = subcontractorService.listSubcontractor(null,
                 null,null,null,null,null,null,
-                null,null,null);
+                null,null,null,null);
 
         return ResponseVo.ok(subcontractorList);
     }
@@ -170,10 +170,11 @@ public class SubcontractorController extends BaseController{
                        @RequestParam(value = "companyEvaluation",required = false) String companyEvaluation,
                        @RequestParam(value = "exportType",required = false)String exportType,
                        @RequestParam(value = "sort",required = false)List<Integer> sort,
+                       @RequestParam(value = "isValid",required = false)Integer isValid,
                        HttpServletResponse response){
 
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
-                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,null,null);
+                maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,null,null,isValid);
         HSSFWorkbook hssfWorkbook = null;
 
         if (exportType != null && sort != null){
@@ -233,7 +234,7 @@ public class SubcontractorController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(450, 750);
+        img.setAbsolutePosition(400, 720);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -248,143 +249,147 @@ public class SubcontractorController extends BaseController{
         BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
         Font font = new Font(bfChinese, 12,Font.NORMAL);
 
-        Paragraph title = new Paragraph(subcontractor.getName()+"资质信息卡",font);
+        Font titleFont = new Font(bfChinese,12,Font.BOLD);
+
+        Paragraph title = new Paragraph(subcontractor.getName()+"资质信息卡",titleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         Paragraph kb1 = new Paragraph(" ");
-        Paragraph kb2 = new Paragraph(" ");
         document.add(title);
         document.add(kb1);
-        document.add(kb2);
 
-        float[] widths = {0.15f, 0.1f, 0.2f,0.1f, 0.2f,0.1f,0.15f};
+        //float[] widths = {0.15f, 0.1f, 0.2f,0.1f, 0.2f,0.1f,0.15f};
+        float[] widths = {70, 70, 70,70, 70,70,70};
         PdfPTable table = new PdfPTable(widths);
+        table.setLockedWidth(true);
+        table.setTotalWidth(490);
+
         PdfPCell cell;
-        cell = Utils.getNewCell(getTitle("分包商全称",font),2,null,true,true);
+        cell = Utils.getNewCell(getTitle("分包商全称",titleFont),2,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getName(),font),5,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("成立日期",font),2,null,true,true);
+        cell = Utils.getNewCell(getTitle("成立日期",titleFont),2,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSetUpTime()),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("纳税人类型",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("纳税人类型",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getTaxpayerType(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("注册资本金",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("注册资本金",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getRegisteredCapital().doubleValue()+"",font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("类型",font),2,null,true,true);
+        cell = Utils.getNewCell(getTitle("类型",titleFont),2,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getType(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("电话",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("电话",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getPhone(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("电子邮箱",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("电子邮箱",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getEmail(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("注册地址",font),2,null,true,true);
+        cell = Utils.getNewCell(getTitle("注册地址",titleFont),2,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getAddress(),font),3,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("邮编",font),1,null,true,false);
+        cell = Utils.getNewCell(getTitle("邮编",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getZipCode(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("法定代表人",font),1,2,true,true);
+        cell = Utils.getNewCell(getTitle("法定代表人",titleFont),1,2,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("姓名",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("姓名",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getName(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("职务",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("职务",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonPosition(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("身份证号码",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("身份证号码",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonCard(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("联系方式",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("联系方式",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonPhone(),font),1,null,true,false);
         table.addCell(cell);
-        Paragraph address = new Paragraph("家庭地址",font);
+        Paragraph address = new Paragraph("家庭地址",titleFont);
         address.setAlignment(Element.ALIGN_CENTER);
         cell = Utils.getNewCell(address,1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonAddress(),font),3,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("营业执照",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("营业执照",titleFont),1,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("统一社会信用代码",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("统一社会信用代码",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getBusinessLicenseCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("有效期限",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getBusinessLicenseValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("发证机关",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getBusinessLicenseFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("资质证书",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("资质证书",titleFont),1,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("证书编号",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("证书编号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getQualificationCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("有效期限",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getQualificationValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("发证机关",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getQualificationFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("安全生产许可证",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("安全生产许可证",titleFont),1,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("编号",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("编号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getSafetyCode(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("有效期限",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("有效期限",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(subcontractor.getSafetyValidityPeriod()),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("发证机关",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getSafetyFrom(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("开户银行许可证",font),1,null,true,true);
+        cell = Utils.getNewCell(getTitle("开户银行许可证",titleFont),1,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("开户银行",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("开户银行",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getBank(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("银行账号",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("银行账号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getBankAccount(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("发证机关",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("发证机关",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getBankFrom(),font),1,null,true,false);
         table.addCell(cell);
