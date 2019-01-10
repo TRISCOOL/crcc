@@ -22,10 +22,10 @@ public interface UserMapper {
 
     int deleteUserById(@Param("userId")Long userId);
 
-    List<User> listUser(@Param("code")String code,@Param("projectName")String projectName,
+    List<User> listUser(@Param("code")String code,@Param("name")String name,
                         @Param("disable")Integer disable,@Param("offset")Integer offset,
                         @Param("length")Integer length);
 
-    Integer listUserSize(@Param("code")String code,@Param("projectName")String projectName,
+    Integer listUserSize(@Param("code")String code,@Param("name")String name,
                          @Param("disable")Integer disable);
 }

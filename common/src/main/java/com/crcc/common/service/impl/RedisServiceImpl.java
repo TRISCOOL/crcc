@@ -1,6 +1,7 @@
 package com.crcc.common.service.impl;
 
 import com.crcc.common.service.RedisService;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
@@ -14,9 +15,13 @@ public class RedisServiceImpl implements RedisService {
     @Resource
     private JedisPool pool;
 
+
+    @Value("${spring.redis.database}")
+    private int database;
+
     public void setStr(String key, String val, final long timeout) {
         try(Jedis jedis = pool.getResource()) {
-
+            jedis.select(database);
             jedis.set(key, val);
             if (timeout == 0l) {
                 setStr(key, val);
@@ -30,6 +35,7 @@ public class RedisServiceImpl implements RedisService {
 
     public Map<String,String> hgetAll(String key){
         try(Jedis jedis = pool.getResource()){
+            jedis.select(database);
             return jedis.hgetAll(key);
         }
     }
@@ -37,18 +43,21 @@ public class RedisServiceImpl implements RedisService {
 
     public void setStr(String key, String val) {
         try(Jedis jedis = pool.getResource()) {
+            jedis.select(database);
             jedis.set(key, val);
         }
     }
 
     public String getStr(String key) {
         try(Jedis jedis = pool.getResource()) {
+            jedis.select(database);
             return jedis.get(key);
         }
     }
 
     public boolean exists(String key) {
         try(Jedis jedis = pool.getResource()) {
+            jedis.select(database);
             return jedis.exists(key);
         }
     }
@@ -56,6 +65,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void delStr(String key) {
         try (Jedis jedis = pool.getResource()){
+            jedis.select(database);
             jedis.del(key);
         }
     }
@@ -63,6 +73,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public Long incrby(String key, Integer add) {
         try (Jedis jedis = pool.getResource()){
+            jedis.select(database);
             return jedis.incrBy(key,add);
         }
     }
@@ -70,6 +81,7 @@ public class RedisServiceImpl implements RedisService {
     @Override
     public void setExpire(String key, Long timeout) {
         try (Jedis jedis = pool.getResource()){
+            jedis.select(database);
             jedis.expire(key,Integer.parseInt(timeout+""));
         }
     }

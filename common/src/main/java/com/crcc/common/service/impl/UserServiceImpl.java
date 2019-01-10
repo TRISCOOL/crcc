@@ -132,6 +132,7 @@ public class UserServiceImpl implements UserService{
         if (user.getUpdateUser() == null)
             throw new CrccException(ResponseCode.AUTH_FAILED);
 
+        user.setName(user.getAccount());
         user.setUpdateTime(new Date());
         int result = userMapper.updateByPrimaryKeySelective(user);
         if (result != 0){
@@ -188,13 +189,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> listUser(String projectCode, String projectName, Integer disable, Integer offset, Integer length) {
-        return userMapper.listUser(projectCode,projectName,disable,offset,length);
+    public List<User> listUser(String code, String name, Integer disable, Integer offset, Integer length) {
+        return userMapper.listUser(code,name,disable,offset,length);
     }
 
     @Override
-    public Integer listUserSize(String projectCode, String projectName, Integer disable) {
-        return userMapper.listUserSize(projectCode,projectName,disable);
+    public Integer listUserSize(String code, String name, Integer disable) {
+        return userMapper.listUserSize(code,name,disable);
     }
 
     @Override

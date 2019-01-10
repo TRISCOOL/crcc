@@ -141,24 +141,24 @@ public class UserController extends BaseController {
 
     /**
      * 获取用户列表
-     * @param projectName
+     * @param name
      * @param code
-     * @param status
+     * @param disable
      * @param page
      * @param pageSize
      * @return
      */
     @GetMapping("/list/v1.1")
-    public ResponseVo listUser(@RequestParam(value = "projectName",required = false)String projectName,
+    public ResponseVo listUser(@RequestParam(value = "name",required = false)String name,
                                @RequestParam(value = "code",required = false)String code,
-                               @RequestParam(value = "status",required = false)Integer status,
+                               @RequestParam(value = "disable",required = false)Integer disable,
                                @RequestParam(value = "page")Integer page,
                                @RequestParam(value = "pageSize")Integer pageSize){
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
-        List<User> users = userService.listUser(code,projectName,status,offset*pageSize,pageSize);
+        List<User> users = userService.listUser(code,name,disable,offset*pageSize,pageSize);
 
-        Integer total = userService.listUserSize(code,projectName,status);
+        Integer total = userService.listUserSize(code,name,disable);
         return ResponseVo.ok(total,page,pageSize,users);
     }
 

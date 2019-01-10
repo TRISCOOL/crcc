@@ -291,10 +291,10 @@
       `user` uu ON u.update_user = uu.id
     WHERE 1=1
     <if test="code != null">
-      AND p.code LIKE CONCAT('%', #{code}, '%')
+      AND u.code LIKE CONCAT('%', #{code}, '%')
     </if>
-    <if test="projectName != null">
-      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%',#{name},'%')
     </if>
     <if test="disable != null">
       AND u.disable = #{disable}
@@ -305,21 +305,21 @@
     </if>
   </select>
 
-  <select id="listUserSize" resultType="com.crcc.common.model.User">
+  <select id="listUserSize" resultType="java.lang.Integer">
     SELECT
      COUNT(*)
     FROM
     `user` u
     LEFT JOIN
-    user_project_rel rel ON u.id = rel.user_id
+      user_project_rel rel ON u.id = rel.user_id
     LEFT JOIN
-    project p ON p.id = rel.project_id
+      project p ON p.id = rel.project_id
     WHERE 1=1
     <if test="code != null">
-      AND p.code LIKE CONCAT('%', #{code}, '%')
+      AND u.code LIKE CONCAT('%', #{code}, '%')
     </if>
-    <if test="projectName != null">
-      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    <if test="name != null">
+      AND u.name LIKE CONCAT('%', #{name}, '%')
     </if>
     <if test="disable != null">
       AND u.disable = #{disable}

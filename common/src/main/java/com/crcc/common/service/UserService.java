@@ -19,9 +19,9 @@ public interface UserService {
 
     User getUserDetails(Long userId);
 
-    List<User> listUser(String projectCode,String projectName,Integer disable,Integer offset,Integer length);
+    List<User> listUser(String code,String name,Integer disable,Integer offset,Integer length);
 
-    Integer listUserSize(String projectCode,String projectName,Integer disable);
+    Integer listUserSize(String code,String name,Integer disable);
 
     List<Resouce> listResourceForUser(Long userId);
 

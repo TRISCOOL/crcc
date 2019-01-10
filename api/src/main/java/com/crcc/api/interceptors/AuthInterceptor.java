@@ -60,6 +60,8 @@ public class AuthInterceptor extends HandlerInterceptorAdapter {
                     return authFail(response, ResponseCode.AUTH_FAILED);
                 }
                 if (!verificationPermission(authorization)){
+                    //权限被更改后，删掉原来的token,保证能重新登录
+                    redisService.delStr(authorization);
                     return authFail(response, ResponseCode.PERMISSION_CHANGED);
                 }
                 return true;
