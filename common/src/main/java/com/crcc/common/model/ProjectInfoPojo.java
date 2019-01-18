@@ -22,7 +22,7 @@ public class ProjectInfoPojo {
 
     private String statusStr;
 
-    private Integer mileageNumber;
+    private String mileageNumber;
 
     private BigDecimal totalPrice;
 
@@ -182,11 +182,11 @@ public class ProjectInfoPojo {
         this.statusStr = statusStr;
     }
 
-    public Integer getMileageNumber() {
+    public String getMileageNumber() {
         return mileageNumber;
     }
 
-    public void setMileageNumber(Integer mileageNumber) {
+    public void setMileageNumber(String mileageNumber) {
         this.mileageNumber = mileageNumber;
     }
 

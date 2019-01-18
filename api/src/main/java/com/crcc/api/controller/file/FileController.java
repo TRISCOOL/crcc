@@ -35,7 +35,7 @@ public class FileController extends BaseController{
     @Value("${file.qiniu.UP_HOST}")
     String upHost;
 
-    private static final String BUCKET = "crcc-cb";//7niu文件夹的名字
+    private static final String BUCKET = "crcc-cb-2";//7niu文件夹的名字
 
 
     /**

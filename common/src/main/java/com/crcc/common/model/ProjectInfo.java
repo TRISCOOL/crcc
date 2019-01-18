@@ -22,7 +22,7 @@ public class ProjectInfo {
 
     private String statusStr;
 
-    private Integer mileageNumber;
+    private String mileageNumber;
 
     private BigDecimal totalPrice;
 
@@ -259,11 +259,11 @@ public class ProjectInfo {
         }
     }
 
-    public Integer getMileageNumber() {
+    public String getMileageNumber() {
         return mileageNumber;
     }
 
-    public void setMileageNumber(Integer mileageNumber) {
+    public void setMileageNumber(String mileageNumber) {
         this.mileageNumber = mileageNumber;
     }
 

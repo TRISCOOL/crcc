@@ -8,7 +8,7 @@
     <result column="address" property="address" jdbcType="VARCHAR" />
     <result column="org_address" property="orgAddress" jdbcType="VARCHAR" />
     <result column="status" property="status" jdbcType="INTEGER" />
-    <result column="mileage_number" property="mileageNumber" jdbcType="INTEGER" />
+    <result column="mileage_number" property="mileageNumber" jdbcType="VARCHAR" />
     <result column="total_price" property="totalPrice" jdbcType="DECIMAL" />
     <result column="contract_number" property="contractNumber" jdbcType="VARCHAR" />
     <result column="contract_day" property="contractDay" jdbcType="INTEGER" />
