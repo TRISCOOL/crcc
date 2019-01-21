@@ -34,6 +34,7 @@
     <result column="status" property="status" jdbcType="TINYINT" />
     <result column="contract_type" property="contractType" jdbcType="TINYINT" />
     <result column="annexUrlSq" property="annexUrlSq" jdbcType="VARCHAR" />
+    <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, subcontractor_id, subcontractor_name, contract_time, construction_scope, 
@@ -41,7 +42,7 @@
     contract_person, phone, annex_url, remark, team_time, team_qualification, team_annex, 
     approval_time, approval_filing, approval_annex, settlement_time, settlement_remark, 
     settlement_amount, settlement_filing, create_time, create_user, update_time, update_user,annexUrlSq
-    status,contract_type
+    status,contract_type,legal_person
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -63,7 +64,7 @@
       approval_time, approval_filing, approval_annex, 
       settlement_time, settlement_remark, settlement_amount, 
       settlement_filing, create_time, create_user, 
-      update_time, update_user,status,contract_type,annexUrlSq)
+      update_time, update_user,status,contract_type,annexUrlSq,legal_person)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
       #{subcontractorName,jdbcType=VARCHAR}, #{contractTime,jdbcType=TIMESTAMP}, #{constructionScope,jdbcType=VARCHAR}, 
       #{contractCode,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{estimatedContractAmount,jdbcType=DECIMAL}, 
@@ -73,7 +74,8 @@
       #{approvalTime,jdbcType=TIMESTAMP}, #{approvalFiling,jdbcType=TINYINT}, #{approvalAnnex,jdbcType=VARCHAR}, 
       #{settlementTime,jdbcType=TIMESTAMP}, #{settlementRemark,jdbcType=VARCHAR}, #{settlementAmount,jdbcType=DECIMAL}, 
       #{settlementFiling,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
-      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT},#{status},#{contractType},#{annexUrlSq})
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT},#{status},#{contractType},#{annexUrlSq},
+      #{legalPerson})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.LaborAccount" keyProperty="id" useGeneratedKeys="true">
     insert into labor_account
@@ -174,6 +176,9 @@
       <if test="annexUrlSq != null">
         annexUrlSq,
       </if>
+      <if test="legalPerson != null">
+        legal_person,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -271,6 +276,9 @@
       </if>
       <if test="annexUrlSq != null">
         #{annexUrlSq},
+      </if>
+      <if test="legalPerson != null">
+        #{legalPerson},
       </if>
     </trim>
   </insert>
@@ -370,6 +378,9 @@
       <if test="annexUrlSq != null">
         annexUrlSq = #{annexUrlSq},
       </if>
+      <if test="legalPerson != null">
+        legal_person = #{legalPerson},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -405,7 +416,8 @@
       update_user = #{updateUser,jdbcType=BIGINT},
       status = #{status},
       contract_type = #{contractType},
-      annexUrlSq = #{annexUrlSq}
+      annexUrlSq = #{annexUrlSq},
+      legal_person = #{legalPerson}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -429,7 +441,7 @@
     SELECT
       la.*, p.name AS projectName,
       cu.name AS createUserStr,
-      uu.name AS updateUserStr,info.contract_number AS contractNumber,
+      uu.name AS updateUserStr,la2.contract_code AS contractNumber,
       s.name AS subcontractorName
     FROM
       labor_account la
@@ -443,12 +455,17 @@
       `user` uu ON la.update_user = uu.id
     LEFT JOIN
       subcontractor s ON s.id = la.subcontractor_id
+    LEFT JOIN
+      labor_account la2 ON la.project_id = la2.project_id AND la.subcontractor_id = la2.subcontractor_id AND la.team_name = la2.team_name AND la2.contract_type = 0
     WHERE 1=1
     <if test="projectId != null">
       AND la.project_id = #{projectId}
     </if>
     <if test="projectName != null">
       AND p.name LIKE CONCAT('%',#{projectName}, '%')
+    </if>
+    <if test="contractPerson != null">
+      AND la.contract_person LIKE CONCAT('%',#{contractPerson},'%')
     </if>
     <if test="subcontractorName != null">
       AND la.subcontractor_name LIKE CONCAT('%',#{subcontractorName}, '%')
@@ -459,7 +476,7 @@
     <if test="approvalFiling != null">
       AND la.settlement_filing = #{approvalFiling}
     </if>
-    ORDER BY la.id DESC
+    ORDER BY la.id,la.team_name DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>
@@ -482,6 +499,9 @@
     <if test="subcontractorName != null">
       AND la.subcontractor_name LIKE CONCAT('%',#{subcontractorName}, '%')
     </if>
+    <if test="contractPerson != null">
+      AND la.contract_person LIKE CONCAT('%',#{contractPerson},'%')
+    </if>
     <if test="status != null">
       AND la.status = #{status}
     </if>
@@ -499,6 +519,19 @@
         project_id = #{projectId}
         AND subcontractor_id = #{subcontractorId}
         AND team_name = #{teamName};
+  </select>
+
+  <select id="getTeamAccountByMain" resultType="com.crcc.common.model.LaborAccount">
+    SELECT
+      *
+    FROM
+      labor_account
+    WHERE
+      project_id = #{projectId}
+      AND subcontractor_id = #{subcontractorId}
+      AND team_name = #{teamName}
+      AND contract_type = #{contractType}
+    limit 1
   </select>
 
   <select id="selectSubcontractorByProject" resultType="com.crcc.common.model.Subcontractor">

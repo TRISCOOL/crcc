@@ -46,8 +46,21 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
         return inspectionAccount.getId();
     }
 
+    //补充对下验工计价信息
+    private void supplementInspectionAccount(InspectionAccount inspectionAccount){
+        if (inspectionAccount.getValuationPrice() != null && inspectionAccount.getEndedPrice() != null){
+            BigDecimal midValue = inspectionAccount.getValuationPrice().add(inspectionAccount.getEndedPrice());
+            if (midValue.doubleValue() != 0d){
+                inspectionAccount.setUnderRate(inspectionAccount.getValuationPrice().divide(
+                        midValue,4,BigDecimal.ROUND_HALF_UP));
+            }
+        }
+    }
+
     @Override
     public boolean update(InspectionAccount inspectionAccount) {
+
+        supplementInspectionAccount(inspectionAccount);
         int result = inspectionAccountMapper.updateByPrimaryKey(inspectionAccount);
         if (result != 0)
             return true;

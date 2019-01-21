@@ -1,5 +1,7 @@
 package com.crcc.common.service.impl;
 
+import com.crcc.common.exception.CrccException;
+import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.LaborAccountMapper;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.model.Subcontractor;
@@ -35,12 +37,18 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     private String getContractCode(LaborAccount laborAccount){
+        LaborAccount exisit =laborAccountMapper.getTeamAccountByMain(laborAccount.getProjectId(),laborAccount.getSubcontractorId(),
+                laborAccount.getTeamName(),0);
+
         if (laborAccount != null && laborAccount.getContractType() == 0){
+            if (exisit != null && exisit.getId() != null){
+                throw new CrccException(ResponseCode.TEAM_MAIN_CONTRACTOR_EXISTS);
+            }
             return laborAccount.getContractCode();
         }
 
         String label = "";
-        Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY+laborAccount.getContractCode(),1);
+        Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY+exisit.getContractCode(),1);
         if (num<10)
             label = "00"+num;
 
@@ -50,7 +58,7 @@ public class LaborAccountServiceImpl implements LaborAccountService{
         if (num>=100)
             label = num+"";
 
-        return laborAccount.getContractCode()+"-补"+label;
+        return exisit.getContractCode()+"-补"+label;
     }
 
     @Override
@@ -80,13 +88,13 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
-    public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval, Integer offset, Integer length) {
-        return laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,offset,length);
+    public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson, Integer offset, Integer length) {
+        return laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,contractPerson,offset,length);
     }
 
     @Override
-    public Integer listLaborAccountSize(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval) {
-        return laborAccountMapper.listForPageSize(projectId,projectName,subcontractorName,status,approval);
+    public Integer listLaborAccountSize(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson) {
+        return laborAccountMapper.listForPageSize(projectId,projectName,subcontractorName,status,approval,contractPerson);
     }
 
     @Override

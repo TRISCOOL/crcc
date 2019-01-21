@@ -401,7 +401,7 @@
         status = #{status,jdbcType=INTEGER},
       </if>
       <if test="mileageNumber != null" >
-        mileage_number = #{mileageNumber,jdbcType=INTEGER},
+        mileage_number = #{mileageNumber,jdbcType=VARCHAR},
       </if>
       <if test="totalPrice != null" >
         total_price = #{totalPrice,jdbcType=DECIMAL},
@@ -527,7 +527,7 @@
       address = #{address,jdbcType=VARCHAR},
       org_address = #{orgAddress,jdbcType=VARCHAR},
       status = #{status,jdbcType=INTEGER},
-      mileage_number = #{mileageNumber,jdbcType=INTEGER},
+      mileage_number = #{mileageNumber,jdbcType=VARCHAR},
       total_price = #{totalPrice,jdbcType=DECIMAL},
       contract_number = #{contractNumber,jdbcType=VARCHAR},
       contract_day = #{contractDay,jdbcType=INTEGER},

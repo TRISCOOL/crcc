@@ -14,7 +14,8 @@ public enum ResponseCode {
     //500-600
     SERVER_ERROR("500","server error"),
     PROJECT_INFO_EXIST("600","this project had projectInfo"),
-    SUBCONTRACTOR_ALREADY_EXISTS("601","this subcontractor have already exists");
+    SUBCONTRACTOR_ALREADY_EXISTS("601","this subcontractor have already exists"),
+    TEAM_MAIN_CONTRACTOR_EXISTS("602","this team had a main contractor");
 
     private String code;
     private String message;

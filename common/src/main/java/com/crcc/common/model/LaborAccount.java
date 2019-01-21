@@ -77,6 +77,16 @@ public class LaborAccount {
 
     private String annexUrlSq;
 
+    private String legalPerson;
+
+    public String getLegalPerson() {
+        return legalPerson;
+    }
+
+    public void setLegalPerson(String legalPerson) {
+        this.legalPerson = legalPerson;
+    }
+
     public String getAnnexUrlSq() {
         return annexUrlSq;
     }

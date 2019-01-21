@@ -25,17 +25,23 @@ public interface LaborAccountMapper {
                                    @Param("subcontractorName") String subcontractorName,
                                    @Param("status") Integer status,
                                    @Param("approvalFiling") Integer approvalFiling,
+                                   @Param("contractPerson") String contractPerson,
                                    @Param("offset") Integer offset,@Param("length") Integer length);
 
     Integer listForPageSize(@Param("projectId")Long projectId, @Param("projectName") String projectName,
                             @Param("subcontractorName") String subcontractorName,
                             @Param("status") Integer status,
-                            @Param("approvalFiling") Integer approvalFiling);
+                            @Param("approvalFiling") Integer approvalFiling,
+                            @Param("contractPerson") String contractPerson);
 
     List<LaborAccount> onlyList();
 
     Double getSumContractAmount(@Param("projectId")Long projectId,@Param("subcontractorId")Long subcontractorId,
                                 @Param("teamName")String teamName);
+
+    LaborAccount getTeamAccountByMain(@Param("projectId")Long projectId,@Param("subcontractorId")Long subcontractorId,
+                                      @Param("teamName")String teamName,@Param("contractType")Integer contractType);
+
 
     List<Subcontractor> selectSubcontractorByProject(@Param("projectId")Long projectId);
 

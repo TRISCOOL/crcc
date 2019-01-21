@@ -95,16 +95,17 @@ public class ForDownAccountTeamController extends BaseController{
                                   @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
                                   @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "approval",required = false) Integer approval,
+                                  @RequestParam(value = "contractPerson",required = false)String contractPerson,
                                   @RequestParam(value = "page") Integer page,
                                   @RequestParam(value = "pageSize") Integer pageSize,
                                   HttpServletRequest request){
         Integer offset = page - 1 < 0 ? 0 : page-1;
         Long projectId = permissionProject(request);
         List<LaborAccount> laborAccounts = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
-                status,approval,offset*pageSize,pageSize);
+                status,approval,contractPerson,offset*pageSize,pageSize);
 
         Integer total = laborAccountService.listLaborAccountSize(projectId,projectName,subcontractorName,
-                status,approval);
+                status,approval,contractPerson);
 
         return ResponseVo.ok(total,page,pageSize,laborAccounts);
     }
@@ -123,13 +124,14 @@ public class ForDownAccountTeamController extends BaseController{
                              @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
                              @RequestParam(value = "status",required = false) Integer status,
                              @RequestParam(value = "approval",required = false) Integer approval,
-                             @RequestParam("token")String token,HttpServletResponse response,
+                       @RequestParam(value = "contractPerson",required = false)String contractPerson,
+                       @RequestParam("token")String token,HttpServletResponse response,
                        @RequestParam(value = "exportType",required = false)String exportType,
                        @RequestParam(value = "sort",required = false)List<Integer> sort){
 
         Long projectId = permissionProjectOnlyToken(token);
         List<LaborAccount> laborAccountList = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
-                status,approval,null,null);
+                status,approval,contractPerson,null,null);
         HSSFWorkbook hb = null;
         if (exportType != null && sort != null){
             List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);
