@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.OutOfContractCompensationStatisticsMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.OutOfContractCompensationStatistics" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="subcontractor_id" property="subcontractorId" jdbcType="BIGINT" />
+    <result column="labor_account_id" property="laborAccountId" jdbcType="BIGINT" />
+    <result column="report_time" property="reportTime" jdbcType="TIMESTAMP" />
+    <result column="quarter" property="quarter" jdbcType="TINYINT" />
+    <result column="total_amount_contract" property="totalAmountContract" jdbcType="DECIMAL" />
+    <result column="mechanical_class" property="mechanicalClass" jdbcType="DECIMAL" />
+    <result column="sporadic_employment" property="sporadicEmployment" jdbcType="DECIMAL" />
+    <result column="daily_work_subtotal" property="dailyWorkSubtotal" jdbcType="DECIMAL" />
+    <result column="out_in" property="outIn" jdbcType="DECIMAL" />
+    <result column="disaster_damage" property="disasterDamage" jdbcType="DECIMAL" />
+    <result column="work_stop" property="workStop" jdbcType="DECIMAL" />
+    <result column="other" property="other" jdbcType="DECIMAL" />
+    <result column="compensation_subtotal" property="compensationSubtotal" jdbcType="DECIMAL" />
+    <result column="total" property="total" jdbcType="DECIMAL" />
+    <result column="daily_percentage" property="dailyPercentage" jdbcType="DECIMAL" />
+    <result column="compensation_percentage" property="compensationPercentage" jdbcType="DECIMAL" />
+    <result column="amount_already_disbursed" property="amountAlreadyDisbursed" jdbcType="DECIMAL" />
+    <result column="disbursed_percentage" property="disbursedPercentage" jdbcType="DECIMAL" />
+    <result column="examination" property="examination" jdbcType="VARCHAR" />
+    <result column="settlement" property="settlement" jdbcType="VARCHAR" />
+    <result column="estimate_mechanical_class" property="estimateMechanicalClass" jdbcType="DECIMAL" />
+    <result column="estimate_sporadic_employment" property="estimateSporadicEmployment" jdbcType="DECIMAL" />
+    <result column="estimate_daily_work_subtotal" property="estimateDailyWorkSubtotal" jdbcType="DECIMAL" />
+    <result column="estimate_out_in" property="estimateOutIn" jdbcType="DECIMAL" />
+    <result column="estimate_disaster_damage" property="estimateDisasterDamage" jdbcType="DECIMAL" />
+    <result column="estimate_work_stop" property="estimateWorkStop" jdbcType="DECIMAL" />
+    <result column="estimate_other" property="estimateOther" jdbcType="DECIMAL" />
+    <result column="estimate_compensation_subtotal" property="estimateCompensationSubtotal" jdbcType="DECIMAL" />
+    <result column="estimate_total" property="estimateTotal" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, subcontractor_id, labor_account_id, report_time, quarter, total_amount_contract, 
+    mechanical_class, sporadic_employment, daily_work_subtotal, out_in, disaster_damage, 
+    work_stop, other, compensation_subtotal, total, daily_percentage, compensation_percentage, 
+    amount_already_disbursed, disbursed_percentage, examination, settlement, estimate_mechanical_class, 
+    estimate_sporadic_employment, estimate_daily_work_subtotal, estimate_out_in, estimate_disaster_damage, 
+    estimate_work_stop, estimate_other, estimate_compensation_subtotal, create_time, 
+    create_user, update_time, update_user,estimate_total
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from out_of_contract_compensation_statistics
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from out_of_contract_compensation_statistics
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.OutOfContractCompensationStatistics" keyProperty="id" useGeneratedKeys="true">
+    insert into out_of_contract_compensation_statistics (id, project_id, subcontractor_id, 
+      labor_account_id, report_time, quarter, 
+      total_amount_contract, mechanical_class, sporadic_employment, 
+      daily_work_subtotal, out_in, disaster_damage, 
+      work_stop, other, compensation_subtotal, 
+      total, daily_percentage, compensation_percentage, 
+      amount_already_disbursed, disbursed_percentage, 
+      examination, settlement, estimate_mechanical_class, 
+      estimate_sporadic_employment, estimate_daily_work_subtotal, 
+      estimate_out_in, estimate_disaster_damage, 
+      estimate_work_stop, estimate_other, estimate_compensation_subtotal, 
+      create_time, create_user, update_time, estimate_total
+      update_user)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
+      #{laborAccountId,jdbcType=BIGINT}, #{reportTime,jdbcType=TIMESTAMP}, #{quarter,jdbcType=TINYINT}, 
+      #{totalAmountContract,jdbcType=DECIMAL}, #{mechanicalClass,jdbcType=DECIMAL}, #{sporadicEmployment,jdbcType=DECIMAL}, 
+      #{dailyWorkSubtotal,jdbcType=DECIMAL}, #{outIn,jdbcType=DECIMAL}, #{disasterDamage,jdbcType=DECIMAL}, 
+      #{workStop,jdbcType=DECIMAL}, #{other,jdbcType=DECIMAL}, #{compensationSubtotal,jdbcType=DECIMAL}, 
+      #{total,jdbcType=DECIMAL}, #{dailyPercentage,jdbcType=DECIMAL}, #{compensationPercentage,jdbcType=DECIMAL}, 
+      #{amountAlreadyDisbursed,jdbcType=DECIMAL}, #{disbursedPercentage,jdbcType=DECIMAL}, 
+      #{examination,jdbcType=VARCHAR}, #{settlement,jdbcType=VARCHAR}, #{estimateMechanicalClass,jdbcType=DECIMAL}, 
+      #{estimateSporadicEmployment,jdbcType=DECIMAL}, #{estimateDailyWorkSubtotal,jdbcType=DECIMAL}, 
+      #{estimateOutIn,jdbcType=DECIMAL}, #{estimateDisasterDamage,jdbcType=DECIMAL}, 
+      #{estimateWorkStop,jdbcType=DECIMAL}, #{estimateOther,jdbcType=DECIMAL}, #{estimateCompensationSubtotal,jdbcType=DECIMAL}, 
+      #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
+      #{updateUser,jdbcType=BIGINT},#{estimateTotal})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.OutOfContractCompensationStatistics" keyProperty="id" useGeneratedKeys="true">
+    insert into out_of_contract_compensation_statistics
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id,
+      </if>
+      <if test="laborAccountId != null" >
+        labor_account_id,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
+      </if>
+      <if test="quarter != null" >
+        quarter,
+      </if>
+      <if test="totalAmountContract != null" >
+        total_amount_contract,
+      </if>
+      <if test="mechanicalClass != null" >
+        mechanical_class,
+      </if>
+      <if test="sporadicEmployment != null" >
+        sporadic_employment,
+      </if>
+      <if test="dailyWorkSubtotal != null" >
+        daily_work_subtotal,
+      </if>
+      <if test="outIn != null" >
+        out_in,
+      </if>
+      <if test="disasterDamage != null" >
+        disaster_damage,
+      </if>
+      <if test="workStop != null" >
+        work_stop,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="compensationSubtotal != null" >
+        compensation_subtotal,
+      </if>
+      <if test="total != null" >
+        total,
+      </if>
+      <if test="dailyPercentage != null" >
+        daily_percentage,
+      </if>
+      <if test="compensationPercentage != null" >
+        compensation_percentage,
+      </if>
+      <if test="amountAlreadyDisbursed != null" >
+        amount_already_disbursed,
+      </if>
+      <if test="disbursedPercentage != null" >
+        disbursed_percentage,
+      </if>
+      <if test="examination != null" >
+        examination,
+      </if>
+      <if test="settlement != null" >
+        settlement,
+      </if>
+      <if test="estimateMechanicalClass != null" >
+        estimate_mechanical_class,
+      </if>
+      <if test="estimateSporadicEmployment != null" >
+        estimate_sporadic_employment,
+      </if>
+      <if test="estimateDailyWorkSubtotal != null" >
+        estimate_daily_work_subtotal,
+      </if>
+      <if test="estimateOutIn != null" >
+        estimate_out_in,
+      </if>
+      <if test="estimateDisasterDamage != null" >
+        estimate_disaster_damage,
+      </if>
+      <if test="estimateWorkStop != null" >
+        estimate_work_stop,
+      </if>
+      <if test="estimateOther != null" >
+        estimate_other,
+      </if>
+      <if test="estimateCompensationSubtotal != null" >
+        estimate_compensation_subtotal,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="estimateTotal != null">
+        estimate_total,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="laborAccountId != null" >
+        #{laborAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quarter != null" >
+        #{quarter,jdbcType=TINYINT},
+      </if>
+      <if test="totalAmountContract != null" >
+        #{totalAmountContract,jdbcType=DECIMAL},
+      </if>
+      <if test="mechanicalClass != null" >
+        #{mechanicalClass,jdbcType=DECIMAL},
+      </if>
+      <if test="sporadicEmployment != null" >
+        #{sporadicEmployment,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyWorkSubtotal != null" >
+        #{dailyWorkSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="outIn != null" >
+        #{outIn,jdbcType=DECIMAL},
+      </if>
+      <if test="disasterDamage != null" >
+        #{disasterDamage,jdbcType=DECIMAL},
+      </if>
+      <if test="workStop != null" >
+        #{workStop,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="compensationSubtotal != null" >
+        #{compensationSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="total != null" >
+        #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyPercentage != null" >
+        #{dailyPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="compensationPercentage != null" >
+        #{compensationPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="amountAlreadyDisbursed != null" >
+        #{amountAlreadyDisbursed,jdbcType=DECIMAL},
+      </if>
+      <if test="disbursedPercentage != null" >
+        #{disbursedPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="examination != null" >
+        #{examination,jdbcType=VARCHAR},
+      </if>
+      <if test="settlement != null" >
+        #{settlement,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateMechanicalClass != null" >
+        #{estimateMechanicalClass,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateSporadicEmployment != null" >
+        #{estimateSporadicEmployment,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateDailyWorkSubtotal != null" >
+        #{estimateDailyWorkSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateOutIn != null" >
+        #{estimateOutIn,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateDisasterDamage != null" >
+        #{estimateDisasterDamage,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateWorkStop != null" >
+        #{estimateWorkStop,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateOther != null" >
+        #{estimateOther,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateCompensationSubtotal != null" >
+        #{estimateCompensationSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="estimateTotal != null">
+        #{estimateTotal},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.OutOfContractCompensationStatistics" >
+    update out_of_contract_compensation_statistics
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="subcontractorId != null" >
+        subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      </if>
+      <if test="laborAccountId != null" >
+        labor_account_id = #{laborAccountId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        report_time = #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="quarter != null" >
+        quarter = #{quarter,jdbcType=TINYINT},
+      </if>
+      <if test="totalAmountContract != null" >
+        total_amount_contract = #{totalAmountContract,jdbcType=DECIMAL},
+      </if>
+      <if test="mechanicalClass != null" >
+        mechanical_class = #{mechanicalClass,jdbcType=DECIMAL},
+      </if>
+      <if test="sporadicEmployment != null" >
+        sporadic_employment = #{sporadicEmployment,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyWorkSubtotal != null" >
+        daily_work_subtotal = #{dailyWorkSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="outIn != null" >
+        out_in = #{outIn,jdbcType=DECIMAL},
+      </if>
+      <if test="disasterDamage != null" >
+        disaster_damage = #{disasterDamage,jdbcType=DECIMAL},
+      </if>
+      <if test="workStop != null" >
+        work_stop = #{workStop,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="compensationSubtotal != null" >
+        compensation_subtotal = #{compensationSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="total != null" >
+        total = #{total,jdbcType=DECIMAL},
+      </if>
+      <if test="dailyPercentage != null" >
+        daily_percentage = #{dailyPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="compensationPercentage != null" >
+        compensation_percentage = #{compensationPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="amountAlreadyDisbursed != null" >
+        amount_already_disbursed = #{amountAlreadyDisbursed,jdbcType=DECIMAL},
+      </if>
+      <if test="disbursedPercentage != null" >
+        disbursed_percentage = #{disbursedPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="examination != null" >
+        examination = #{examination,jdbcType=VARCHAR},
+      </if>
+      <if test="settlement != null" >
+        settlement = #{settlement,jdbcType=VARCHAR},
+      </if>
+      <if test="estimateMechanicalClass != null" >
+        estimate_mechanical_class = #{estimateMechanicalClass,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateSporadicEmployment != null" >
+        estimate_sporadic_employment = #{estimateSporadicEmployment,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateDailyWorkSubtotal != null" >
+        estimate_daily_work_subtotal = #{estimateDailyWorkSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateOutIn != null" >
+        estimate_out_in = #{estimateOutIn,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateDisasterDamage != null" >
+        estimate_disaster_damage = #{estimateDisasterDamage,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateWorkStop != null" >
+        estimate_work_stop = #{estimateWorkStop,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateOther != null" >
+        estimate_other = #{estimateOther,jdbcType=DECIMAL},
+      </if>
+      <if test="estimateCompensationSubtotal != null" >
+        estimate_compensation_subtotal = #{estimateCompensationSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="estimateTotal != null">
+        estimate_total = #{estimateTotal},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.OutOfContractCompensationStatistics" >
+    update out_of_contract_compensation_statistics
+    set project_id = #{projectId,jdbcType=BIGINT},
+      subcontractor_id = #{subcontractorId,jdbcType=BIGINT},
+      labor_account_id = #{laborAccountId,jdbcType=BIGINT},
+      report_time = #{reportTime,jdbcType=TIMESTAMP},
+      quarter = #{quarter,jdbcType=TINYINT},
+      total_amount_contract = #{totalAmountContract,jdbcType=DECIMAL},
+      mechanical_class = #{mechanicalClass,jdbcType=DECIMAL},
+      sporadic_employment = #{sporadicEmployment,jdbcType=DECIMAL},
+      daily_work_subtotal = #{dailyWorkSubtotal,jdbcType=DECIMAL},
+      out_in = #{outIn,jdbcType=DECIMAL},
+      disaster_damage = #{disasterDamage,jdbcType=DECIMAL},
+      work_stop = #{workStop,jdbcType=DECIMAL},
+      other = #{other,jdbcType=DECIMAL},
+      compensation_subtotal = #{compensationSubtotal,jdbcType=DECIMAL},
+      total = #{total,jdbcType=DECIMAL},
+      daily_percentage = #{dailyPercentage,jdbcType=DECIMAL},
+      compensation_percentage = #{compensationPercentage,jdbcType=DECIMAL},
+      amount_already_disbursed = #{amountAlreadyDisbursed,jdbcType=DECIMAL},
+      disbursed_percentage = #{disbursedPercentage,jdbcType=DECIMAL},
+      examination = #{examination,jdbcType=VARCHAR},
+      settlement = #{settlement,jdbcType=VARCHAR},
+      estimate_mechanical_class = #{estimateMechanicalClass,jdbcType=DECIMAL},
+      estimate_sporadic_employment = #{estimateSporadicEmployment,jdbcType=DECIMAL},
+      estimate_daily_work_subtotal = #{estimateDailyWorkSubtotal,jdbcType=DECIMAL},
+      estimate_out_in = #{estimateOutIn,jdbcType=DECIMAL},
+      estimate_disaster_damage = #{estimateDisasterDamage,jdbcType=DECIMAL},
+      estimate_work_stop = #{estimateWorkStop,jdbcType=DECIMAL},
+      estimate_other = #{estimateOther,jdbcType=DECIMAL},
+      estimate_compensation_subtotal = #{estimateCompensationSubtotal,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      estimate_total = #{estimateTotal}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="getDetailsById" resultType="com.crcc.common.model.OutOfContractCompensationStatistics">
+    SELECT
+      o.*,
+      p.`name` AS projectName,
+      pi.project_type AS projectType,
+      pi.contract_number AS contractNumber,
+      s.`name` AS subcontractorName,
+      la.team_name AS teamName,
+      la.contract_person AS contractPerson
+    FROM
+      out_of_contract_compensation_statistics o
+    LEFT JOIN
+      project_info pi ON o.project_id = pi.project_id
+    LEFT JOIN
+      subcontractor s ON o.subcontractor_id = s.id
+    LEFT JOIN
+      labor_account la ON o.labor_account_id = la.id
+    LEFT JOIN
+      project p ON o.project_id = p.id
+    WHERE
+      o.id = #{id}
+  </select>
+
+  <select id="listForPage" resultType="com.crcc.common.model.OutOfContractCompensationStatistics">
+    SELECT
+      o.*,
+      p.`name` AS projectName,
+      pi.project_type AS projectType,
+      pi.contract_number AS contractNumber,
+      s.`name` AS subcontractorName,
+      la.team_name AS teamName,
+      la.contract_person AS contractPerson
+    FROM
+      out_of_contract_compensation_statistics o
+    LEFT JOIN
+      project_info pi ON o.project_id = pi.project_id
+    LEFT JOIN
+      subcontractor s ON o.subcontractor_id = s.id
+    LEFT JOIN
+      labor_account la ON o.labor_account_id = la.id
+    LEFT JOIN
+      project p ON o.project_id = p.id
+    WHERE 1=1
+    <if test="projectName != null">
+      AND p.`name` LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="subcontractorName != null">
+      AND s.`name` LIKE CONCAT('%', #{subcontractorName}, '%')
+    </if>
+    <if test="teamName != null">
+      AND la.team_name LIKE CONCAT('%', #{teamName}, '%')
+    </if>
+    <if test="year != null">
+      AND YEAR(o.report_time) = #{year}
+    </if>
+    <if test="quarter != null">
+      AND o.quarter = #{quarter}
+    </if>
+    <if test="projectId != null">
+      AND o.project_id = #{projectId}
+    </if>
+    ORDER BY id DESC
+    <if test="offset != null and limit != null">
+      limit #{offset},#{limit}
+    </if>
+  </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+      count(*)
+    FROM
+    out_of_contract_compensation_statistics o
+    LEFT JOIN
+    project_info pi ON o.project_id = pi.project_id
+    LEFT JOIN
+    subcontractor s ON o.subcontractor_id = s.id
+    LEFT JOIN
+    labor_account la ON o.labor_account_id = la.id
+    LEFT JOIN
+    project p ON o.project_id = p.id
+    WHERE 1=1
+    <if test="projectName != null">
+      AND p.`name` LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="subcontractorName != null">
+      AND s.`name` LIKE CONCAT('%', #{subcontractorName}, '%')
+    </if>
+    <if test="teamName != null">
+      AND la.team_name LIKE CONCAT('%', #{teamName}, '%')
+    </if>
+    <if test="year != null">
+      AND YEAR(o.report_time) = #{year}
+    </if>
+    <if test="quarter != null">
+      AND o.quarter = #{quarter}
+    </if>
+    <if test="projectId != null">
+      AND o.project_id = #{projectId}
+    </if>
+  </select>
+
+  <select id="listStatisticsForPage" resultType="com.crcc.common.model.OutOfContractCompensationStatistics">
+    SELECT
+      o.id,
+      o.project_id,
+      sum(o.daily_work_subtotal) as statisticsDailyWorkSubtotal,
+      sum(o.compensation_subtotal) as statisticsCompensationSubtotal,
+      sum(o.estimate_daily_work_subtotal) as statisticsEstimateDailyWorkSubtotal,
+      sum(o.estimate_compensation_subtotal) as statisticsEstimateCompensationSubtotal,
+      p.`name` AS projectName,
+      pi.project_type AS projectType
+    FROM
+      out_of_contract_compensation_statistics o
+    LEFT JOIN
+      project_info pi ON o.project_id = pi.project_id
+    LEFT JOIN
+      project p ON o.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND o.projectI=_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.`name` LIKE concat('%',#{projectName},'%')
+    </if>
+    group by o.project_id
+    ORDER BY id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listStatisticsForPageSize" resultType="java.lang.Integer">
+    SELECT COUNT(*) FROM (SELECT
+      o.id
+    FROM
+      out_of_contract_compensation_statistics o
+    LEFT JOIN
+      project_info pi ON o.project_id = pi.project_id
+    LEFT JOIN
+      project p ON o.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND o.projectI=_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.`name` LIKE concat('%',#{projectName},'%')
+    </if>
+    group by o.project_id) AS a
+  </select>
+
+  <select id="getSumPriceByProject" resultType="java.lang.Double">
+    SELECT
+      SUM(ic.valuation_price)
+    FROM
+      out_of_contract_compensation_statistics o
+    LEFT JOIN
+      inspection_account ic ON o.project_id = ic.project_id AND o.subcontractor_id = ic.subcontractor_id AND ic.labor_account_id = o.labor_account_id
+    where o.project_id = #{projectId} group by o.project_id;
+  </select>
+</mapper>

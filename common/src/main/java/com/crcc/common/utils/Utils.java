@@ -10,6 +10,7 @@ import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPHeaderCell;
 import org.springframework.util.StringUtils;
 
+import java.math.BigDecimal;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.*;
@@ -199,6 +200,38 @@ public class Utils {
             });
         }
         return result;
+    }
+
+    public static BigDecimal computerDivide(BigDecimal bcs, BigDecimal cs, int decimalPoint){
+        if (cs.doubleValue() == 0d)
+            return new BigDecimal(0);
+
+        return bcs.divide(cs,decimalPoint,BigDecimal.ROUND_HALF_UP);
+    }
+
+    public static Integer getQuarter(Date date){
+        if (date == null)
+            return 0;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+
+        Integer month = calendar.get(Calendar.MONTH)+1;
+        if (month >= 1 && month<=3){
+            return 1;
+        }
+
+        if (month >=4 && month <=6){
+            return 2;
+        }
+
+        if (month >=7 && month <=9)
+            return 3;
+
+        if (month >=10 && month <= 12)
+            return 4;
+
+        return 0;
     }
 
 }

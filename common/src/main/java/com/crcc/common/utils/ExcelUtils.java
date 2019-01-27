@@ -4,6 +4,7 @@ import com.crcc.common.model.*;
 import com.google.gson.reflect.TypeToken;
 import org.apache.poi.hssf.usermodel.*;
 import org.apache.poi.ss.usermodel.HorizontalAlignment;
+import org.apache.poi.ss.usermodel.VerticalAlignment;
 import org.apache.poi.ss.util.CellRangeAddress;
 
 import java.lang.reflect.Field;
@@ -994,6 +995,395 @@ public class ExcelUtils {
         return wb;
     }
 
+
+    public static HSSFWorkbook getEngineerChangeExcel(String titleValue,String sheetName,String[] title,
+                                                                      List<EngineeringChangeMonthly> engineeringChangeMonthlies){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        HSSFRow realRow = sheet.createRow(num);
+        for (int j = 0;j<title.length;j++){
+            HSSFCell cell = realRow.createCell(j);
+            cell.setCellValue(title[j]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlies){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(engineeringChangeMonthly.getId());
+            contentRow.createCell(1).setCellValue(engineeringChangeMonthly.getProjectName());
+            contentRow.createCell(2).setCellValue(engineeringChangeMonthly.getProjectType());
+            contentRow.createCell(3).setCellValue(DateTimeUtil.getYYYYMMDD(engineeringChangeMonthly.getReportTime()));
+            contentRow.createCell(4).setCellValue(isNull(engineeringChangeMonthly.getTemporarilyPrice()));
+            contentRow.createCell(5).setCellValue(isNull(engineeringChangeMonthly.getConstructionOutputValue()));
+            contentRow.createCell(6).setCellValue(isNull(engineeringChangeMonthly.getChangeClaimAmount()));
+            contentRow.createCell(7).setCellValue(isNull(engineeringChangeMonthly.getPercentage()));
+            contentRow.createCell(8).setCellValue(engineeringChangeMonthly.getRemark());
+            num++;
+
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getEngineerChangeStatisticsExcel(String titleValue,String sheetName,String[] title,
+                                                      List<EngineeringChangeMonthly> engineeringChangeMonthlies){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        HSSFRow realRow = sheet.createRow(num);
+        for (int j = 0;j<title.length;j++){
+            HSSFCell cell = realRow.createCell(j);
+            cell.setCellValue(title[j]);
+            cell.setCellStyle(style);
+        }
+
+        //创建内容
+        num = num+1;
+        for(EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlies){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(engineeringChangeMonthly.getProjectName());
+            contentRow.createCell(1).setCellValue(isNull(engineeringChangeMonthly.getTemporarilyPrice()));
+            contentRow.createCell(2).setCellValue(isNull(engineeringChangeMonthly.getConstructionOutputValueStatistics()));
+            contentRow.createCell(3).setCellValue(isNull(engineeringChangeMonthly.getChangeClaimAmountStatistics()));
+            contentRow.createCell(4).setCellValue(isNull(engineeringChangeMonthly.getPercentageStatistics()));
+            num++;
+
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getContractCompensationStatisticsExcel(String titleValue,String sheetName,String[] title,
+                                                                      List<OutOfContractCompensationStatistics> compensationStatistics){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 2){
+                cell.setCellValue("已计价金额（元）");
+            }else if (i>2 && i<=5){
+
+            }else if (i==6){
+                cell.setCellValue("预估金额（元）");
+            }else if (i >6 && i<=8){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        for (int j = 2;j<=8;j++){
+            HSSFCell cell3Row = twoRow.createCell(j);
+            cell3Row.setCellValue(title[j]);
+            cell3Row.setCellStyle(style);
+        }
+
+
+        CellRangeAddress address0 = new CellRangeAddress(1,2,0,0);
+        CellRangeAddress address1 = new CellRangeAddress(1,2,1,1);
+        sheet.addMergedRegion(address0);
+        sheet.addMergedRegion(address1);
+
+        CellRangeAddress address3 = new CellRangeAddress(1,1,2,5);
+        sheet.addMergedRegion(address3);
+        CellRangeAddress address4 = new CellRangeAddress(1,1,6,8);
+        sheet.addMergedRegion(address4);
+
+        //创建内容
+        num = num+1;
+        for(OutOfContractCompensationStatistics out : compensationStatistics){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(out.getProjectName());
+            contentRow.createCell(1).setCellValue(out.getProjectType());
+            contentRow.createCell(2).setCellValue(isNull(out.getStatisticsTotalAmountContract()));
+            contentRow.createCell(3).setCellValue(isNull(out.getStatisticsDailyWorkSubtotal()));
+            contentRow.createCell(4).setCellValue(isNull(out.getStatisticsCompensationSubtotal()));
+            contentRow.createCell(5).setCellValue(isNull(out.getStatisticsAlreadySubtotal()));
+            contentRow.createCell(6).setCellValue(isNull(out.getStatisticsEstimateDailyWorkSubtotal()));
+            contentRow.createCell(7).setCellValue(isNull(out.getStatisticsEstimateCompensationSubtotal()));
+            contentRow.createCell(8).setCellValue(isNull(out.getStatisticsEstimateSubtotal()));
+            num++;
+
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getContractCompensationExcel(String titleValue,String sheetName,String[] title,
+                                                            List<OutOfContractCompensationStatistics> outOfContractCompensationStatistics){
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 8){
+                cell.setCellValue("已计价金额（元）");
+            }else if (i>8 && i<=17){
+
+            }else if (i==24){
+                cell.setCellValue("合同外计日工及赔偿预估金额（元）");
+            }else if (i >24 && i<=32){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num+1;
+        HSSFRow twoRow = sheet.createRow(num);
+        HSSFCell cell28 = twoRow.createCell(8);
+        cell28.setCellValue("合同内计量");
+        cell28.setCellStyle(style);
+        HSSFCell cell29 = twoRow.createCell(9);
+        cell29.setCellValue("计日工");
+        cell29.setCellStyle(style);
+        HSSFCell cell212 = twoRow.createCell(12);
+        cell212.setCellValue("合同外补偿/赔偿");
+        cell212.setCellStyle(style);
+        HSSFCell cell217 = twoRow.createCell(17);
+        cell217.setCellValue("合计");
+        cell217.setCellStyle(style);
+        HSSFCell cell224 = twoRow.createCell(24);
+        cell224.setCellValue("计日工");
+        cell224.setCellStyle(style);
+        HSSFCell cell227 = twoRow.createCell(27);
+        cell227.setCellValue("合同外补偿/赔偿");
+        cell227.setCellStyle(style);
+        HSSFCell cell232 = twoRow.createCell(32);
+        cell232.setCellValue("合计");
+        cell232.setCellStyle(style);
+
+        num = num +1;
+        HSSFRow thridRow = sheet.createRow(num);
+        for (int j = 9;j<=16;j++){
+            HSSFCell cell3Row = thridRow.createCell(j);
+            cell3Row.setCellValue(title[j]);
+            cell3Row.setCellStyle(style);
+        }
+
+        for (int n=24;n<=31;n++){
+            HSSFCell cell3Row = thridRow.createCell(n);
+            cell3Row.setCellValue(title[n]);
+            cell3Row.setCellStyle(style);
+        }
+
+
+        CellRangeAddress address0 = new CellRangeAddress(1,3,0,0);
+        CellRangeAddress address1 = new CellRangeAddress(1,3,1,1);
+        CellRangeAddress address2 = new CellRangeAddress(1,3,2,2);
+        CellRangeAddress address3 = new CellRangeAddress(1,3,3,3);
+        CellRangeAddress address4 = new CellRangeAddress(1,3,4,4);
+        CellRangeAddress address5 = new CellRangeAddress(1,3,5,5);
+        CellRangeAddress address6 = new CellRangeAddress(1,3,6,6);
+        CellRangeAddress address7 = new CellRangeAddress(1,3,7,7);
+        sheet.addMergedRegion(address0);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+        sheet.addMergedRegion(address4);
+        sheet.addMergedRegion(address5);
+        sheet.addMergedRegion(address6);
+        sheet.addMergedRegion(address7);
+
+        CellRangeAddress address8 = new CellRangeAddress(1,1,8,17);
+        sheet.addMergedRegion(address8);
+        CellRangeAddress address9 = new CellRangeAddress(1,1,24,32);
+        sheet.addMergedRegion(address9);
+
+        CellRangeAddress address10 = new CellRangeAddress(1,3,18,18);
+        CellRangeAddress address11 = new CellRangeAddress(1,3,19,19);
+        CellRangeAddress address12 = new CellRangeAddress(1,3,20,20);
+        CellRangeAddress address13 = new CellRangeAddress(1,3,21,21);
+        CellRangeAddress address14 = new CellRangeAddress(1,3,22,22);
+        CellRangeAddress address15 = new CellRangeAddress(1,3,23,23);
+        sheet.addMergedRegion(address10);
+        sheet.addMergedRegion(address11);
+        sheet.addMergedRegion(address12);
+        sheet.addMergedRegion(address13);
+        sheet.addMergedRegion(address14);
+        sheet.addMergedRegion(address15);
+
+        CellRangeAddress address16 = new CellRangeAddress(2,3,8,8);
+        sheet.addMergedRegion(address16);
+        CellRangeAddress address17 = new CellRangeAddress(2,2,9,11);
+        sheet.addMergedRegion(address17);
+        CellRangeAddress address18 = new CellRangeAddress(2,2,12,16);
+        sheet.addMergedRegion(address18);
+        CellRangeAddress address19 = new CellRangeAddress(2,3,17,17);
+        sheet.addMergedRegion(address19);
+        CellRangeAddress address20 = new CellRangeAddress(2,2,24,26);
+        sheet.addMergedRegion(address20);
+        CellRangeAddress address21 = new CellRangeAddress(2,2,27,31);
+        sheet.addMergedRegion(address21);
+        CellRangeAddress address22 = new CellRangeAddress(2,3,32,32);
+        sheet.addMergedRegion(address22);
+
+
+
+
+        //创建内容
+        num = num+1;
+        for(OutOfContractCompensationStatistics out : outOfContractCompensationStatistics){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(out.getId());
+            contentRow.createCell(1).setCellValue(out.getProjectName());
+            contentRow.createCell(2).setCellValue(out.getProjectType());
+            contentRow.createCell(3).setCellValue(out.getSubcontractorName());
+            contentRow.createCell(4).setCellValue(out.getTeamName());
+            contentRow.createCell(5).setCellValue(out.getContractNumber());
+            contentRow.createCell(6).setCellValue(out.getContractPerson());
+            contentRow.createCell(7).setCellValue(DateTimeUtil.getYYYYMMDD(out.getReportTime()));
+            contentRow.createCell(8).setCellValue(isNull(out.getTotalAmountContract()));
+            contentRow.createCell(9).setCellValue(isNull(out.getMechanicalClass()));
+            contentRow.createCell(10).setCellValue(isNull(out.getSporadicEmployment()));
+            contentRow.createCell(11).setCellValue(isNull(out.getDailyWorkSubtotal()));
+            contentRow.createCell(12).setCellValue(isNull(out.getOutIn()));
+            contentRow.createCell(13).setCellValue(isNull(out.getDisasterDamage()));
+            contentRow.createCell(14).setCellValue(isNull(out.getWorkStop()));
+            contentRow.createCell(15).setCellValue(isNull(out.getOther()));
+            contentRow.createCell(16).setCellValue(isNull(out.getCompensationSubtotal()));
+            contentRow.createCell(17).setCellValue(isNull(out.getTotal()));
+            contentRow.createCell(18).setCellValue(out.getDailyPercentage() == null?"":out.getDailyPercentage().doubleValue()*100+"%");
+            contentRow.createCell(19).setCellValue(out.getCompensationPercentage() == null?"":out.getCompensationPercentage().doubleValue()*100+"%");
+            contentRow.createCell(20).setCellValue(isNull(out.getAmountAlreadyDisbursed()));
+            contentRow.createCell(21).setCellValue(out.getExamination());
+            contentRow.createCell(22).setCellValue(out.getSettlement());
+            contentRow.createCell(23).setCellValue(out.getDisbursedPercentage() == null?"":out.getDisbursedPercentage().doubleValue()*100+"%");
+            contentRow.createCell(24).setCellValue(isNull(out.getEstimateMechanicalClass()));
+            contentRow.createCell(25).setCellValue(isNull(out.getEstimateSporadicEmployment()));
+            contentRow.createCell(26).setCellValue(isNull(out.getEstimateDailyWorkSubtotal()));
+            contentRow.createCell(27).setCellValue(isNull(out.getEstimateOutIn()));
+            contentRow.createCell(28).setCellValue(isNull(out.getEstimateDisasterDamage()));
+            contentRow.createCell(29).setCellValue(isNull(out.getEstimateWorkStop()));
+            contentRow.createCell(30).setCellValue(isNull(out.getEstimateOther()));
+            contentRow.createCell(31).setCellValue(isNull(out.getEstimateCompensationSubtotal()));
+            contentRow.createCell(32).setCellValue(isNull(out.getEstimateTotal()));
+            num++;
+
+        }
+        return wb;
+    }
+
     //消除科学记数法
     private static String transformationFromDoubleToString(Double value){
         NumberFormat nf = NumberFormat.getInstance();
@@ -1003,5 +1393,18 @@ public class ExcelUtils {
         nf.setGroupingUsed(false);
 
         return nf.format(value);
+    }
+
+    private static HSSFCellStyle getTitleStyle(HSSFWorkbook wb){
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+        HSSFFont font = wb.createFont();
+        font.setBold(true);
+        font.setFontHeightInPoints((short) 20); //字体高度);
+        style.setFont(font);
+
+        return style;
     }
 }

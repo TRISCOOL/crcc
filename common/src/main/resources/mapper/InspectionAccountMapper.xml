@@ -365,7 +365,7 @@
       AND ic.valuation_type = #{valuationType}
     </if>
     <if test="valuationTime != null">
-      AND ic.valuation_time = #{valuationTime}
+      AND date_format(ic.valuation_time,'%Y-%m') = #{valuationTime}
     </if>
     <if test="minUnderRate != null and maxUnderRate != null">
       AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
@@ -395,10 +395,21 @@
       AND ic.valuation_type = #{valuationType}
     </if>
     <if test="valuationTime != null">
-      AND ic.valuation_time = #{valuationTime}
+      AND date_format(ic.valuation_time,'%Y-%m') = #{valuationTime}
     </if>
     <if test="minUnderRate != null and maxUnderRate != null">
       AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
     </if>
+  </select>
+
+  <select id="sumPriceByProjectIdAndSubcontractorIdAndLaborAccountId" resultType="java.lang.Double">
+    select
+      SUM(valuation_price)
+    from
+      inspection_account
+    where
+      project_id = #{projectId}
+      and subcontractor_id = #{subcontractorId}
+      and labor_account_id = #{laborAccountId};
   </select>
 </mapper>

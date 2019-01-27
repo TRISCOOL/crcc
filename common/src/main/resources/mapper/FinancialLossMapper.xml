@@ -1,0 +1,390 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.FinancialLossMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.FinancialLoss" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="report_time" property="reportTime" jdbcType="TIMESTAMP" />
+    <result column="report_year" property="reportYear" jdbcType="VARCHAR" />
+    <result column="quarter" property="quarter" jdbcType="TINYINT" />
+    <result column="already_priced" property="alreadyPriced" jdbcType="DECIMAL" />
+    <result column="un_priced" property="unPriced" jdbcType="DECIMAL" />
+    <result column="sum_priced" property="sumPriced" jdbcType="DECIMAL" />
+    <result column="confirm_priced" property="confirmPriced" jdbcType="DECIMAL" />
+    <result column="in_book_cost" property="inBookCost" jdbcType="DECIMAL" />
+    <result column="out_book_cost" property="outBookCost" jdbcType="DECIMAL" />
+    <result column="sum_book_cost" property="sumBookCost" jdbcType="DECIMAL" />
+    <result column="loss_amount" property="lossAmount" jdbcType="DECIMAL" />
+    <result column="confirmed_net_profit" property="confirmedNetProfit" jdbcType="DECIMAL" />
+    <result column="un_confirmed_net_profit" property="unConfirmedNetProfit" jdbcType="DECIMAL" />
+    <result column="loss_ratio" property="lossRatio" jdbcType="DECIMAL" />
+    <result column="contract_receivable" property="contractReceivable" jdbcType="DECIMAL" />
+    <result column="prepayments" property="prepayments" jdbcType="DECIMAL" />
+    <result column="other" property="other" jdbcType="DECIMAL" />
+    <result column="profit_loss_subtotal" property="profitLossSubtotal" jdbcType="DECIMAL" />
+    <result column="potential_loss" property="potentialLoss" jdbcType="DECIMAL" />
+    <result column="total_profit_loss" property="totalProfitLoss" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.crcc.common.model.FinancialLoss" extends="BaseResultMap" >
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, report_time, report_year, quarter, already_priced, un_priced, sum_priced, 
+    confirm_priced, in_book_cost, out_book_cost, sum_book_cost, loss_amount, confirmed_net_profit, 
+    un_confirmed_net_profit, loss_ratio, contract_receivable, prepayments, other, profit_loss_subtotal, 
+    potential_loss, total_profit_loss, create_time, create_user, update_time, update_user
+  </sql>
+  <sql id="Blob_Column_List" >
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from financial_loss
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from financial_loss
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.FinancialLoss" >
+    insert into financial_loss (id, project_id, report_time, 
+      report_year, quarter, already_priced, 
+      un_priced, sum_priced, confirm_priced, 
+      in_book_cost, out_book_cost, sum_book_cost, 
+      loss_amount, confirmed_net_profit, un_confirmed_net_profit, 
+      loss_ratio, contract_receivable, prepayments, 
+      other, profit_loss_subtotal, potential_loss, 
+      total_profit_loss, create_time, create_user, 
+      update_time, update_user, remark
+      )
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{reportTime,jdbcType=TIMESTAMP}, 
+      #{reportYear,jdbcType=VARCHAR}, #{quarter,jdbcType=TINYINT}, #{alreadyPriced,jdbcType=DECIMAL}, 
+      #{unPriced,jdbcType=DECIMAL}, #{sumPriced,jdbcType=DECIMAL}, #{confirmPriced,jdbcType=DECIMAL}, 
+      #{inBookCost,jdbcType=DECIMAL}, #{outBookCost,jdbcType=DECIMAL}, #{sumBookCost,jdbcType=DECIMAL}, 
+      #{lossAmount,jdbcType=DECIMAL}, #{confirmedNetProfit,jdbcType=DECIMAL}, #{unConfirmedNetProfit,jdbcType=DECIMAL}, 
+      #{lossRatio,jdbcType=DECIMAL}, #{contractReceivable,jdbcType=DECIMAL}, #{prepayments,jdbcType=DECIMAL}, 
+      #{other,jdbcType=DECIMAL}, #{profitLossSubtotal,jdbcType=DECIMAL}, #{potentialLoss,jdbcType=DECIMAL}, 
+      #{totalProfitLoss,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
+      #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{remark,jdbcType=LONGVARCHAR}
+      )
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.FinancialLoss" >
+    insert into financial_loss
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
+      </if>
+      <if test="reportYear != null" >
+        report_year,
+      </if>
+      <if test="quarter != null" >
+        quarter,
+      </if>
+      <if test="alreadyPriced != null" >
+        already_priced,
+      </if>
+      <if test="unPriced != null" >
+        un_priced,
+      </if>
+      <if test="sumPriced != null" >
+        sum_priced,
+      </if>
+      <if test="confirmPriced != null" >
+        confirm_priced,
+      </if>
+      <if test="inBookCost != null" >
+        in_book_cost,
+      </if>
+      <if test="outBookCost != null" >
+        out_book_cost,
+      </if>
+      <if test="sumBookCost != null" >
+        sum_book_cost,
+      </if>
+      <if test="lossAmount != null" >
+        loss_amount,
+      </if>
+      <if test="confirmedNetProfit != null" >
+        confirmed_net_profit,
+      </if>
+      <if test="unConfirmedNetProfit != null" >
+        un_confirmed_net_profit,
+      </if>
+      <if test="lossRatio != null" >
+        loss_ratio,
+      </if>
+      <if test="contractReceivable != null" >
+        contract_receivable,
+      </if>
+      <if test="prepayments != null" >
+        prepayments,
+      </if>
+      <if test="other != null" >
+        other,
+      </if>
+      <if test="profitLossSubtotal != null" >
+        profit_loss_subtotal,
+      </if>
+      <if test="potentialLoss != null" >
+        potential_loss,
+      </if>
+      <if test="totalProfitLoss != null" >
+        total_profit_loss,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportYear != null" >
+        #{reportYear,jdbcType=VARCHAR},
+      </if>
+      <if test="quarter != null" >
+        #{quarter,jdbcType=TINYINT},
+      </if>
+      <if test="alreadyPriced != null" >
+        #{alreadyPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="unPriced != null" >
+        #{unPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="sumPriced != null" >
+        #{sumPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmPriced != null" >
+        #{confirmPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="inBookCost != null" >
+        #{inBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="outBookCost != null" >
+        #{outBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sumBookCost != null" >
+        #{sumBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="lossAmount != null" >
+        #{lossAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmedNetProfit != null" >
+        #{confirmedNetProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="unConfirmedNetProfit != null" >
+        #{unConfirmedNetProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="lossRatio != null" >
+        #{lossRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="contractReceivable != null" >
+        #{contractReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="prepayments != null" >
+        #{prepayments,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null" >
+        #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="profitLossSubtotal != null" >
+        #{profitLossSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="potentialLoss != null" >
+        #{potentialLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="totalProfitLoss != null" >
+        #{totalProfitLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.FinancialLoss" >
+    update financial_loss
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        report_time = #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="reportYear != null" >
+        report_year = #{reportYear,jdbcType=VARCHAR},
+      </if>
+      <if test="quarter != null" >
+        quarter = #{quarter,jdbcType=TINYINT},
+      </if>
+      <if test="alreadyPriced != null" >
+        already_priced = #{alreadyPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="unPriced != null" >
+        un_priced = #{unPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="sumPriced != null" >
+        sum_priced = #{sumPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmPriced != null" >
+        confirm_priced = #{confirmPriced,jdbcType=DECIMAL},
+      </if>
+      <if test="inBookCost != null" >
+        in_book_cost = #{inBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="outBookCost != null" >
+        out_book_cost = #{outBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="sumBookCost != null" >
+        sum_book_cost = #{sumBookCost,jdbcType=DECIMAL},
+      </if>
+      <if test="lossAmount != null" >
+        loss_amount = #{lossAmount,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmedNetProfit != null" >
+        confirmed_net_profit = #{confirmedNetProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="unConfirmedNetProfit != null" >
+        un_confirmed_net_profit = #{unConfirmedNetProfit,jdbcType=DECIMAL},
+      </if>
+      <if test="lossRatio != null" >
+        loss_ratio = #{lossRatio,jdbcType=DECIMAL},
+      </if>
+      <if test="contractReceivable != null" >
+        contract_receivable = #{contractReceivable,jdbcType=DECIMAL},
+      </if>
+      <if test="prepayments != null" >
+        prepayments = #{prepayments,jdbcType=DECIMAL},
+      </if>
+      <if test="other != null" >
+        other = #{other,jdbcType=DECIMAL},
+      </if>
+      <if test="profitLossSubtotal != null" >
+        profit_loss_subtotal = #{profitLossSubtotal,jdbcType=DECIMAL},
+      </if>
+      <if test="potentialLoss != null" >
+        potential_loss = #{potentialLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="totalProfitLoss != null" >
+        total_profit_loss = #{totalProfitLoss,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.crcc.common.model.FinancialLoss" >
+    update financial_loss
+    set project_id = #{projectId,jdbcType=BIGINT},
+      report_time = #{reportTime,jdbcType=TIMESTAMP},
+      report_year = #{reportYear,jdbcType=VARCHAR},
+      quarter = #{quarter,jdbcType=TINYINT},
+      already_priced = #{alreadyPriced,jdbcType=DECIMAL},
+      un_priced = #{unPriced,jdbcType=DECIMAL},
+      sum_priced = #{sumPriced,jdbcType=DECIMAL},
+      confirm_priced = #{confirmPriced,jdbcType=DECIMAL},
+      in_book_cost = #{inBookCost,jdbcType=DECIMAL},
+      out_book_cost = #{outBookCost,jdbcType=DECIMAL},
+      sum_book_cost = #{sumBookCost,jdbcType=DECIMAL},
+      loss_amount = #{lossAmount,jdbcType=DECIMAL},
+      confirmed_net_profit = #{confirmedNetProfit,jdbcType=DECIMAL},
+      un_confirmed_net_profit = #{unConfirmedNetProfit,jdbcType=DECIMAL},
+      loss_ratio = #{lossRatio,jdbcType=DECIMAL},
+      contract_receivable = #{contractReceivable,jdbcType=DECIMAL},
+      prepayments = #{prepayments,jdbcType=DECIMAL},
+      other = #{other,jdbcType=DECIMAL},
+      profit_loss_subtotal = #{profitLossSubtotal,jdbcType=DECIMAL},
+      potential_loss = #{potentialLoss,jdbcType=DECIMAL},
+      total_profit_loss = #{totalProfitLoss,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.FinancialLoss" >
+    update financial_loss
+    set project_id = #{projectId,jdbcType=BIGINT},
+      report_time = #{reportTime,jdbcType=TIMESTAMP},
+      report_year = #{reportYear,jdbcType=VARCHAR},
+      quarter = #{quarter,jdbcType=TINYINT},
+      already_priced = #{alreadyPriced,jdbcType=DECIMAL},
+      un_priced = #{unPriced,jdbcType=DECIMAL},
+      sum_priced = #{sumPriced,jdbcType=DECIMAL},
+      confirm_priced = #{confirmPriced,jdbcType=DECIMAL},
+      in_book_cost = #{inBookCost,jdbcType=DECIMAL},
+      out_book_cost = #{outBookCost,jdbcType=DECIMAL},
+      sum_book_cost = #{sumBookCost,jdbcType=DECIMAL},
+      loss_amount = #{lossAmount,jdbcType=DECIMAL},
+      confirmed_net_profit = #{confirmedNetProfit,jdbcType=DECIMAL},
+      un_confirmed_net_profit = #{unConfirmedNetProfit,jdbcType=DECIMAL},
+      loss_ratio = #{lossRatio,jdbcType=DECIMAL},
+      contract_receivable = #{contractReceivable,jdbcType=DECIMAL},
+      prepayments = #{prepayments,jdbcType=DECIMAL},
+      other = #{other,jdbcType=DECIMAL},
+      profit_loss_subtotal = #{profitLossSubtotal,jdbcType=DECIMAL},
+      potential_loss = #{potentialLoss,jdbcType=DECIMAL},
+      total_profit_loss = #{totalProfitLoss,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+</mapper>

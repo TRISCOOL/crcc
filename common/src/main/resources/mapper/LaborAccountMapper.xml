@@ -434,7 +434,7 @@
   </select>
 
   <select id="onlyList" resultType="com.crcc.common.model.LaborAccount">
-    SELECT id,team_name,contract_person FROM labor_account GROUP BY team_name;
+    SELECT id,team_name,contract_person FROM labor_account WHERE contract_type = 0 GROUP BY team_name;
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
@@ -476,7 +476,7 @@
     <if test="approvalFiling != null">
       AND la.settlement_filing = #{approvalFiling}
     </if>
-    ORDER BY la.id,la.team_name DESC
+    ORDER BY la.id DESC , la.team_name
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>
@@ -547,6 +547,6 @@
   </select>
 
   <select id="selectTeamByProjectAndSub" resultType="com.crcc.common.model.LaborAccount">
-    select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} group by team_name;
+    select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} AND contract_type = 0 group by team_name;
   </select>
 </mapper>

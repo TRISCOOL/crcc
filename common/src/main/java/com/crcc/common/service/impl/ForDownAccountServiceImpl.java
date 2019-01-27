@@ -5,6 +5,7 @@ import com.crcc.common.model.InspectionAccount;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.service.ForDownAccountService;
 import com.crcc.common.service.LaborAccountService;
+import com.crcc.common.utils.DateTimeUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -71,15 +72,17 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     public List<InspectionAccount> listForPage(Long projectId,String projectName, String subcontractorName,
                                                Integer valuationType, Date valuationTime, Integer offset,Integer length,
                                                Double maxUnderRate, Double minUnderRate) {
-        return inspectionAccountMapper.listForPage(projectId,projectName,subcontractorName,valuationType,valuationTime,
+        String time = DateTimeUtil.getYYYYMM(valuationTime);
+        return inspectionAccountMapper.listForPage(projectId,projectName,subcontractorName,valuationType,time,
                 minUnderRate,maxUnderRate,offset,length);
     }
 
     @Override
     public Integer listForPageSize(Long projectId, String projectName, String subcontractorName,
                                    Integer valuationType, Date valuationTime, Double maxUnderRate, Double minUnderRate) {
+        String time = DateTimeUtil.getYYYYMM(valuationTime);
         return inspectionAccountMapper.listForPageSize(projectId,projectName,subcontractorName,valuationType,minUnderRate,
-                maxUnderRate,valuationTime);
+                maxUnderRate,time);
     }
 
     @Override
