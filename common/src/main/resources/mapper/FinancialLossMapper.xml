@@ -53,7 +53,7 @@
     delete from financial_loss
     where id = #{id,jdbcType=BIGINT}
   </delete>
-  <insert id="insert" parameterType="com.crcc.common.model.FinancialLoss" >
+  <insert id="insert" parameterType="com.crcc.common.model.FinancialLoss" useGeneratedKeys="true" keyProperty="id">
     insert into financial_loss (id, project_id, report_time, 
       report_year, quarter, already_priced, 
       un_priced, sum_priced, confirm_priced, 
@@ -75,7 +75,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{remark,jdbcType=LONGVARCHAR}
       )
   </insert>
-  <insert id="insertSelective" parameterType="com.crcc.common.model.FinancialLoss" >
+  <insert id="insertSelective" parameterType="com.crcc.common.model.FinancialLoss" useGeneratedKeys="true" keyProperty="id">
     insert into financial_loss
     <trim prefix="(" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -387,4 +387,58 @@
       update_user = #{updateUser,jdbcType=BIGINT}
     where id = #{id,jdbcType=BIGINT}
   </update>
+
+  <select id="listForPage" resultType="com.crcc.common.model.FinancialLoss">
+    SELECT
+    fl.*,
+    p.`name` AS projectName,
+    pi.temporarily_price AS temporarilyPrice
+FROM
+    financial_loss fl
+        LEFT JOIN
+    project p ON fl.project_id = p.id
+        LEFT JOIN
+    project_info pi ON fl.project_id = pi.project_id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND fl.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.`name` LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="year != null">
+      AND fl.report_year = #{year}
+    </if>
+    <if test="quarter != null">
+      AND fl.quarter = #{quarter}
+    </if>
+    ORDER BY fl.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+    COUNT(*)
+    FROM
+    financial_loss fl
+    LEFT JOIN
+    project p ON fl.project_id = p.id
+    LEFT JOIN
+    project_info pi ON fl.project_id = pi.project_id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND fl.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.`name` LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="year != null">
+      AND fl.report_year = #{year}
+    </if>
+    <if test="quarter != null">
+      AND fl.quarter = #{quarter}
+    </if>
+  </select>
 </mapper>

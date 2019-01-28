@@ -58,6 +58,26 @@ public class FinancialLoss {
 
     private String remark;
 
+    private String projectName;
+
+    private BigDecimal temporarilyPrice;
+
+    public String getProjectName() {
+        return projectName;
+    }
+
+    public void setProjectName(String projectName) {
+        this.projectName = projectName;
+    }
+
+    public BigDecimal getTemporarilyPrice() {
+        return temporarilyPrice;
+    }
+
+    public void setTemporarilyPrice(BigDecimal temporarilyPrice) {
+        this.temporarilyPrice = temporarilyPrice;
+    }
+
     public Long getId() {
         return id;
     }

@@ -1384,6 +1384,141 @@ public class ExcelUtils {
         return wb;
     }
 
+    public static HSSFWorkbook getLossExcel(String titleValue,String sheetName,String[] title,
+                                                                      List<FinancialLoss> financialLosses){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 4){
+                cell.setCellValue("收入（万元）");
+            }else if (i>4 && i<=7){
+
+            }else if (i==8){
+                cell.setCellValue("成本(不含上交公司管理费)（万元）");
+            }else if (i >8 && i<=10){
+
+            }else if (i==11){
+                cell.setCellValue("亏损情况（万元）");
+            }else if (i>11 && i<=14){
+
+            }else if (i==15){
+                cell.setCellValue("潜盈（+）潜亏（-）情况（万元）");
+            }else if (i>15 && i <=20){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        HSSFCell cell2Row = twoRow.createCell(15);
+        cell2Row.setCellValue("账内潜亏");
+        cell2Row.setCellStyle(style);
+
+        num = num+1;
+        HSSFRow thirdRow = sheet.createRow(num);
+        for (int j=4;j<=18;j++){
+            HSSFCell cell3Row = thirdRow.createCell(j);
+            cell3Row.setCellValue(title[j]);
+            cell3Row.setCellStyle(style);
+        }
+
+
+        CellRangeAddress address0 = new CellRangeAddress(1,3,0,0);
+        CellRangeAddress address1 = new CellRangeAddress(1,3,1,1);
+        CellRangeAddress address2 = new CellRangeAddress(1,3,2,2);
+        CellRangeAddress address3 = new CellRangeAddress(1,3,3,3);
+        CellRangeAddress address4 = new CellRangeAddress(1,3,21,21);
+        sheet.addMergedRegion(address0);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+        sheet.addMergedRegion(address4);
+
+        CellRangeAddress address5 = new CellRangeAddress(1,2,4,7);
+        CellRangeAddress address6 = new CellRangeAddress(1,2,8,10);
+        CellRangeAddress address7 = new CellRangeAddress(1,2,11,14);
+        sheet.addMergedRegion(address5);
+        sheet.addMergedRegion(address6);
+        sheet.addMergedRegion(address7);
+
+        CellRangeAddress address8 = new CellRangeAddress(1,1,15,20);
+        sheet.addMergedRegion(address8);
+        CellRangeAddress address9 = new CellRangeAddress(2,2,15,18);
+        sheet.addMergedRegion(address9);
+
+        CellRangeAddress address10 = new CellRangeAddress(2,3,19,19);
+        sheet.addMergedRegion(address10);
+        CellRangeAddress address11 = new CellRangeAddress(2,3,20,20);
+        sheet.addMergedRegion(address11);
+
+        //创建内容
+        num = num+1;
+        for(FinancialLoss loss : financialLosses){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(loss.getId());
+            contentRow.createCell(1).setCellValue(loss.getProjectName());
+            contentRow.createCell(2).setCellValue(loss.getReportYear()+"第"+loss.getQuarter()+"季度");
+            contentRow.createCell(3).setCellValue(isNull(loss.getTemporarilyPrice()));
+            contentRow.createCell(4).setCellValue(isNull(loss.getAlreadyPriced()));
+            contentRow.createCell(5).setCellValue(isNull(loss.getUnPriced()));
+            contentRow.createCell(6).setCellValue(isNull(loss.getSumPriced()));
+            contentRow.createCell(7).setCellValue(isNull(loss.getConfirmPriced()));
+            contentRow.createCell(8).setCellValue(isNull(loss.getInBookCost()));
+            contentRow.createCell(9).setCellValue(isNull(loss.getOutBookCost()));
+            contentRow.createCell(10).setCellValue(isNull(loss.getSumBookCost()));
+            contentRow.createCell(11).setCellValue(isNull(loss.getLossAmount()));
+            contentRow.createCell(12).setCellValue(isNull(loss.getConfirmedNetProfit()));
+            contentRow.createCell(13).setCellValue(isNull(loss.getUnConfirmedNetProfit()));
+            contentRow.createCell(14).setCellValue(isNull(loss.getLossRatio())*100+"%");
+            contentRow.createCell(15).setCellValue(isNull(loss.getContractReceivable()));
+            contentRow.createCell(16).setCellValue(isNull(loss.getPrepayments()));
+            contentRow.createCell(17).setCellValue(isNull(loss.getOther()));
+            contentRow.createCell(18).setCellValue(isNull(loss.getProfitLossSubtotal()));
+            contentRow.createCell(19).setCellValue(isNull(loss.getPotentialLoss()));
+            contentRow.createCell(20).setCellValue(isNull(loss.getTotalProfitLoss()));
+            contentRow.createCell(21).setCellValue(loss.getRemark());
+            num++;
+
+        }
+        return wb;
+    }
+
     //消除科学记数法
     private static String transformationFromDoubleToString(Double value){
         NumberFormat nf = NumberFormat.getInstance();
