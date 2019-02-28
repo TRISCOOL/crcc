@@ -22,6 +22,8 @@ public interface SubcontractorService {
 
     boolean isCanAdd(Subcontractor subcontractor);
 
+    String getCodeTest();
+
 
 
 }

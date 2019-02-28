@@ -225,7 +225,7 @@ public class SubcontractorController extends BaseController{
         response.setHeader("content-Type", "application/pdf");
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename="+new String((subcontractor.getName()+"资质信息卡").getBytes("UTF-8"), "ISO8859-1")+".pdf");
-        Document document = new Document();
+        Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
         document.open();
         setContentForPDF(subcontractor,document,writer);
@@ -234,7 +234,7 @@ public class SubcontractorController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(400, 720);
+        img.setAbsolutePosition(360, 720);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -247,21 +247,22 @@ public class SubcontractorController extends BaseController{
             return;
 
         BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
-        Font font = new Font(bfChinese, 12,Font.NORMAL);
+        Font font = new Font(bfChinese, 10,Font.NORMAL);
 
-        Font titleFont = new Font(bfChinese,12,Font.BOLD);
+        Font titleFont = new Font(bfChinese,10,Font.BOLD);
+        Font realTitleFont = new Font(bfChinese,24,Font.BOLD);
 
-        Paragraph title = new Paragraph(subcontractor.getName()+"资质信息卡",titleFont);
+        Paragraph title = new Paragraph(subcontractor.getName()+"资质信息卡",realTitleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         Paragraph kb1 = new Paragraph(" ");
         document.add(title);
         document.add(kb1);
 
         //float[] widths = {0.15f, 0.1f, 0.2f,0.1f, 0.2f,0.1f,0.15f};
-        float[] widths = {70, 70, 70,70, 70,70,70};
+        float[] widths = {70, 50, 100,50, 90,50,80};
         PdfPTable table = new PdfPTable(widths);
         table.setLockedWidth(true);
-        table.setTotalWidth(490);
+        table.setTotalWidth(550);
 
         PdfPCell cell;
         cell = Utils.getNewCell(getTitle("分包商全称",titleFont),2,null,true,true);
@@ -309,9 +310,9 @@ public class SubcontractorController extends BaseController{
         cell = Utils.getNewCell(new Paragraph(subcontractor.getZipCode(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("法定代表人",titleFont),1,2,true,true);
+        cell = Utils.getNewCell(getTitle("法定代表人",titleFont),1,2,true,true,60);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("姓名",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("姓 名",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getName(),font),1,null,true,false);
         table.addCell(cell);
@@ -323,7 +324,7 @@ public class SubcontractorController extends BaseController{
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonCard(),font),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("联系方式",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("联系方式",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getLegalPersonPhone(),font),1,null,true,false);
         table.addCell(cell);
@@ -366,7 +367,7 @@ public class SubcontractorController extends BaseController{
 
         cell = Utils.getNewCell(getTitle("安全生产许可证",titleFont),1,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("编号",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("编 号",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(subcontractor.getSafetyCode(),font),1,null,true,false);
         table.addCell(cell);

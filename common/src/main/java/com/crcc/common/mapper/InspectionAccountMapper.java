@@ -39,4 +39,9 @@ public interface InspectionAccountMapper {
     Double sumPriceByProjectIdAndSubcontractorIdAndLaborAccountId(@Param("projectId")Long projectId,
                                                                   @Param("subcontractorId")Long subcontractorId,
                                                                   @Param("laborAccountId")Long laborAccountId);
+
+    List<InspectionAccount> foundInspectionByValuationType(@Param("valuationType")Integer valuationType,
+                                                           @Param("laborAccountId")Long laborAccountId,
+                                                           @Param("projectId")Long projectId,
+                                                           @Param("subcontractorId")Long subcontractorId);
 }

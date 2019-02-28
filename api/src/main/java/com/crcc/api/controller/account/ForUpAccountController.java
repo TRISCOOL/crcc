@@ -96,7 +96,8 @@ public class ForUpAccountController extends BaseController{
                            @RequestParam(value = "maxPayProportion",required = false)Double maxPayProportion,
                            @RequestParam(value = "minProductionValue",required = false)Double minProductionValue,
                            @RequestParam(value = "maxProductionValue",required = false)Double maxProductionValue,
-                           @RequestParam("page") Integer page,@RequestParam("pageSize")Integer pageSize,
+                           @RequestParam(value = "page",required = false) Integer page,
+                           @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
 
         Long projectId = permissionProject(request);

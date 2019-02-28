@@ -359,7 +359,7 @@
       AND p.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="subcontractorName != null">
-      AND ic.subcontractor_name LIKE concat('%',#{subcontractorName},'%')
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
     </if>
     <if test="valuationType != null">
       AND ic.valuation_type = #{valuationType}
@@ -370,7 +370,7 @@
     <if test="minUnderRate != null and maxUnderRate != null">
       AND under_rate &gt;= #{minUnderRate} AND under_rate &lt;= #{maxUnderRate}
     </if>
-    GROUP BY ac2.team_name ORDER BY ic.id DESC
+    GROUP BY ac2.team_name,ic.project_id,ic.subcontractor_id,ic.valuation_period ORDER BY ic.id DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>
@@ -380,7 +380,7 @@
     SELECT
      COUNT(*)
     FROM
-    inspection_account ic LEFT JOIN project p ON ic.project_id = p.id
+    inspection_account ic LEFT JOIN project p ON ic.project_id = p.id LEFT JOIN subcontractor s ON ic.subcontractor_id = s.id
     WHERE 1=1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
@@ -389,7 +389,7 @@
       AND p.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="subcontractorName != null">
-      AND ic.subcontractor_name LIKE concat('%',#{subcontractorName},'%')
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
     </if>
     <if test="valuationType != null">
       AND ic.valuation_type = #{valuationType}
@@ -411,5 +411,16 @@
       project_id = #{projectId}
       and subcontractor_id = #{subcontractorId}
       and labor_account_id = #{laborAccountId};
+  </select>
+
+  <select id="foundInspectionByValuationType" resultType="com.crcc.common.model.InspectionAccount">
+    select
+      *
+    from
+      inspection_account
+    where labor_account_id = #{laborAccountId} AND project_id = #{projectId} AND subcontractor_id = #{subcontractorId}
+    <if test="valuationType != null">
+      AND valuation_type = #{valuationType}
+    </if>
   </select>
 </mapper>

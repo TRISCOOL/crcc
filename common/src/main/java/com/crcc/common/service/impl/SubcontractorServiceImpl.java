@@ -100,4 +100,9 @@ public class SubcontractorServiceImpl implements SubcontractorService{
         }
         return true;
     }
+
+    @Override
+    public String getCodeTest() {
+        return getCode();
+    }
 }

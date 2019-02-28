@@ -1,0 +1,115 @@
+package com.crcc.api.controller.report;
+
+import com.crcc.api.annotations.AuthRequire;
+import com.crcc.api.controller.BaseController;
+import com.crcc.api.vo.ResponseVo;
+import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.ConfirmationOfRights;
+import com.crcc.common.model.User;
+import com.crcc.common.service.ConfirmationOfRightsService;
+import com.crcc.common.utils.ExcelUtils;
+import org.apache.ibatis.annotations.Param;
+import org.apache.poi.hssf.usermodel.HSSFWorkbook;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.text.SimpleDateFormat;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RequestMapping("/confirmation")
+@RestController
+public class ConfirmationOfRightsController extends BaseController{
+
+    @Autowired
+    private ConfirmationOfRightsService confirmationOfRightsService;
+
+    /**
+     * 获得上年余额
+     * @param projectId
+     * @return
+     */
+    @GetMapping("/last/v1.1")
+    public ResponseVo found(@Param("projectId")Long projectId){
+        ConfirmationOfRights confirmation = confirmationOfRightsService.foundConfirmForLastYear(projectId);
+        return ResponseVo.ok(confirmation);
+    }
+
+    @PostMapping("/add/v1.1")
+    @AuthRequire
+    public ResponseVo add(@RequestBody ConfirmationOfRights confirmationOfRights, HttpServletRequest request){
+        User user = curUser(request);
+        confirmationOfRights.setCreateUser(user.getId());
+        confirmationOfRightsService.add(confirmationOfRights);
+        if (confirmationOfRights.getId() != null){
+            Map<String,Long> result = new HashMap<String, Long>();
+            result.put("id",confirmationOfRights.getId());
+            return ResponseVo.ok(result);
+        }
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
+
+    @PostMapping("/update/v1.1")
+    @AuthRequire
+    public ResponseVo update(@RequestBody ConfirmationOfRights confirmationOfRights,HttpServletRequest request){
+        User user = curUser(request);
+        boolean result = confirmationOfRightsService.updateConfirmationOfRights(confirmationOfRights);
+        if (result){
+            return ResponseVo.ok();
+        }
+
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
+
+    @GetMapping("/list/v1.1")
+    @AuthRequire
+    public ResponseVo list(@RequestParam(value = "projectName",required = false)String projectName,
+                           @RequestParam(value = "year",required = false)String year,
+                           @RequestParam(value = "quarter",required = false)String quarter,
+                           @RequestParam(value = "page")Integer page,
+                           @RequestParam(value = "pageSize")Integer pageSize,HttpServletRequest request){
+
+        Long projectId = permissionProject(request);
+        Integer offset = page - 1 < 0 ? page -1 : 0;
+
+        List<ConfirmationOfRights> confirmations =
+                confirmationOfRightsService.listForPage(projectId,projectName,year,quarter,offset*pageSize,pageSize);
+
+        Integer total = confirmationOfRightsService.listForPageSize(projectId,projectName,year,quarter);
+
+        return ResponseVo.ok(total,page,pageSize,confirmations);
+
+    }
+
+    @GetMapping("/export/v1.1")
+    public void export(@RequestParam(value = "projectName",required = false)String projectName,
+                       @RequestParam(value = "quarter",required = false)String quarter,
+                       @RequestParam(value = "year",required = false)String  year,
+                       @RequestParam("token")String token, HttpServletResponse response){
+        Long projectId = permissionProjectOnlyToken(token);
+        List<ConfirmationOfRights> confirmationOfRights = confirmationOfRightsService.listForPage(projectId,projectName,year,quarter,
+                null,null);
+        String[] titles = {"序号","项目名称","填报时间","合同金额（万元）","已计价","未计价","小计","财务确认收入","账内成本",
+                "账外成本","小计","亏损金额","财务已确认净利润","财务未确认的亏损","亏损比例","应收客户合同工程款","预付账款","其他","小计",
+                "账外潜亏","合计","备注"};
+
+        try {
+            OutputStream out = response.getOutputStream();
+            HSSFWorkbook wb = ExcelUtils.getConfirmationExcel("工程承包板块季度确权清收统计表",
+                    "工程承包板块季度确权清收统计表",titles,confirmationOfRights);
+
+            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            response.setHeader("Content-disposition", "attachment; filename="+
+                    new String("工程承包板块季度确权清收统计表".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}

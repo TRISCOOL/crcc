@@ -69,7 +69,8 @@ public class ContractReportController extends BaseController{
                            @RequestParam(value = "teamName",required = false)String teamName,
                            @RequestParam(value = "year",required = false)String year,
                            @RequestParam(value = "quarter",required = false)Integer quarter,
-                           @RequestParam(value = "page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                           @RequestParam(value = "page",required = false)Integer page,
+                           @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
 
         Long projectId = permissionProject(request);
@@ -121,7 +122,8 @@ public class ContractReportController extends BaseController{
     @GetMapping("/statistics_list/v1.1")
     @AuthRequire
     public ResponseVo listStatistics(@RequestParam(value = "projectName",required = false)String projectName,
-                                     @RequestParam(value = "page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                                     @RequestParam(value = "page",required = false)Integer page,
+                                     @RequestParam(value = "pageSize",required = false)Integer pageSize,
                                      HttpServletRequest request){
         Integer offset = page-1<0?0:page-1;
 

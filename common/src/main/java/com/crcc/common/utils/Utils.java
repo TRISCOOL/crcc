@@ -163,6 +163,32 @@ public class Utils {
         return cell;
     }
 
+    public static PdfPCell getNewCell(Paragraph context, Integer colSpan, Integer rowSpan,
+                                      boolean isMiddle, boolean isFixHeight,float fixhight){
+        PdfPCell cell = new PdfPCell(context);
+        if (colSpan != null){
+            cell.setColspan(colSpan);
+        }
+
+        if (rowSpan != null){
+            cell.setRowspan(rowSpan);
+        }
+
+        if (isMiddle){
+            cell.setUseAscender(true);
+            cell.setVerticalAlignment(PdfPHeaderCell.ALIGN_MIDDLE);
+            cell.setHorizontalAlignment(Element.ALIGN_CENTER); //水平居中
+
+        }
+
+        if (isFixHeight){
+            cell.setFixedHeight(fixhight);
+        }
+        cell.setBorderWidth(1);
+
+        return cell;
+    }
+
     @SuppressWarnings("Duplicates")
     public static PdfPCell getImageCell(Image image, Integer colSpan, Integer rowSpan,
                                         boolean isMiddle, boolean isFixHeight){
@@ -182,7 +208,7 @@ public class Utils {
         }
 
         if (isFixHeight){
-            cell.setFixedHeight(40f);
+            cell.setFixedHeight(30f);
         }
 
         return cell;

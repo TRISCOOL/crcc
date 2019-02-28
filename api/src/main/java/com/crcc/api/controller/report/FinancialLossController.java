@@ -69,7 +69,8 @@ public class FinancialLossController extends BaseController{
     public ResponseVo list(@RequestParam(value = "projectName",required = false)String projectName,
                            @RequestParam(value = "year",required = false)String year,
                            @RequestParam(value = "quarter",required = false)Integer quarter,
-                           @RequestParam("page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                           @RequestParam(value = "page",required = false)Integer page,
+                           @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
         Long projectId = permissionProject(request);
         Integer offset = page - 1 < 0 ? 0 : page-1;

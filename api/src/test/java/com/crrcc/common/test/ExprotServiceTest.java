@@ -1,6 +1,8 @@
 package com.crrcc.common.test;
 
 import com.crcc.common.model.Subcontractor;
+import com.crcc.common.service.LaborAccountService;
+import com.crcc.common.service.RedisService;
 import com.crcc.common.service.SubcontractorService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.Utils;
@@ -28,19 +30,46 @@ public class ExprotServiceTest {
     @Autowired
     private SubcontractorService subcontractorService;
 
+    @Autowired
+    private RedisService redisService;
+
+    @Autowired
+    private LaborAccountService laborAccountService;
+
+
+    @Test
+    @Ignore
+    public void test1(){
+        laborAccountService.listLaborAccount(null,null,null,null,
+                null,null,null,null);
+/*        String value = subcontractorService.getCodeTest();
+        System.out.println("--------->"+value);*/
+    }
+
+    @Test
+    @Ignore
+    public void testUpdateCode(){
+        List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(null,null,null,null,null,null,
+                null,null,null,null,null);
+        for (Subcontractor subcontractor : subcontractors){
+            subcontractor.setCode(getCode());
+            subcontractorService.updateSubcontractor(subcontractor);
+        }
+    }
+
     @Test
     @Ignore
     public void test() throws Exception{
         try {
-            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream("/Users/taoran/sub2.xlsx"));
+            XSSFWorkbook workbook = new XSSFWorkbook(new FileInputStream("/Users/taoran/Desktop/sub2.xlsx"));
 
 
             Sheet sheet = workbook.getSheetAt(0);
             if (sheet != null){
                 Integer maxRow = sheet.getLastRowNum();
                 List<Subcontractor> subcontractors = new ArrayList<Subcontractor>();
-                for (int rowNum = 1;rowNum<maxRow;rowNum++){
-                    if (rowNum >= 50)
+                for (int rowNum = 50;rowNum<maxRow;rowNum++){
+                    if (rowNum >= 456)
                         break;
 
                     Row row = sheet.getRow(rowNum);
@@ -112,6 +141,31 @@ public class ExprotServiceTest {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    private String getCode(){
+        Long num = redisService.incrby("subcontractor_key",1);
+        if (num < 10){
+            return "0000"+num;
+        }
+
+        if (num >= 10 && num < 100){
+            return "000"+num;
+        }
+
+        if (num>=100 && num < 1000){
+            return "00"+num;
+        }
+
+        if (num >= 1000 && num <10000){
+            return "0"+num;
+        }
+
+        if (num >= 10000)
+            return num.toString();
+
+        return "00000";
+
     }
 
 }

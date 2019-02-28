@@ -177,7 +177,7 @@ public class ManagerPeopleController extends BaseController{
         response.setHeader("content-Type", "application/pdf");
         // 下载文件的默认名称
         response.setHeader("Content-Disposition", "attachment;filename="+new String((personnel.getName()+"个人履历表").getBytes("UTF-8"), "ISO8859-1")+".pdf");
-        Document document = new Document();
+        Document document = new Document(PageSize.A4);
         PdfWriter writer = PdfWriter.getInstance(document, new FileOutputStream(fileUrl));
         document.open();
         setContentForPDF(personnel,document,writer);
@@ -186,7 +186,7 @@ public class ManagerPeopleController extends BaseController{
         PdfReader reader = new PdfReader(fileUrl);
         PdfStamper stamper = new PdfStamper(reader,response.getOutputStream());
         Image img = Image.getInstance(pdfMarketAddress);
-        img.setAbsolutePosition(400, 720);
+        img.setAbsolutePosition(360, 720);
         PdfContentByte under = stamper.getUnderContent(1);
         under.addImage(img);
         stamper.close();
@@ -199,21 +199,22 @@ public class ManagerPeopleController extends BaseController{
             return;
 
         BaseFont bfChinese = BaseFont.createFont( "STSongStd-Light" ,"UniGB-UCS2-H",BaseFont.NOT_EMBEDDED);
-        Font font = new Font(bfChinese, 12,Font.NORMAL);
+        Font font = new Font(bfChinese, 10,Font.NORMAL);
 
-        Font titleFont = new Font(bfChinese,12,Font.BOLD);
+        Font titleFont = new Font(bfChinese,10,Font.BOLD);
+        Font realTitleFont = new Font(bfChinese,24,Font.BOLD);
 
-        Paragraph title = new Paragraph(personnel.getName()+"个人履历表",titleFont);
+        Paragraph title = new Paragraph(personnel.getName()+"个人履历表",realTitleFont);
         title.setAlignment(Element.ALIGN_CENTER);
         Paragraph kb1 = new Paragraph(" ");
 
         document.add(title);
         document.add(kb1);
 
-        float[] widths = {70, 70, 70,70, 70,70,70};
+        float[] widths = {75, 75, 75,75, 75,75,75};
         PdfPTable table = new PdfPTable(widths);
         table.setLockedWidth(true);
-        table.setTotalWidth(490);
+        table.setTotalWidth(550);
 
         PdfPCell cell;
         cell = Utils.getNewCell(getTitle("姓名",titleFont),1,null,true,true);
@@ -272,9 +273,9 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getNewCell(new Paragraph(personnel.getSpecialty(),font),1,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("第一学历",titleFont),1,2,true,false);
+        cell = Utils.getNewCell(getTitle("第一学历",titleFont),1,2,true,true,60);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeSchool(),font),2,null,true,false);
         table.addCell(cell);
@@ -282,7 +283,7 @@ public class ManagerPeopleController extends BaseController{
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeProfession(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getFirstDegreeTime()),font),2,null,true,false);
         table.addCell(cell);
@@ -291,9 +292,9 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getNewCell(new Paragraph(personnel.getFirstDegreeLevel(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(getTitle("第二学历",titleFont),1,2,true,true);
+        cell = Utils.getNewCell(getTitle("第二学历",titleFont),1,2,true,true,60);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业院校",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSecondDegreeSchool(),font),2,null,true,false);
         table.addCell(cell);
@@ -301,7 +302,7 @@ public class ManagerPeopleController extends BaseController{
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getSecondDegreeProfession(),font),2,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("毕业时间",titleFont),1,null,true,true,30);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getSecondDegreeTime()),font),2,null,true,false);
         table.addCell(cell);
@@ -319,7 +320,7 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getNewCell(new Paragraph(personnel.getIdCard(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("联系电话",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph("联系电话",titleFont),1,null,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getPhone(),font),3,null,true,false);
         table.addCell(cell);
@@ -328,7 +329,7 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getNewCell(new Paragraph(personnel.getQqNumber(),font),2,null,true,false);
         table.addCell(cell);
 
-        cell = Utils.getNewCell(new Paragraph("工作经历",titleFont),1,3,true,true);
+        cell = Utils.getNewCell(new Paragraph("工作经历",titleFont),1,3,true,true,100);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getWorkExperience(),font),6,3,true,false);
         table.addCell(cell);

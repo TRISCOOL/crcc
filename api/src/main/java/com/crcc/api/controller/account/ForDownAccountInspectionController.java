@@ -84,10 +84,10 @@ public class ForDownAccountInspectionController extends BaseController{
                                   @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
                                   @RequestParam(value = "valuationType",required = false)Integer valuationType,
                                   @RequestParam(value = "valuationTime",required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date valuationTime,
-                                  @RequestParam(value = "page")Integer page,
+                                  @RequestParam(value = "page",required = false)Integer page,
                                   @RequestParam(value = "maxUnderRate",required = false) Double maxUnderRate,
                                   @RequestParam(value = "minUnderRate",required = false) Double minUnderRate,
-                                  @RequestParam(value = "pageSize")Integer pageSize,HttpServletRequest request){
+                                  @RequestParam(value = "pageSize",required = false)Integer pageSize,HttpServletRequest request){
 
         Long projectId = permissionProject(request);
         Integer offset = page - 1<0?0:page-1;

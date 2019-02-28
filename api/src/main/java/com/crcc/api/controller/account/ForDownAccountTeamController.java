@@ -96,8 +96,8 @@ public class ForDownAccountTeamController extends BaseController{
                                   @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "approval",required = false) Integer approval,
                                   @RequestParam(value = "contractPerson",required = false)String contractPerson,
-                                  @RequestParam(value = "page") Integer page,
-                                  @RequestParam(value = "pageSize") Integer pageSize,
+                                  @RequestParam(value = "page",required = false) Integer page,
+                                  @RequestParam(value = "pageSize",required = false) Integer pageSize,
                                   HttpServletRequest request){
         Integer offset = page - 1 < 0 ? 0 : page-1;
         Long projectId = permissionProject(request);

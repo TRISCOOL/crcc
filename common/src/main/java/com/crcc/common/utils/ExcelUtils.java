@@ -742,6 +742,12 @@ public class ExcelUtils {
         num = num+1;
         Double sumPrice = 0d;
         Double sumEndPrice = 0d;
+        Double sumValuationPrice = 0d;
+        Double sumValuationPriceReduce = 0d;
+        Double sumWarranty = 0d;
+        Double sumPerformanceBond = 0d;
+        Double sumShouldAmount = 0d;
+        Double sumCompensation = 0d;
         for(InspectionAccount inspectionAccount : inspectionAccounts){
             HSSFRow contentRow = sheet.createRow(num);
             contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
@@ -758,18 +764,31 @@ public class ExcelUtils {
             contentRow.createCell(11).setCellValue(isNull(inspectionAccount.getCompensation()));
             contentRow.createCell(12).setCellValue(isNull(inspectionAccount.getShouldAmount()));
             contentRow.createCell(13).setCellValue(isNull(inspectionAccount.getEndedPrice()));
-            contentRow.createCell(14).setCellValue(isNull(inspectionAccount.getUnderRate())*100+"%");
+            contentRow.createCell(14).setCellValue(inspectionAccount.getUnderRate()==null?"":new BigDecimal(inspectionAccount.getUnderRate().setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()).doubleValue()*100+"%");
             contentRow.createCell(15).setCellValue(inspectionAccount.getValuationPerson());
             contentRow.createCell(16).setCellValue(inspectionAccount.getRemark());
             sumPrice = addAmount(sumPrice,inspectionAccount.getValuationPrice());
             sumEndPrice = addAmount(sumEndPrice,inspectionAccount.getEndedPrice());
+            sumValuationPrice = addAmount(sumValuationPrice,inspectionAccount.getValuationPrice());
+            sumValuationPriceReduce = addAmount(sumValuationPriceReduce,inspectionAccount.getValuationPriceReduce());
+            sumWarranty = addAmount(sumWarranty,inspectionAccount.getWarranty());
+            sumPerformanceBond = addAmount(sumPerformanceBond,inspectionAccount.getPerformanceBond());
+            sumShouldAmount = addAmount(sumShouldAmount,inspectionAccount.getShouldAmount());
+            sumCompensation = addAmount(sumCompensation,inspectionAccount.getCompensation());
             num++;
 
         }
         HSSFRow contentRow = sheet.createRow(num);
         contentRow.createCell(0).setCellValue("合计");
+        contentRow.createCell(7).setCellValue(sumValuationPrice);
+        contentRow.createCell(8).setCellValue(sumValuationPriceReduce);
+        contentRow.createCell(9).setCellValue(sumWarranty);
+        contentRow.createCell(10).setCellValue(sumPerformanceBond);
+        contentRow.createCell(11).setCellValue(sumCompensation);
+        contentRow.createCell(12).setCellValue(sumShouldAmount);
+        contentRow.createCell(13).setCellValue(sumEndPrice);
         contentRow.createCell(14).setCellValue(
-                computerDivide(new BigDecimal(sumPrice),new BigDecimal(sumPrice+sumEndPrice),4)+"%"
+                computerDivide(new BigDecimal(sumPrice),new BigDecimal(sumPrice+sumEndPrice),4)*100+"%"
         );
         return wb;
     }
@@ -779,7 +798,7 @@ public class ExcelUtils {
             return -1d;
         }
 
-        return value.setScale(2,BigDecimal.ROUND_DOWN).doubleValue();
+        return value.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
     }
 
     public static HSSFWorkbook getPersonnelExcel(String titleValue,String sheetName,String[] title, List<Personnel> personnels){
@@ -1036,6 +1055,9 @@ public class ExcelUtils {
             cell.setCellStyle(style);
         }
 
+        Double sumTemporarilyPrice = 0d;
+        Double sumConstructionOutputValue = 0d;
+        Double sumChangeClaimAmount = 0d;
         //创建内容
         num = num+1;
         for(EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlies){
@@ -1044,14 +1066,34 @@ public class ExcelUtils {
             contentRow.createCell(1).setCellValue(engineeringChangeMonthly.getProjectName());
             contentRow.createCell(2).setCellValue(engineeringChangeMonthly.getProjectType());
             contentRow.createCell(3).setCellValue(DateTimeUtil.getYYYYMMDD(engineeringChangeMonthly.getReportTime()));
-            contentRow.createCell(4).setCellValue(isNull(engineeringChangeMonthly.getTemporarilyPrice()));
-            contentRow.createCell(5).setCellValue(isNull(engineeringChangeMonthly.getConstructionOutputValue()));
-            contentRow.createCell(6).setCellValue(isNull(engineeringChangeMonthly.getChangeClaimAmount()));
-            contentRow.createCell(7).setCellValue(isNull(engineeringChangeMonthly.getPercentage()));
+
+            Double temporarilyPrice = isNull(engineeringChangeMonthly.getTemporarilyPrice());
+            contentRow.createCell(4).setCellValue(temporarilyPrice);
+            sumTemporarilyPrice = sumTemporarilyPrice + temporarilyPrice;
+
+            Double constructionOutputValue =  isNull(engineeringChangeMonthly.getConstructionOutputValue());
+            contentRow.createCell(5).setCellValue(constructionOutputValue);
+            sumConstructionOutputValue = sumConstructionOutputValue + constructionOutputValue;
+
+            Double changeClaimAmount = isNull(engineeringChangeMonthly.getChangeClaimAmount());
+            contentRow.createCell(6).setCellValue(changeClaimAmount);
+            sumChangeClaimAmount = sumChangeClaimAmount + changeClaimAmount;
+
+            contentRow.createCell(7).setCellValue(isNull(engineeringChangeMonthly.getPercentage()) *100 + "%");
             contentRow.createCell(8).setCellValue(engineeringChangeMonthly.getRemark());
             num++;
 
         }
+        num = num + 1;
+        HSSFRow sumRow = sheet.createRow(num);
+        sumRow.createCell(0).setCellValue("合计");
+        sumRow.createCell(4).setCellValue(sumTemporarilyPrice);
+        sumRow.createCell(5).setCellValue(sumConstructionOutputValue);
+        sumRow.createCell(6).setCellValue(sumChangeClaimAmount);
+        sumRow.createCell(7).setCellValue(Utils.computerDivide(
+                new BigDecimal(sumChangeClaimAmount),
+                new BigDecimal(sumTemporarilyPrice),4).doubleValue() * 100 + "%");
+
         return wb;
     }
 
@@ -1095,18 +1137,40 @@ public class ExcelUtils {
             cell.setCellStyle(style);
         }
 
+        Double sumTemporarilyPrice = 0d;
+        Double sumConstructionOutputValue = 0d;
+        Double sumChangeClaimAmount = 0d;
         //创建内容
         num = num+1;
         for(EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlies){
             HSSFRow contentRow = sheet.createRow(num);
             contentRow.createCell(0).setCellValue(engineeringChangeMonthly.getProjectName());
-            contentRow.createCell(1).setCellValue(isNull(engineeringChangeMonthly.getTemporarilyPrice()));
-            contentRow.createCell(2).setCellValue(isNull(engineeringChangeMonthly.getConstructionOutputValueStatistics()));
-            contentRow.createCell(3).setCellValue(isNull(engineeringChangeMonthly.getChangeClaimAmountStatistics()));
-            contentRow.createCell(4).setCellValue(isNull(engineeringChangeMonthly.getPercentageStatistics()));
+
+            Double temporarilyPrice = isNull(engineeringChangeMonthly.getTemporarilyPrice());
+            contentRow.createCell(1).setCellValue(temporarilyPrice);
+            sumTemporarilyPrice = sumTemporarilyPrice + temporarilyPrice;
+
+            Double constructionOutputValueStatistics = isNull(engineeringChangeMonthly.getConstructionOutputValueStatistics());
+            contentRow.createCell(2).setCellValue(constructionOutputValueStatistics);
+            sumConstructionOutputValue = sumConstructionOutputValue + constructionOutputValueStatistics;
+
+            Double changeClaimAmountStatistics = isNull(engineeringChangeMonthly.getChangeClaimAmountStatistics());
+            contentRow.createCell(3).setCellValue(changeClaimAmountStatistics);
+            sumChangeClaimAmount = sumChangeClaimAmount + changeClaimAmountStatistics;
+
+            contentRow.createCell(4).setCellValue(isNull(engineeringChangeMonthly.getPercentageStatistics())*100+"%");
             num++;
 
         }
+        num = num + 1;
+        HSSFRow sumRow = sheet.createRow(num);
+        sumRow.createCell(0).setCellValue("合计");
+        sumRow.createCell(1).setCellValue(sumTemporarilyPrice);
+        sumRow.createCell(2).setCellValue(sumConstructionOutputValue);
+        sumRow.createCell(3).setCellValue(sumChangeClaimAmount);
+        sumRow.createCell(4).setCellValue(Utils.computerDivide(
+                new BigDecimal(sumChangeClaimAmount),
+                new BigDecimal(sumTemporarilyPrice),4).doubleValue() * 100 + "%");
         return wb;
     }
 
@@ -1181,22 +1245,62 @@ public class ExcelUtils {
         CellRangeAddress address4 = new CellRangeAddress(1,1,6,8);
         sheet.addMergedRegion(address4);
 
+        Double sumStatisticsTotalAmountContract = 0d;
+        Double sumStatisticsDailyWorkSubtotal = 0d;
+        Double sumStatisticsCompensationSubtotal = 0d;
+        Double sumStatisticsAlreadySubtotal = 0d;
+        Double sumStatisticsEstimateDailyWorkSubtotal = 0d;
+        Double sumStatisticsEstimateCompensationSubtotal = 0d;
+        Double sumStatisticsEstimateSubtotal = 0d;
         //创建内容
         num = num+1;
         for(OutOfContractCompensationStatistics out : compensationStatistics){
             HSSFRow contentRow = sheet.createRow(num);
             contentRow.createCell(0).setCellValue(out.getProjectName());
             contentRow.createCell(1).setCellValue(out.getProjectType());
-            contentRow.createCell(2).setCellValue(isNull(out.getStatisticsTotalAmountContract()));
-            contentRow.createCell(3).setCellValue(isNull(out.getStatisticsDailyWorkSubtotal()));
-            contentRow.createCell(4).setCellValue(isNull(out.getStatisticsCompensationSubtotal()));
-            contentRow.createCell(5).setCellValue(isNull(out.getStatisticsAlreadySubtotal()));
-            contentRow.createCell(6).setCellValue(isNull(out.getStatisticsEstimateDailyWorkSubtotal()));
-            contentRow.createCell(7).setCellValue(isNull(out.getStatisticsEstimateCompensationSubtotal()));
-            contentRow.createCell(8).setCellValue(isNull(out.getStatisticsEstimateSubtotal()));
+
+            Double statisticsTotalAmountContract = isNull(out.getStatisticsTotalAmountContract());
+            contentRow.createCell(2).setCellValue(statisticsTotalAmountContract);
+            sumStatisticsTotalAmountContract = sumStatisticsTotalAmountContract+statisticsTotalAmountContract;
+
+            Double statisticsDailyWorkSubtotal = isNull(out.getStatisticsDailyWorkSubtotal());
+            contentRow.createCell(3).setCellValue(statisticsDailyWorkSubtotal);
+            sumStatisticsDailyWorkSubtotal = sumStatisticsDailyWorkSubtotal + statisticsDailyWorkSubtotal;
+
+            Double statisticsCompensationSubtotal = isNull(out.getStatisticsCompensationSubtotal());
+            contentRow.createCell(4).setCellValue(statisticsCompensationSubtotal);
+            sumStatisticsCompensationSubtotal = sumStatisticsCompensationSubtotal + statisticsCompensationSubtotal;
+
+            Double statisticsAlreadySubtotal = isNull(out.getStatisticsAlreadySubtotal());
+            contentRow.createCell(5).setCellValue(statisticsAlreadySubtotal);
+            sumStatisticsAlreadySubtotal = sumStatisticsAlreadySubtotal + statisticsAlreadySubtotal;
+
+            Double statisticsEstimateDailyWorkSubtotal = isNull(out.getStatisticsEstimateDailyWorkSubtotal());
+            contentRow.createCell(6).setCellValue(statisticsEstimateDailyWorkSubtotal);
+            sumStatisticsEstimateDailyWorkSubtotal = sumStatisticsEstimateDailyWorkSubtotal + statisticsEstimateDailyWorkSubtotal;
+
+            Double statisticsEstimateCompensationSubtotal = isNull(out.getStatisticsEstimateCompensationSubtotal());
+            contentRow.createCell(7).setCellValue(statisticsEstimateCompensationSubtotal);
+            sumStatisticsEstimateCompensationSubtotal = sumStatisticsEstimateCompensationSubtotal + statisticsEstimateCompensationSubtotal;
+
+            Double statisticsEstimateSubtotal = isNull(out.getStatisticsEstimateSubtotal());
+            contentRow.createCell(8).setCellValue(statisticsEstimateSubtotal);
+            sumStatisticsEstimateSubtotal = sumStatisticsEstimateSubtotal + statisticsEstimateSubtotal;
             num++;
 
         }
+
+        num = num + 1;
+        HSSFRow sumRow = sheet.createRow(num);
+        sumRow.createCell(0).setCellValue("合计");
+        sumRow.createCell(2).setCellValue(sumStatisticsTotalAmountContract);
+        sumRow.createCell(3).setCellValue(sumStatisticsDailyWorkSubtotal);
+        sumRow.createCell(4).setCellValue(sumStatisticsCompensationSubtotal);
+        sumRow.createCell(5).setCellValue(sumStatisticsAlreadySubtotal);
+        sumRow.createCell(6).setCellValue(sumStatisticsEstimateDailyWorkSubtotal);
+        sumRow.createCell(7).setCellValue(sumStatisticsEstimateCompensationSubtotal);
+        sumRow.createCell(8).setCellValue(sumStatisticsEstimateSubtotal);
+
         return wb;
     }
 
@@ -1338,9 +1442,26 @@ public class ExcelUtils {
         CellRangeAddress address22 = new CellRangeAddress(2,3,32,32);
         sheet.addMergedRegion(address22);
 
-
-
-
+        Double sumTotalAmountContract = 0d;
+        Double sumMechanicalClass = 0.00d;
+        Double sumSporadicEmployment = 0.00d;
+        Double sumDailyWorkSubtotal = 0.00d;
+        Double sumOutIn = 0.00d;
+        Double sumDisasterDamage = 0.00d;
+        Double sumWorkStop = 0.00d;
+        Double sumOther = 0.00d;
+        Double sumCompensationSubtotal = 0.00d;
+        Double sumTotal = 0.00d;
+        Double sumAmountAlreadyDisbursed = 0.00d;
+        Double sumEstimateMechanicalClass = 0.00d;
+        Double sumEstimateSporadicEmployment = 0.00d;
+        Double sumEstimateDailyWorkSubtotal = 0.00d;
+        Double sumEstimateOutIn = 0.00d;
+        Double sumEstimateDisasterDamage = 0.00d;
+        Double sumEstimateWorkStop = 0.00d;
+        Double sumEstimateOther = 0.00d;
+        Double sumEstimateCompensationSubtotal = 0.00d;
+        Double sumEstimateTotal = 0.00d;
         //创建内容
         num = num+1;
         for(OutOfContractCompensationStatistics out : outOfContractCompensationStatistics){
@@ -1353,34 +1474,130 @@ public class ExcelUtils {
             contentRow.createCell(5).setCellValue(out.getContractNumber());
             contentRow.createCell(6).setCellValue(out.getContractPerson());
             contentRow.createCell(7).setCellValue(DateTimeUtil.getYYYYMMDD(out.getReportTime()));
-            contentRow.createCell(8).setCellValue(isNull(out.getTotalAmountContract()));
-            contentRow.createCell(9).setCellValue(isNull(out.getMechanicalClass()));
-            contentRow.createCell(10).setCellValue(isNull(out.getSporadicEmployment()));
-            contentRow.createCell(11).setCellValue(isNull(out.getDailyWorkSubtotal()));
-            contentRow.createCell(12).setCellValue(isNull(out.getOutIn()));
-            contentRow.createCell(13).setCellValue(isNull(out.getDisasterDamage()));
-            contentRow.createCell(14).setCellValue(isNull(out.getWorkStop()));
-            contentRow.createCell(15).setCellValue(isNull(out.getOther()));
-            contentRow.createCell(16).setCellValue(isNull(out.getCompensationSubtotal()));
-            contentRow.createCell(17).setCellValue(isNull(out.getTotal()));
+
+            Double totalAmountContract =  isNull(out.getTotalAmountContract());
+            contentRow.createCell(8).setCellValue(totalAmountContract);
+            sumTotalAmountContract = sumTotalAmountContract + totalAmountContract;
+
+            Double mechanicalClass = isNull(out.getMechanicalClass());
+            contentRow.createCell(9).setCellValue(mechanicalClass);
+            sumMechanicalClass = sumMechanicalClass + mechanicalClass;
+
+            Double sporadicEmployment = isNull(out.getSporadicEmployment());
+            contentRow.createCell(10).setCellValue(sporadicEmployment);
+            sumSporadicEmployment = sumSporadicEmployment + sporadicEmployment;
+
+            Double dailyWorkSubtotal = isNull(out.getDailyWorkSubtotal());
+            contentRow.createCell(11).setCellValue(dailyWorkSubtotal);
+            sumDailyWorkSubtotal = sumDailyWorkSubtotal + dailyWorkSubtotal;
+
+            Double outIn = isNull(out.getOutIn());
+            contentRow.createCell(12).setCellValue(outIn);
+            sumOutIn = sumOutIn + outIn;
+
+            Double disasterDamage = isNull(out.getDisasterDamage());
+            contentRow.createCell(13).setCellValue(disasterDamage);
+            sumDisasterDamage = disasterDamage + sumDisasterDamage;
+
+            Double workStop = isNull(out.getWorkStop());
+            contentRow.createCell(14).setCellValue(workStop);
+            sumWorkStop = workStop + sumWorkStop;
+
+            Double other = isNull(out.getOther());
+            contentRow.createCell(15).setCellValue(other);
+            sumOther = other + sumOther;
+
+            Double compensationSubtotal = isNull(out.getCompensationSubtotal());
+            contentRow.createCell(16).setCellValue(compensationSubtotal);
+            sumCompensationSubtotal = sumCompensationSubtotal + compensationSubtotal;
+
+            Double total = isNull(out.getTotal());
+            contentRow.createCell(17).setCellValue(total);
+            sumTotal = total+ sumTotal;
+
             contentRow.createCell(18).setCellValue(out.getDailyPercentage() == null?"":out.getDailyPercentage().doubleValue()*100+"%");
             contentRow.createCell(19).setCellValue(out.getCompensationPercentage() == null?"":out.getCompensationPercentage().doubleValue()*100+"%");
-            contentRow.createCell(20).setCellValue(isNull(out.getAmountAlreadyDisbursed()));
-            contentRow.createCell(21).setCellValue(out.getExamination());
+
+            Double amountAlreadyDisbursed = isNull(out.getAmountAlreadyDisbursed());
+            contentRow.createCell(20).setCellValue(amountAlreadyDisbursed);
+            sumAmountAlreadyDisbursed = amountAlreadyDisbursed+sumAmountAlreadyDisbursed;
+
+            contentRow.createCell(21).setCellValue(out.getDisbursedPercentage() == null?"":out.getDisbursedPercentage().doubleValue()*100+"%");
             contentRow.createCell(22).setCellValue(out.getSettlement());
-            contentRow.createCell(23).setCellValue(out.getDisbursedPercentage() == null?"":out.getDisbursedPercentage().doubleValue()*100+"%");
-            contentRow.createCell(24).setCellValue(isNull(out.getEstimateMechanicalClass()));
-            contentRow.createCell(25).setCellValue(isNull(out.getEstimateSporadicEmployment()));
+            contentRow.createCell(23).setCellValue(out.getExamination());
+
+            Double estimateMechanicalClass = isNull(out.getEstimateMechanicalClass());
+            contentRow.createCell(24).setCellValue(estimateMechanicalClass);
+            sumEstimateMechanicalClass = sumEstimateMechanicalClass + estimateMechanicalClass;
+
+            Double estimateSporadicEmployment = isNull(out.getEstimateSporadicEmployment());
+            contentRow.createCell(25).setCellValue(estimateSporadicEmployment);
+            sumEstimateSporadicEmployment = estimateSporadicEmployment + sumEstimateSporadicEmployment;
+
+            Double estimateDailyWorkSubtotal = isNull(out.getEstimateDailyWorkSubtotal());
             contentRow.createCell(26).setCellValue(isNull(out.getEstimateDailyWorkSubtotal()));
-            contentRow.createCell(27).setCellValue(isNull(out.getEstimateOutIn()));
-            contentRow.createCell(28).setCellValue(isNull(out.getEstimateDisasterDamage()));
-            contentRow.createCell(29).setCellValue(isNull(out.getEstimateWorkStop()));
-            contentRow.createCell(30).setCellValue(isNull(out.getEstimateOther()));
-            contentRow.createCell(31).setCellValue(isNull(out.getEstimateCompensationSubtotal()));
-            contentRow.createCell(32).setCellValue(isNull(out.getEstimateTotal()));
+            sumEstimateDailyWorkSubtotal = sumEstimateDailyWorkSubtotal + estimateDailyWorkSubtotal;
+
+            Double estimateOutIn = isNull(out.getEstimateOutIn());
+            contentRow.createCell(27).setCellValue(estimateOutIn);
+            sumEstimateOutIn = sumEstimateOutIn + estimateOutIn;
+
+            Double estimateDisasterDamage = isNull(out.getEstimateDisasterDamage());
+            contentRow.createCell(28).setCellValue(estimateDisasterDamage);
+            sumEstimateDisasterDamage = sumEstimateDisasterDamage + estimateDisasterDamage;
+
+            Double estimateWorkStop = isNull(out.getEstimateWorkStop());
+            contentRow.createCell(29).setCellValue(estimateWorkStop);
+            sumEstimateWorkStop = sumEstimateWorkStop + estimateWorkStop;
+
+            Double estimateOther = isNull(out.getEstimateOther());
+            contentRow.createCell(30).setCellValue(estimateOther);
+            sumEstimateOther = estimateOther+sumEstimateOther;
+
+            Double estimateCompensationSubtotal = isNull(out.getEstimateCompensationSubtotal());
+            contentRow.createCell(31).setCellValue(estimateCompensationSubtotal);
+            sumEstimateCompensationSubtotal = sumEstimateCompensationSubtotal + estimateCompensationSubtotal;
+
+            Double estimateTotal = isNull(out.getEstimateTotal());
+            contentRow.createCell(32).setCellValue(estimateTotal);
+            sumEstimateTotal = sumEstimateTotal + estimateTotal;
             num++;
 
         }
+        num = num+1;
+        HSSFRow contentRow = sheet.createRow(num);
+        contentRow.createCell(0).setCellValue("合计");
+        contentRow.createCell(8).setCellValue(sumTotalAmountContract);
+        contentRow.createCell(9).setCellValue(sumMechanicalClass);
+        contentRow.createCell(10).setCellValue(sumSporadicEmployment);
+        contentRow.createCell(11).setCellValue(sumDailyWorkSubtotal);
+        contentRow.createCell(12).setCellValue(sumOutIn);
+        contentRow.createCell(13).setCellValue(sumDisasterDamage);
+        contentRow.createCell(14).setCellValue(sumWorkStop);
+        contentRow.createCell(15).setCellValue(sumOther);
+        contentRow.createCell(16).setCellValue(sumCompensationSubtotal);
+        contentRow.createCell(17).setCellValue(sumTotal);
+
+        Double sumDailyPercentage = Utils.computerDivide(new BigDecimal(sumDailyWorkSubtotal),
+                new BigDecimal(sumTotal),4).doubleValue();
+        contentRow.createCell(18).setCellValue(sumDailyPercentage * 100 + "%");
+
+        Double sumCompensationPercentage = Utils.computerDivide(new BigDecimal(sumCompensationSubtotal),
+                new BigDecimal(sumTotal),4).doubleValue();
+        contentRow.createCell(19).setCellValue(sumCompensationPercentage*100 + "%");
+        contentRow.createCell(20).setCellValue(sumAmountAlreadyDisbursed);
+        Double sumDisbursedPercentage = Utils.computerDivide(new BigDecimal(sumAmountAlreadyDisbursed),
+                new BigDecimal(sumCompensationSubtotal),4).doubleValue();
+        contentRow.createCell(21).setCellValue(sumDisbursedPercentage*100 + "%");
+        contentRow.createCell(24).setCellValue(sumEstimateMechanicalClass);
+        contentRow.createCell(25).setCellValue(sumEstimateSporadicEmployment);
+        contentRow.createCell(26).setCellValue(sumEstimateDailyWorkSubtotal);
+        contentRow.createCell(27).setCellValue(sumEstimateOutIn);
+        contentRow.createCell(28).setCellValue(sumEstimateDisasterDamage);
+        contentRow.createCell(29).setCellValue(sumEstimateWorkStop);
+        contentRow.createCell(30).setCellValue(sumEstimateOther);
+        contentRow.createCell(31).setCellValue(sumEstimateCompensationSubtotal);
+        contentRow.createCell(32).setCellValue(sumEstimateTotal);
         return wb;
     }
 
@@ -1487,6 +1704,17 @@ public class ExcelUtils {
         CellRangeAddress address11 = new CellRangeAddress(2,3,20,20);
         sheet.addMergedRegion(address11);
 
+        Double sumTemporarilyPrice = 0d;
+        Double sumAlreadyPriced = 0d;
+        Double sumUnPriced = 0d;
+        Double sumSumPriced = 0d;
+        Double sumConfirmPriced = 0d;
+        Double sumInBookCost = 0d;
+        Double sumOutBookCost = 0d;
+        Double sumSumBookCost = 0d;
+        Double sumLossAmount = 0d;
+        Double sumConfirmedNetProfit = 0d;
+        Double sumUnConfirmedNetProfit = 0d;
         //创建内容
         num = num+1;
         for(FinancialLoss loss : financialLosses){
@@ -1494,17 +1722,51 @@ public class ExcelUtils {
             contentRow.createCell(0).setCellValue(loss.getId());
             contentRow.createCell(1).setCellValue(loss.getProjectName());
             contentRow.createCell(2).setCellValue(loss.getReportYear()+"第"+loss.getQuarter()+"季度");
-            contentRow.createCell(3).setCellValue(isNull(loss.getTemporarilyPrice()));
-            contentRow.createCell(4).setCellValue(isNull(loss.getAlreadyPriced()));
-            contentRow.createCell(5).setCellValue(isNull(loss.getUnPriced()));
-            contentRow.createCell(6).setCellValue(isNull(loss.getSumPriced()));
-            contentRow.createCell(7).setCellValue(isNull(loss.getConfirmPriced()));
-            contentRow.createCell(8).setCellValue(isNull(loss.getInBookCost()));
-            contentRow.createCell(9).setCellValue(isNull(loss.getOutBookCost()));
-            contentRow.createCell(10).setCellValue(isNull(loss.getSumBookCost()));
-            contentRow.createCell(11).setCellValue(isNull(loss.getLossAmount()));
-            contentRow.createCell(12).setCellValue(isNull(loss.getConfirmedNetProfit()));
-            contentRow.createCell(13).setCellValue(isNull(loss.getUnConfirmedNetProfit()));
+
+            Double temporarilyPrice = isNull(loss.getTemporarilyPrice());
+            contentRow.createCell(3).setCellValue(temporarilyPrice);
+            sumTemporarilyPrice = sumTemporarilyPrice + temporarilyPrice;
+
+            Double alreadyPriced = isNull(loss.getAlreadyPriced());
+            contentRow.createCell(4).setCellValue(alreadyPriced);
+            sumAlreadyPriced = sumAlreadyPriced + alreadyPriced;
+
+            Double unPriced = isNull(loss.getUnPriced());
+            contentRow.createCell(5).setCellValue(unPriced);
+            sumUnPriced = sumUnPriced + unPriced;
+
+            Double sumPriced = isNull(loss.getSumPriced());
+            contentRow.createCell(6).setCellValue(sumPriced);
+            sumSumPriced = sumSumPriced + sumPriced;
+
+            Double confirmPriced = isNull(loss.getConfirmPriced());
+            contentRow.createCell(7).setCellValue(confirmPriced);
+            sumConfirmPriced = sumConfirmPriced + confirmPriced;
+
+            Double inBookCost = isNull(loss.getInBookCost());
+            contentRow.createCell(8).setCellValue(inBookCost);
+            sumInBookCost = sumInBookCost + inBookCost;
+
+            Double outBookCost = isNull(loss.getOutBookCost());
+            contentRow.createCell(9).setCellValue(outBookCost);
+            sumOutBookCost = sumOutBookCost + outBookCost;
+
+            Double sumBookCost = isNull(loss.getSumBookCost());
+            contentRow.createCell(10).setCellValue(sumBookCost);
+            sumSumBookCost = sumSumBookCost + sumBookCost;
+
+            Double lossAmount = isNull(loss.getLossAmount());
+            contentRow.createCell(11).setCellValue(lossAmount);
+            sumLossAmount = sumLossAmount + lossAmount;
+
+            Double confirmedNetProfit = isNull(loss.getConfirmedNetProfit());
+            contentRow.createCell(12).setCellValue(confirmedNetProfit);
+            sumConfirmedNetProfit = sumConfirmedNetProfit + confirmedNetProfit;
+
+            Double unConfirmedNetProfit =  isNull(loss.getUnConfirmedNetProfit());
+            contentRow.createCell(13).setCellValue(unConfirmedNetProfit);
+            sumUnConfirmedNetProfit = sumUnConfirmedNetProfit + unConfirmedNetProfit;
+
             contentRow.createCell(14).setCellValue(isNull(loss.getLossRatio())*100+"%");
             contentRow.createCell(15).setCellValue(isNull(loss.getContractReceivable()));
             contentRow.createCell(16).setCellValue(isNull(loss.getPrepayments()));
@@ -1513,6 +1775,133 @@ public class ExcelUtils {
             contentRow.createCell(19).setCellValue(isNull(loss.getPotentialLoss()));
             contentRow.createCell(20).setCellValue(isNull(loss.getTotalProfitLoss()));
             contentRow.createCell(21).setCellValue(loss.getRemark());
+            num++;
+
+        }
+        return wb;
+    }
+
+    public static HSSFWorkbook getConfirmationExcel(String titleValue,String sheetName,String[] title,
+                                            List<ConfirmationOfRights> confirmationOfRights){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 2){
+                cell.setCellValue("年初余额");
+            }else if (i>2 && i<=6){
+
+            }else if (i==7){
+                cell.setCellValue("本年截至本期");
+            }else if (i >7 && i<=10){
+
+            }else if (i == 11){
+                cell.setCellValue("  ");
+            }else if (i==12){
+                cell.setCellValue("开累情况");
+            }else if (i>12 && i<=16){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        for(int i=2;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 4){
+                cell.setCellValue("上年末完工未计价");
+            }else if (i>4 && i<=6){
+
+            }else if (i==8){
+                cell.setCellValue("截至本期验工计价");
+            }else if (i >8 && i<=10){
+
+            }else if(i == 11){
+                cell.setCellValue("  ");
+            }else if (i==14){
+                cell.setCellValue("期末完工未计价");
+            }else if (i>14 && i<=16){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num+1;
+        HSSFRow thirdRow = sheet.createRow(num);
+        for (int j=4;j<=16;j++){
+            HSSFCell cell3Row = thirdRow.createCell(j);
+            cell3Row.setCellValue(title[j]);
+            cell3Row.setCellStyle(style);
+        }
+
+
+        CellRangeAddress address0 = new CellRangeAddress(1,1,2,6);
+        CellRangeAddress address1 = new CellRangeAddress(1,1,7,10);
+        CellRangeAddress address2 = new CellRangeAddress(1,1,12,16);
+        CellRangeAddress address3 = new CellRangeAddress(2,3,2,2);
+        CellRangeAddress address4 = new CellRangeAddress(2,3,3,3);
+        sheet.addMergedRegion(address0);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+        sheet.addMergedRegion(address4);
+
+        CellRangeAddress address5 = new CellRangeAddress(2,3,7,7);
+        CellRangeAddress address6 = new CellRangeAddress(2,3,12,12);
+        CellRangeAddress address7 = new CellRangeAddress(2,3,13,13);
+        sheet.addMergedRegion(address5);
+        sheet.addMergedRegion(address6);
+        sheet.addMergedRegion(address7);
+
+        CellRangeAddress address8 = new CellRangeAddress(2,2,4,6);
+        sheet.addMergedRegion(address8);
+        CellRangeAddress address9 = new CellRangeAddress(2,2,8,10);
+        sheet.addMergedRegion(address9);
+
+        CellRangeAddress address10 = new CellRangeAddress(2,2,14,16);
+        sheet.addMergedRegion(address10);
+
+        //创建内容
+        num = num+1;
+        for(ConfirmationOfRights confirmationOfRights1 : confirmationOfRights){
+            HSSFRow contentRow = sheet.createRow(num);
             num++;
 
         }

@@ -1,0 +1,341 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.ConfirmationOfRightsMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.ConfirmationOfRights" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="year" property="year" jdbcType="VARCHAR" />
+    <result column="quarter" property="quarter" jdbcType="VARCHAR" />
+    <result column="current_production_value" property="currentProductionValue" jdbcType="DECIMAL" />
+    <result column="sum_half_one" property="sumHalfOne" jdbcType="DECIMAL" />
+    <result column="half_completed_value" property="halfCompletedValue" jdbcType="DECIMAL" />
+    <result column="one_completed_value" property="oneCompletedValue" jdbcType="DECIMAL" />
+    <result column="change_value" property="changeValue" jdbcType="DECIMAL" />
+    <result column="completed_value" property="completedValue" jdbcType="DECIMAL" />
+    <result column="inspection" property="inspection" jdbcType="DECIMAL" />
+    <result column="sum_final_period" property="sumFinalPeriod" jdbcType="DECIMAL" />
+    <result column="final_period_should" property="finalPeriodShould" jdbcType="DECIMAL" />
+    <result column="final_period_change" property="finalPeriodChange" jdbcType="DECIMAL" />
+    <result column="balance_complete_value" property="balanceCompleteValue" jdbcType="DECIMAL" />
+    <result column="balance_inspection_value" property="balanceInspectionValue" jdbcType="DECIMAL" />
+    <result column="balance_should" property="balanceShould" jdbcType="DECIMAL" />
+    <result column="balance_change" property="balanceChange" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="report_time" property="reportTime" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, year, quarter, current_production_value, sum_half_one, half_completed_value, 
+    one_completed_value, change_value, completed_value, inspection, sum_final_period, final_period_should,
+    final_period_change, balance_complete_value, balance_inspection_value, balance_should, 
+    balance_change,create_time,create_user,report_time
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    from confirmation_of_rights
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from confirmation_of_rights
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.ConfirmationOfRights" >
+    insert into confirmation_of_rights (id, project_id, year, 
+      quarter, current_production_value, sum_half_one, 
+      half_completed_value, one_completed_value, 
+      change_value, completed_value, inspection,
+      sum_final_period, final_period_should, final_period_change, 
+      balance_complete_value, balance_inspection_value, 
+      balance_should, balance_change,create_time,create_user,report_time)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{year,jdbcType=VARCHAR}, 
+      #{quarter,jdbcType=VARCHAR}, #{currentProductionValue,jdbcType=DECIMAL}, #{sumHalfOne,jdbcType=DECIMAL}, 
+      #{halfCompletedValue,jdbcType=DECIMAL}, #{oneCompletedValue,jdbcType=DECIMAL}, 
+      #{changeValue,jdbcType=DECIMAL}, #{completedValue,jdbcType=DECIMAL}, #{inspection,jdbcType=DECIMAL},
+      #{sumFinalPeriod,jdbcType=DECIMAL}, #{finalPeriodShould,jdbcType=DECIMAL}, #{finalPeriodChange,jdbcType=DECIMAL}, 
+      #{balanceCompleteValue,jdbcType=DECIMAL}, #{balanceInspectionValue,jdbcType=DECIMAL}, 
+      #{balanceShould,jdbcType=DECIMAL}, #{balanceChange,jdbcType=DECIMAL},#{createTime},#{createUser},#{reportTime})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.ConfirmationOfRights" keyProperty="id" useGeneratedKeys="true">
+    insert into confirmation_of_rights
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="year != null" >
+        year,
+      </if>
+      <if test="quarter != null" >
+        quarter,
+      </if>
+      <if test="currentProductionValue != null" >
+        current_production_value,
+      </if>
+      <if test="sumHalfOne != null" >
+        sum_half_one,
+      </if>
+      <if test="halfCompletedValue != null" >
+        half_completed_value,
+      </if>
+      <if test="oneCompletedValue != null" >
+        one_completed_value,
+      </if>
+      <if test="changeValue != null" >
+        change_value,
+      </if>
+      <if test="completedValue != null" >
+        completed_value,
+      </if>
+      <if test="inspection != null" >
+        inspection,
+      </if>
+      <if test="sumFinalPeriod != null" >
+        sum_final_period,
+      </if>
+      <if test="finalPeriodShould != null" >
+        final_period_should,
+      </if>
+      <if test="finalPeriodChange != null" >
+        final_period_change,
+      </if>
+      <if test="balanceCompleteValue != null" >
+        balance_complete_value,
+      </if>
+      <if test="balanceInspectionValue != null" >
+        balance_inspection_value,
+      </if>
+      <if test="balanceShould != null" >
+        balance_should,
+      </if>
+      <if test="balanceChange != null" >
+        balance_change,
+      </if>
+      <if test="createTime != null">
+        create_time,
+      </if>
+      <if test="createUser != null">
+        create_user,
+      </if>
+      <if test="reportTime != null">
+        report_time,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="year != null" >
+        #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="quarter != null" >
+        #{quarter,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProductionValue != null" >
+        #{currentProductionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="sumHalfOne != null" >
+        #{sumHalfOne,jdbcType=DECIMAL},
+      </if>
+      <if test="halfCompletedValue != null" >
+        #{halfCompletedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="oneCompletedValue != null" >
+        #{oneCompletedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="changeValue != null" >
+        #{changeValue,jdbcType=DECIMAL},
+      </if>
+      <if test="completedValue != null" >
+        #{completedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="inspection != null" >
+        #{inspection,jdbcType=DECIMAL},
+      </if>
+      <if test="sumFinalPeriod != null" >
+        #{sumFinalPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPeriodShould != null" >
+        #{finalPeriodShould,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPeriodChange != null" >
+        #{finalPeriodChange,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceCompleteValue != null" >
+        #{balanceCompleteValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceInspectionValue != null" >
+        #{balanceInspectionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceShould != null" >
+        #{balanceShould,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceChange != null" >
+        #{balanceChange,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        #{createTime},
+      </if>
+      <if test="createUser != null">
+        #{createUser},
+      </if>
+      <if test="reportTime != null">
+        #{reportTime},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.ConfirmationOfRights" >
+    update confirmation_of_rights
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="year != null" >
+        year = #{year,jdbcType=VARCHAR},
+      </if>
+      <if test="quarter != null" >
+        quarter = #{quarter,jdbcType=VARCHAR},
+      </if>
+      <if test="currentProductionValue != null" >
+        current_production_value = #{currentProductionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="sumHalfOne != null" >
+        sum_half_one = #{sumHalfOne,jdbcType=DECIMAL},
+      </if>
+      <if test="halfCompletedValue != null" >
+        half_completed_value = #{halfCompletedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="oneCompletedValue != null" >
+        one_completed_value = #{oneCompletedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="changeValue != null" >
+        change_value = #{changeValue,jdbcType=DECIMAL},
+      </if>
+      <if test="completedValue != null" >
+        completed_value = #{completedValue,jdbcType=DECIMAL},
+      </if>
+      <if test="inspection != null" >
+        inspection = #{inspection,jdbcType=DECIMAL},
+      </if>
+      <if test="sumFinalPeriod != null" >
+        sum_final_period = #{sumFinalPeriod,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPeriodShould != null" >
+        final_period_should = #{finalPeriodShould,jdbcType=DECIMAL},
+      </if>
+      <if test="finalPeriodChange != null" >
+        final_period_change = #{finalPeriodChange,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceCompleteValue != null" >
+        balance_complete_value = #{balanceCompleteValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceInspectionValue != null" >
+        balance_inspection_value = #{balanceInspectionValue,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceShould != null" >
+        balance_should = #{balanceShould,jdbcType=DECIMAL},
+      </if>
+      <if test="balanceChange != null" >
+        balance_change = #{balanceChange,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null">
+        create_time = #{createTime},
+      </if>
+      <if test="createUser != null">
+        create_user = #{createUser},
+      </if>
+      <if test="reportTime != null">
+        report_time = #{reportTime},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.ConfirmationOfRights" >
+    update confirmation_of_rights
+    set project_id = #{projectId,jdbcType=BIGINT},
+      year = #{year,jdbcType=VARCHAR},
+      quarter = #{quarter,jdbcType=VARCHAR},
+      current_production_value = #{currentProductionValue,jdbcType=DECIMAL},
+      sum_half_one = #{sumHalfOne,jdbcType=DECIMAL},
+      half_completed_value = #{halfCompletedValue,jdbcType=DECIMAL},
+      one_completed_value = #{oneCompletedValue,jdbcType=DECIMAL},
+      change_value = #{changeValue,jdbcType=DECIMAL},
+      completed_value = #{completedValue,jdbcType=DECIMAL},
+      inspection = #{inspection,jdbcType=DECIMAL},
+      sum_final_period = #{sumFinalPeriod,jdbcType=DECIMAL},
+      final_period_should = #{finalPeriodShould,jdbcType=DECIMAL},
+      final_period_change = #{finalPeriodChange,jdbcType=DECIMAL},
+      balance_complete_value = #{balanceCompleteValue,jdbcType=DECIMAL},
+      balance_inspection_value = #{balanceInspectionValue,jdbcType=DECIMAL},
+      balance_should = #{balanceShould,jdbcType=DECIMAL},
+      balance_change = #{balanceChange,jdbcType=DECIMAL},
+      create_time = #{createTime},
+      create_user = #{createUser},
+      report_time = #{reportTime}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="foundConfirmByProjectAndYear" resultType="com.crcc.common.model.ConfirmationOfRights">
+    select
+      *
+    from
+      confirmation_of_rights
+    where
+      project_id = #{projectId}
+    and `year` = #{year}
+    order by `quarter` desc limit 1;
+  </select>
+
+  <select id="listForPage" resultType="com.crcc.common.model.ConfirmationOfRights">
+    SELECT
+      c.*,p.name AS projectName
+    FROM
+      confirmation_of_rights c
+        LEFT JOIN
+      project p ON c.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND c.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND c.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="year != null">
+      AND c.year = #{year}
+    </if>
+    <if test="quarter != null">
+      AND c.quarter = #{quarter}
+    </if>
+    ORDER BY c.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listForPageSize" resultType="java.lang.Integer">
+    SELECT
+      COUNT(*)
+    FROM
+    confirmation_of_rights c
+    LEFT JOIN
+    project p ON c.project_id = p.id
+    WHERE 1=1
+    <if test="projectId != null">
+      AND c.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND c.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="year != null">
+      AND c.year = #{year}
+    </if>
+    <if test="quarter != null">
+      AND c.quarter = #{quarter}
+    </if>
+  </select>
+</mapper>

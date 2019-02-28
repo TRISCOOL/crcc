@@ -2,7 +2,9 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.mapper.InspectionAccountMapper;
 import com.crcc.common.mapper.LaborAccountMapper;
+import com.crcc.common.model.InspectionAccount;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.model.Subcontractor;
 import com.crcc.common.service.LaborAccountService;
@@ -10,6 +12,7 @@ import com.crcc.common.service.RedisService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
 
@@ -19,6 +22,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
 
     @Autowired
     private LaborAccountMapper laborAccountMapper;
+
+    @Autowired
+    private InspectionAccountMapper inspectionAccountMapper;
 
     @Autowired
     private RedisService redisService;
@@ -89,7 +95,27 @@ public class LaborAccountServiceImpl implements LaborAccountService{
 
     @Override
     public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson, Integer offset, Integer length) {
-        return laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,contractPerson,offset,length);
+        List<LaborAccount> laborAccountList = laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,contractPerson,offset,length);
+        //获取结算金额，当所属队伍的对下验工计价台账有末次计算时（valuationType=2），累计该队伍的计价金额（包括中期计价与末次计价的累计）
+        laborAccountList.forEach(laborAccount -> {
+            Long laborAccountId = laborAccount.getId();
+            Long pId = laborAccount.getProjectId();
+            Long subId = laborAccount.getSubcontractorId();
+            List<InspectionAccount> inspectionAccounts = inspectionAccountMapper.foundInspectionByValuationType(2,laborAccountId,pId,subId);
+            if (inspectionAccounts != null && inspectionAccounts.size() > 0){
+                List<InspectionAccount> inspectionAccountList = inspectionAccountMapper.foundInspectionByValuationType(null,laborAccountId,pId,subId);
+                if (inspectionAccountList != null && inspectionAccountList.size() > 0){
+                    BigDecimal sum = new BigDecimal(0.0d);
+                    for (InspectionAccount inspectionAccount : inspectionAccountList){
+                        if (inspectionAccount.getValuationPrice() != null){
+                            sum = sum.add(inspectionAccount.getValuationPrice());
+                        }
+                    }
+                    laborAccount.setSettlementAmount(sum);
+                }
+            }
+        });
+        return laborAccountList;
     }
 
     @Override

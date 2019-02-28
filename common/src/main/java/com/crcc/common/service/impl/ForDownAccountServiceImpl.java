@@ -38,10 +38,10 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
 
         int result = inspectionAccountMapper.insertSelective(inspectionAccount);
         if (result != 0){
-            LaborAccount laborAccount = new LaborAccount();
+/*            LaborAccount laborAccount = new LaborAccount();
             laborAccount.setId(inspectionAccount.getLaborAccountId());
             laborAccount.setSettlementAmount(inspectionAccount.getValuationPrice() != null?inspectionAccount.getValuationPrice():new BigDecimal(0));
-            laborAccountService.updateSective(laborAccount);
+            laborAccountService.updateSective(laborAccount);*/
         }
 
         return inspectionAccount.getId();
