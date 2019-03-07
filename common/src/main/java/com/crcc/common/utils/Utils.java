@@ -235,6 +235,33 @@ public class Utils {
         return bcs.divide(cs,decimalPoint,BigDecimal.ROUND_HALF_UP);
     }
 
+    public static BigDecimal addBigDecimal(BigDecimal b1,BigDecimal b2){
+        if (b1 != null && b2 != null){
+            return b1.add(b2);
+        }
+
+        if (b1 == null && b2 != null){
+            return b2;
+        }
+
+        if (b1 != null && b2 == null){
+            return b1;
+        }
+
+        if (b1 == null && b2 == null){
+            return new BigDecimal(0);
+        }
+
+        return null;
+    }
+
+    public static BigDecimal subtract(BigDecimal js,BigDecimal bjs){
+        if (js == null || js == null)
+            return null;
+
+        return js.subtract(bjs);
+    }
+
     public static Integer getQuarter(Date date){
         if (date == null)
             return 0;

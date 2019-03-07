@@ -73,7 +73,7 @@ public class LaborAccountServiceImpl implements LaborAccountService{
         if (laborAccount.getTeamName() != null){
             laborAccount.setTeamName(laborAccount.getTeamName().trim());
         }
-        int result = laborAccountMapper.updateByPrimaryKey(laborAccount);
+        int result = laborAccountMapper.updateByPrimaryKeySelective(laborAccount);
         if (result != 0)
             return true;
         return false;

@@ -303,7 +303,7 @@
       AND c.project_id = #{projectId}
     </if>
     <if test="projectName != null">
-      AND c.name LIKE concat('%',#{projectName},'%')
+      AND p.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="year != null">
       AND c.year = #{year}
@@ -329,7 +329,7 @@
       AND c.project_id = #{projectId}
     </if>
     <if test="projectName != null">
-      AND c.name LIKE concat('%',#{projectName},'%')
+      AND p.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="year != null">
       AND c.year = #{year}

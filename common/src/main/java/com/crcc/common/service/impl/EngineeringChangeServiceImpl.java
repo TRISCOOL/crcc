@@ -2,6 +2,7 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.mapper.EngineeringChangeMonthlyMapper;
 import com.crcc.common.mapper.ProjectInfoMapper;
+import com.crcc.common.model.EngineerChangeTotal;
 import com.crcc.common.model.EngineeringChangeMonthly;
 import com.crcc.common.model.ProjectInfo;
 import com.crcc.common.service.EngineeringChangeService;
@@ -95,6 +96,54 @@ public class EngineeringChangeServiceImpl implements EngineeringChangeService{
     @Override
     public Integer listStatisticsForPageSize(Long projectId, String projectName) {
         return engineeringChangeMonthlyMapper.listStatisticsForPageSize(projectName,projectId);
+    }
+
+    @Override
+    public EngineerChangeTotal getTotal(String projectName, Long projectId, String year, Integer q) {
+        List<EngineeringChangeMonthly> engineeringChangeMonthlies = listForPage(projectId,projectName,year,q,null,null);
+        EngineerChangeTotal total = new EngineerChangeTotal();
+        BigDecimal sumTemporarilyPrice = new BigDecimal(0);
+        BigDecimal sumConstructionOutputValue = new BigDecimal(0);
+        BigDecimal sumChangeClaimAmount = new BigDecimal(0);
+        if (engineeringChangeMonthlies != null && engineeringChangeMonthlies.size() > 0){
+            for (EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlies){
+                sumTemporarilyPrice = Utils.addBigDecimal(sumTemporarilyPrice,engineeringChangeMonthly.getTemporarilyPrice());
+                sumChangeClaimAmount = Utils.addBigDecimal(sumChangeClaimAmount,engineeringChangeMonthly.getChangeClaimAmount());
+                sumConstructionOutputValue = Utils.addBigDecimal(sumConstructionOutputValue,engineeringChangeMonthly.getConstructionOutputValue());
+            }
+        }
+        if (sumChangeClaimAmount != null && sumTemporarilyPrice != null){
+            BigDecimal result = Utils.computerDivide(sumChangeClaimAmount, sumTemporarilyPrice,4);
+            total.setSumPercentage(new BigDecimal(result.doubleValue()*100));
+        }
+        total.setSumChangeClaimAmount(sumChangeClaimAmount);
+        total.setSumConstructionOutputValue(sumConstructionOutputValue);
+        total.setSumTemporarilyPrice(sumTemporarilyPrice);
+        return total;
+    }
+
+    @Override
+    public EngineerChangeTotal getStatisticsTotal(Long projectId,String projectName) {
+        List<EngineeringChangeMonthly> engineeringChangeMonthlyList = listStatisticsForPage(projectId,projectName,null,null);
+        EngineerChangeTotal total = new EngineerChangeTotal();
+        BigDecimal sumTemporarilyPrice = new BigDecimal(0);
+        BigDecimal sumConstructionOutputValue = new BigDecimal(0);
+        BigDecimal sumChangeClaimAmount = new BigDecimal(0);
+        if (engineeringChangeMonthlyList != null && engineeringChangeMonthlyList.size() > 0){
+            for (EngineeringChangeMonthly engineeringChangeMonthly : engineeringChangeMonthlyList){
+                sumTemporarilyPrice = Utils.addBigDecimal(sumTemporarilyPrice,engineeringChangeMonthly.getTemporarilyPrice());
+                sumChangeClaimAmount = Utils.addBigDecimal(sumChangeClaimAmount,engineeringChangeMonthly.getChangeClaimAmountStatistics());
+                sumConstructionOutputValue = Utils.addBigDecimal(sumConstructionOutputValue,engineeringChangeMonthly.getConstructionOutputValueStatistics());
+            }
+        }
+        if (sumChangeClaimAmount != null && sumTemporarilyPrice != null){
+            BigDecimal result = Utils.computerDivide(sumChangeClaimAmount, sumTemporarilyPrice,4);
+            total.setSumPercentage(new BigDecimal(result.doubleValue()*100));
+        }
+        total.setSumChangeClaimAmount(sumChangeClaimAmount);
+        total.setSumConstructionOutputValue(sumConstructionOutputValue);
+        total.setSumTemporarilyPrice(sumTemporarilyPrice);
+        return total;
     }
 
     private void supplement(EngineeringChangeMonthly engineeringChangeMonthly){

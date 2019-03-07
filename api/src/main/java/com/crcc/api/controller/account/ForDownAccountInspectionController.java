@@ -5,6 +5,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.InspectionAccount;
+import com.crcc.common.model.InspectionAccountTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.ForDownAccountService;
 import com.crcc.common.utils.ExcelUtils;
@@ -98,6 +99,33 @@ public class ForDownAccountInspectionController extends BaseController{
                 valuationType,valuationTime,maxUnderRate,minUnderRate);
 
         return ResponseVo.ok(total,page,pageSize,inspectionAccounts);
+    }
+
+    /**
+     *
+     * @param projectName
+     * @param subcontractorName
+     * @param valuationType
+     * @param valuationTime
+     * @param maxUnderRate
+     * @param minUnderRate
+     * @param request
+     * @return
+     */
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
+                               @RequestParam(value = "valuationType",required = false)Integer valuationType,
+                               @RequestParam(value = "valuationTime",required = false)@DateTimeFormat(pattern = "yyyy-MM-dd")Date valuationTime,
+                               @RequestParam(value = "maxUnderRate",required = false) Double maxUnderRate,
+                               @RequestParam(value = "minUnderRate",required = false) Double minUnderRate,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        InspectionAccountTotal total = forDownAccountService.getTotal(projectId,projectName,subcontractorName,valuationType,
+                valuationTime,maxUnderRate,minUnderRate);
+
+        return ResponseVo.ok(total);
     }
 
     /**

@@ -1,6 +1,7 @@
 package com.crcc.common.service;
 
 import com.crcc.common.model.OutOfContractCompensationStatistics;
+import com.crcc.common.model.OutOfContractCompensationStatisticsTotal;
 
 import java.util.List;
 
@@ -22,6 +23,11 @@ public interface CompensationStatisticsService {
                                                                     Integer length);
 
     Integer listStatisticsForPageSize(String projectName,Long projectId);
+
+    OutOfContractCompensationStatisticsTotal getTotal(String projectName,String subcontractName,String teamName,String year,Integer quarter,
+                                                      Long projectId);
+
+    OutOfContractCompensationStatisticsTotal getTotalStatistics(String projectName,Long projectId);
 
 
 }

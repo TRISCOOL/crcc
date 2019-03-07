@@ -4,6 +4,7 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
+import com.crcc.common.model.EngineerChangeTotal;
 import com.crcc.common.model.EngineeringChangeMonthly;
 import com.crcc.common.model.User;
 import com.crcc.common.service.EngineeringChangeService;
@@ -90,6 +91,17 @@ public class EngineerChangeController extends BaseController{
         return ResponseVo.ok(total,page,pageSize,engineeringChangeMonthlies);
     }
 
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "year",required = false)String year,
+                               @RequestParam(value = "quarter",required = false)Integer quarter,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        EngineerChangeTotal total = engineeringChangeService.getTotal(projectName,projectId,year,quarter);
+        return ResponseVo.ok(total);
+    }
+
     /**
      * 台账列表
      * @return
@@ -107,6 +119,15 @@ public class EngineerChangeController extends BaseController{
 
         Integer total = engineeringChangeService.listStatisticsForPageSize(projectId,projectName);
         return ResponseVo.ok(total,page,pageSize,engineeringChangeMonthlies);
+    }
+
+    @GetMapping("/total_statistics/v1.1")
+    @AuthRequire
+    public ResponseVo getTotalStatistics(@RequestParam(value = "projectName",required = false)String projectName,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        EngineerChangeTotal total = engineeringChangeService.getStatisticsTotal(projectId,projectName);
+        return ResponseVo.ok(total);
     }
 
     @GetMapping("/export/v1.1")

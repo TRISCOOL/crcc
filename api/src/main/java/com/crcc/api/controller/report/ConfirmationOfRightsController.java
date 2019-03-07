@@ -94,9 +94,9 @@ public class ConfirmationOfRightsController extends BaseController{
         Long projectId = permissionProjectOnlyToken(token);
         List<ConfirmationOfRights> confirmationOfRights = confirmationOfRightsService.listForPage(projectId,projectName,year,quarter,
                 null,null);
-        String[] titles = {"序号","项目名称","填报时间","合同金额（万元）","已计价","未计价","小计","财务确认收入","账内成本",
-                "账外成本","小计","亏损金额","财务已确认净利润","财务未确认的亏损","亏损比例","应收客户合同工程款","预付账款","其他","小计",
-                "账外潜亏","合计","备注"};
+        String[] titles = {"项目名称","填报时间","上年末开累完成产值","上年末开累验工计价","小计","合同内应计未计",
+                "变更索赔预计额","本年截至本期完成产值", "小计","上年末已完工本年计价","当年完成产值当年验工计价",
+                "变更索赔预计额","开累完成产值", "开累验工计价","小计","其中：合同内应计未计","其中：变更索赔预计额",};
 
         try {
             OutputStream out = response.getOutputStream();

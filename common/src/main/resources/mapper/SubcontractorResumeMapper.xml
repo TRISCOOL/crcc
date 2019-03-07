@@ -247,10 +247,10 @@
       p.name AS projectName,
       s.name AS subcontractorName,
       s.code AS subcontractorCode,
-      la.contract_person AS contractPerson,
-      la.phone,
-      la.estimated_contract_amount AS contractAmount,
-      la.settlement_amount AS settlementAmount,
+      la2.contract_person AS contractPerson,
+      la2.phone,
+      la2.estimated_contract_amount AS contractAmount,
+      la2.settlement_amount AS settlementAmount,
       cu.name AS createUserStr,
       uu.name AS updateUserStr,
       la.settlement_amount AS settlementAmount
@@ -258,6 +258,8 @@
       subcontractor_resume sr
     LEFT JOIN
       labor_account la ON sr.labor_account_id = la.id
+    LEFT JOIN
+      labor_account la2 ON la.team_name = la2.team_name AND la2.subcontractor_id = sr.subcontractor_id AND la2.project_id = sr.project_id and la2.contract_type = 0
     LEFT JOIN
       subcontractor s ON sr.subcontractor_id = s.id
     LEFT JOIN

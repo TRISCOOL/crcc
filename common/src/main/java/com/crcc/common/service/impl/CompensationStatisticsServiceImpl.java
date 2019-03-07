@@ -3,6 +3,7 @@ package com.crcc.common.service.impl;
 import com.crcc.common.mapper.InspectionAccountMapper;
 import com.crcc.common.mapper.OutOfContractCompensationStatisticsMapper;
 import com.crcc.common.model.OutOfContractCompensationStatistics;
+import com.crcc.common.model.OutOfContractCompensationStatisticsTotal;
 import com.crcc.common.service.CompensationStatisticsService;
 import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -121,6 +122,120 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
     @Override
     public Integer listStatisticsForPageSize(String projectName, Long projectId) {
         return compensationStatisticsMapper.listStatisticsForPageSize(projectName,projectId);
+    }
+
+    @Override
+    public OutOfContractCompensationStatisticsTotal getTotal(String projectName, String subcontractName, String teamName, String year, Integer quarter, Long projectId) {
+        List<OutOfContractCompensationStatistics> outOfContractCompensationStatistics = listForPage(projectName,subcontractName,teamName,year,quarter,null,null,projectId);
+        OutOfContractCompensationStatisticsTotal total = new OutOfContractCompensationStatisticsTotal();
+        BigDecimal sumTotalAmountContract = new BigDecimal(0);
+        BigDecimal sumMechanicalClass = new BigDecimal(0);
+        BigDecimal sumSporadicEmployment = new BigDecimal(0);
+        BigDecimal sumDailyWorkSubtotal = new BigDecimal(0);
+        BigDecimal sumOutIn = new BigDecimal(0);
+        BigDecimal sumDisasterDamage = new BigDecimal(0);
+        BigDecimal sumWorkStop = new BigDecimal(0);
+        BigDecimal sumOther = new BigDecimal(0);
+        BigDecimal sumCompensationSubtotal = new BigDecimal(0);
+        BigDecimal sumTotal = new BigDecimal(0);
+        BigDecimal sumAmountAlreadyDisbursed = new BigDecimal(0);
+        BigDecimal sumEstimateMechanicalClass = new BigDecimal(0);
+        BigDecimal sumEstimateSporadicEmployment = new BigDecimal(0);
+        BigDecimal sumEstimateDailyWorkSubtotal = new BigDecimal(0);
+        BigDecimal sumEstimateOutIn = new BigDecimal(0);
+        BigDecimal sumEstimateDisasterDamage = new BigDecimal(0);
+        BigDecimal sumEstimateWorkStop = new BigDecimal(0);
+        BigDecimal sumEstimateOther = new BigDecimal(0);
+        BigDecimal sumEstimateCompensationSubtotal = new BigDecimal(0);
+        BigDecimal sumEstimateTotal = new BigDecimal(0);
+        BigDecimal sumDailyPercentage = new BigDecimal(0);
+        BigDecimal sumCompensationPercentage = new BigDecimal(0);
+        BigDecimal sumDisbursedPercentage = new BigDecimal(0);
+        if (outOfContractCompensationStatistics != null && outOfContractCompensationStatistics.size() > 0){
+            for (OutOfContractCompensationStatistics out : outOfContractCompensationStatistics){
+                sumTotalAmountContract = Utils.addBigDecimal(sumTotalAmountContract,out.getTotalAmountContract());
+                sumMechanicalClass = Utils.addBigDecimal(sumMechanicalClass,out.getMechanicalClass());
+                sumSporadicEmployment = Utils.addBigDecimal(sumSporadicEmployment,out.getSporadicEmployment());
+                sumDailyWorkSubtotal = Utils.addBigDecimal(sumDailyWorkSubtotal,out.getDailyWorkSubtotal());
+                sumOutIn = Utils.addBigDecimal(sumOutIn,out.getOutIn());
+                sumDisasterDamage = Utils.addBigDecimal(sumDisasterDamage,out.getDisasterDamage());
+                sumWorkStop = Utils.addBigDecimal(sumWorkStop,out.getWorkStop());
+                sumOther = Utils.addBigDecimal(sumOther,out.getOther());
+                sumCompensationSubtotal = Utils.addBigDecimal(sumCompensationSubtotal,out.getCompensationSubtotal());
+                sumTotal = Utils.addBigDecimal(sumTotal,out.getTotal());
+                sumAmountAlreadyDisbursed = Utils.addBigDecimal(sumAmountAlreadyDisbursed,out.getAmountAlreadyDisbursed());
+                sumEstimateMechanicalClass = Utils.addBigDecimal(sumEstimateMechanicalClass,out.getEstimateMechanicalClass());
+                sumEstimateSporadicEmployment = Utils.addBigDecimal(sumEstimateSporadicEmployment,out.getEstimateSporadicEmployment());
+                sumEstimateDailyWorkSubtotal = Utils.addBigDecimal(sumEstimateDailyWorkSubtotal,out.getEstimateDailyWorkSubtotal());
+                sumEstimateOutIn = Utils.addBigDecimal(sumEstimateOutIn,out.getEstimateOutIn());
+                sumEstimateDisasterDamage = Utils.addBigDecimal(sumEstimateDisasterDamage,out.getEstimateDisasterDamage());
+                sumEstimateOther = Utils.addBigDecimal(sumEstimateOther,out.getEstimateOther());
+                sumEstimateWorkStop = Utils.addBigDecimal(sumEstimateWorkStop,out.getEstimateWorkStop());
+                sumEstimateCompensationSubtotal = Utils.addBigDecimal(sumEstimateCompensationSubtotal,out.getEstimateCompensationSubtotal());
+                sumEstimateTotal = Utils.addBigDecimal(sumEstimateTotal,out.getEstimateTotal());
+            }
+            sumDailyPercentage = Utils.computerDivide(sumDailyWorkSubtotal,sumTotal,4);
+            total.setSumDailyPercentage(new BigDecimal(sumDailyPercentage.doubleValue()*100));
+            sumCompensationPercentage = Utils.computerDivide(sumCompensationSubtotal,sumTotal,4);
+            total.setSumCompensationPercentage(new BigDecimal(sumCompensationPercentage.doubleValue()*100));
+            sumDisbursedPercentage = Utils.computerDivide(sumAmountAlreadyDisbursed,sumCompensationSubtotal,4);
+            total.setSumDisbursedPercentage(new BigDecimal(sumDisbursedPercentage.doubleValue()*100));
+
+            total.setSumTotalAmountContract(sumTotalAmountContract);
+            total.setSumMechanicalClass(sumMechanicalClass);
+            total.setSumSporadicEmployment(sumSporadicEmployment);
+            total.setSumDailyWorkSubtotal(sumDailyWorkSubtotal);
+            total.setSumOutIn(sumOutIn);
+            total.setSumDisasterDamage(sumDisasterDamage);
+            total.setSumWorkStop(sumWorkStop);
+            total.setSumOther(sumOther);
+            total.setSumCompensationSubtotal(sumCompensationSubtotal);
+            total.setSumTotal(sumTotal);
+            total.setSumAmountAlreadyDisbursed(sumAmountAlreadyDisbursed);
+            total.setSumEstimateSporadicEmployment(sumEstimateSporadicEmployment);
+            total.setSumEstimateMechanicalClass(sumEstimateMechanicalClass);
+            total.setSumEstimateDailyWorkSubtotal(sumEstimateDailyWorkSubtotal);
+            total.setSumEstimateOutIn(sumEstimateOutIn);
+            total.setSumEstimateDisasterDamage(sumEstimateDisasterDamage);
+            total.setSumEstimateOther(sumEstimateOther);
+            total.setSumEstimateWorkStop(sumEstimateWorkStop);
+            total.setSumEstimateCompensationSubtotal(sumEstimateCompensationSubtotal);
+            total.setSumEstimateTotal(sumEstimateTotal);
+        }
+        return total;
+    }
+
+    @Override
+    public OutOfContractCompensationStatisticsTotal getTotalStatistics(String projectName, Long projectId) {
+        List<OutOfContractCompensationStatistics> outs = listStatisticsForPage(projectName,projectId,null,null);
+        OutOfContractCompensationStatisticsTotal total = new OutOfContractCompensationStatisticsTotal();
+        BigDecimal sumStatisticsAlreadySubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsCompensationSubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsDailyWorkSubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsEstimateCompensationSubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsEstimateDailyWorkSubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsEstimateSubtotal = new BigDecimal(0);
+        BigDecimal sumStatisticsTotalAmountContract = new BigDecimal(0);
+        if (outs != null && outs.size() > 0){
+            for (OutOfContractCompensationStatistics out : outs){
+                sumStatisticsAlreadySubtotal = Utils.addBigDecimal(sumStatisticsAlreadySubtotal,out.getStatisticsAlreadySubtotal());
+                sumStatisticsCompensationSubtotal = Utils.addBigDecimal(sumStatisticsCompensationSubtotal,out.getStatisticsCompensationSubtotal());
+                sumStatisticsDailyWorkSubtotal = Utils.addBigDecimal(sumStatisticsDailyWorkSubtotal,out.getStatisticsDailyWorkSubtotal());
+                sumStatisticsEstimateCompensationSubtotal = Utils.addBigDecimal(sumStatisticsCompensationSubtotal,out.getStatisticsEstimateCompensationSubtotal());
+                sumStatisticsEstimateDailyWorkSubtotal = Utils.addBigDecimal(sumStatisticsEstimateDailyWorkSubtotal,out.getStatisticsEstimateDailyWorkSubtotal());
+                sumStatisticsEstimateSubtotal = Utils.addBigDecimal(sumStatisticsEstimateSubtotal,out.getStatisticsEstimateSubtotal());
+                sumStatisticsTotalAmountContract = Utils.addBigDecimal(sumStatisticsTotalAmountContract,out.getStatisticsTotalAmountContract());
+            }
+
+            total.setSumStatisticsAlreadySubtotal(sumStatisticsAlreadySubtotal);
+            total.setSumStatisticsCompensationSubtotal(sumStatisticsCompensationSubtotal);
+            total.setSumStatisticsDailyWorkSubtotal(sumStatisticsDailyWorkSubtotal);
+            total.setSumStatisticsEstimateCompensationSubtotal(sumStatisticsEstimateCompensationSubtotal);
+            total.setSumStatisticsEstimateDailyWorkSubtotal(sumStatisticsEstimateDailyWorkSubtotal);
+            total.setSumStatisticsEstimateSubtotal(sumStatisticsEstimateSubtotal);
+            total.setSumStatisticsTotalAmountContract(sumStatisticsTotalAmountContract);
+        }
+        return total;
     }
 
     private void supplement(OutOfContractCompensationStatistics compensationStatistics){

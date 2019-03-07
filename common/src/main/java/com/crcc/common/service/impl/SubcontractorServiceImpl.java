@@ -35,6 +35,20 @@ public class SubcontractorServiceImpl implements SubcontractorService{
 
     private String getCode(){
         Long num = redisService.incrby(SUBCONTRACTOR_CODE_KEY,1);
+
+        //不知为何原因，redise的 key 老是被重置，初步判断是被人删除了，封锁了端口后再次发生，所以写了该段代码
+        if (num <= 1){
+            List<Subcontractor> subcontractors = subcontractorMapper.listForPage(null,null,null,null,null,null,
+                    null,null,0,1,null);
+            if (subcontractors != null && subcontractors.size() > 0){
+                String midCode = subcontractors.get(0).getCode();
+                Long midNum = Long.parseLong(midCode.substring(1,5));
+                midNum = midNum + 1;
+                redisService.setStr(SUBCONTRACTOR_CODE_KEY,midNum.toString());
+                num = midNum;
+            }
+
+        }
         if (num < 10){
             return "0000"+num;
         }

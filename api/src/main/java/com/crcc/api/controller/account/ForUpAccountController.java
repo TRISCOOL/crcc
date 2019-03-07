@@ -6,6 +6,7 @@ import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.ExportConfig;
 import com.crcc.common.model.MeteringAccount;
+import com.crcc.common.model.MeteringAccountTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.ForUpAccountService;
@@ -112,6 +113,21 @@ public class ForUpAccountController extends BaseController{
 
         return ResponseVo.ok(total,page,pageSize,meteringAccounts);
 
+    }
+
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "meteringTime",required = false) @DateTimeFormat(pattern = "yyyy-MM")Date meteringTime,
+                               @RequestParam(value = "minPayProportion",required = false)Double minPayProportion,
+                               @RequestParam(value = "maxPayProportion",required = false)Double maxPayProportion,
+                               @RequestParam(value = "minProductionValue",required = false)Double minProductionValue,
+                               @RequestParam(value = "maxProductionValue",required = false)Double maxProductionValue,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        MeteringAccountTotal total = forUpAccountService.getTotal(projectId,projectName,meteringTime,minPayProportion,
+                maxPayProportion,minProductionValue,maxProductionValue);
+        return ResponseVo.ok(total);
     }
 
     /**

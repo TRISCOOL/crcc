@@ -1,6 +1,7 @@
 package com.crcc.common.service;
 
 import com.crcc.common.model.InspectionAccount;
+import com.crcc.common.model.InspectionAccountTotal;
 
 import java.util.Date;
 import java.util.List;
@@ -19,4 +20,7 @@ public interface ForDownAccountService {
                             Date valuationTime,Double maxUnderRate,Double minUnderRate);
 
     InspectionAccount getDetails(Long inspectionAccountId);
+
+    InspectionAccountTotal getTotal(Long projectId,String projectName, String subcontractorName, Integer valuationType,
+                                    Date valuationTime,Double maxUnderRate,Double minUnderRate);
 }

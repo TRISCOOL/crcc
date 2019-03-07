@@ -1,5 +1,6 @@
 package com.crrcc.common.test;
 
+import com.crcc.common.mapper.SubcontractorMapper;
 import com.crcc.common.model.Subcontractor;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.service.RedisService;
@@ -23,6 +24,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+@SuppressWarnings("SpringJavaAutowiringInspection")
 @SpringBootTest(classes = ApplicationTest.class)
 @RunWith(SpringRunner.class)
 public class ExprotServiceTest {
@@ -36,12 +38,18 @@ public class ExprotServiceTest {
     @Autowired
     private LaborAccountService laborAccountService;
 
+    @Autowired
+    private SubcontractorMapper subcontractorMapper;
+
 
     @Test
     @Ignore
     public void test1(){
-        laborAccountService.listLaborAccount(null,null,null,null,
-                null,null,null,null);
+
+        String code = getCode();
+        System.out.println(">>>>>>>>>>>>>>>>>>>"+code);
+/*        laborAccountService.listLaborAccount(null,null,null,null,
+                null,null,null,null);*/
 /*        String value = subcontractorService.getCodeTest();
         System.out.println("--------->"+value);*/
     }
@@ -145,6 +153,19 @@ public class ExprotServiceTest {
 
     private String getCode(){
         Long num = redisService.incrby("subcontractor_key",1);
+
+        //不知为何原因，redise的 key 老是被重置，初步判断是被人删除了，封锁了端口后再次发生，所以写了该段代码
+        if (num <= 1){
+            List<Subcontractor> subcontractors = subcontractorMapper.listForPage(null,null,null,null,null,null,
+                    null,null,0,1,null);
+            if (subcontractors != null && subcontractors.size() > 0){
+                String midCode = subcontractors.get(0).getCode();
+                Long midNum = Long.parseLong(midCode.substring(1,5));
+                redisService.setStr("subcontractor_key",midNum.toString());
+                num = midNum;
+            }
+
+        }
         if (num < 10){
             return "0000"+num;
         }

@@ -1,5 +1,6 @@
 package com.crcc.common.service;
 
+import com.crcc.common.model.EngineerChangeTotal;
 import com.crcc.common.model.EngineeringChangeMonthly;
 
 import java.util.List;
@@ -20,6 +21,8 @@ public interface EngineeringChangeService {
 
     Integer listStatisticsForPageSize(Long projectId, String projectName);
 
+    EngineerChangeTotal getTotal(String projectName,Long projectId,String year,Integer q);
 
+    EngineerChangeTotal getStatisticsTotal(Long projectId,String projectName);
 
 }

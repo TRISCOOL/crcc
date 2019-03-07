@@ -2,10 +2,13 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.mapper.InspectionAccountMapper;
 import com.crcc.common.model.InspectionAccount;
+import com.crcc.common.model.InspectionAccountTotal;
 import com.crcc.common.model.LaborAccount;
 import com.crcc.common.service.ForDownAccountService;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.utils.DateTimeUtil;
+import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -96,5 +99,49 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
         }
 
         return inspectionAccount;
+    }
+
+    @Override
+    public InspectionAccountTotal getTotal(Long projectId, String projectName, String subcontractorName, Integer valuationType, Date valuationTime, Double maxUnderRate, Double minUnderRate) {
+
+        List<InspectionAccount> inspectionAccounts = listForPage(projectId,projectName,
+                subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate);
+
+        InspectionAccountTotal inspectionAccountTotal = new InspectionAccountTotal();
+        BigDecimal sumPrice = new BigDecimal(0);
+        BigDecimal sumEndPrice = new BigDecimal(0);
+        BigDecimal sumValuationPrice = new BigDecimal(0);
+        BigDecimal sumValuationPriceReduce = new BigDecimal(0);
+        BigDecimal sumWarranty = new BigDecimal(0);
+        BigDecimal sumPerformanceBond = new BigDecimal(0);
+        BigDecimal sumShouldAmount = new BigDecimal(0);
+        BigDecimal sumCompensation = new BigDecimal(0);
+        if (inspectionAccounts != null && inspectionAccounts.size() > 0){
+            for (InspectionAccount inspectionAccount : inspectionAccounts){
+                sumPrice = Utils.addBigDecimal(sumPrice,inspectionAccount.getValuationPrice());
+                sumEndPrice = Utils.addBigDecimal(sumEndPrice,inspectionAccount.getEndedPrice());
+                sumValuationPrice = Utils.addBigDecimal(sumValuationPrice,inspectionAccount.getValuationPrice());
+                sumValuationPriceReduce = Utils.addBigDecimal(sumValuationPriceReduce,inspectionAccount.getValuationPriceReduce());
+                sumWarranty = Utils.addBigDecimal(sumWarranty,inspectionAccount.getWarranty());
+                sumPerformanceBond = Utils.addBigDecimal(sumCompensation,inspectionAccount.getPerformanceBond());
+                sumShouldAmount = Utils.addBigDecimal(sumShouldAmount,inspectionAccount.getShouldAmount());
+                sumCompensation = Utils.addBigDecimal(sumCompensation,inspectionAccount.getCompensation());
+            }
+        }
+
+        inspectionAccountTotal.setSumEndPrice(sumEndPrice);
+        inspectionAccountTotal.setSumValuationPrice(sumValuationPrice);
+        inspectionAccountTotal.setSumValuationPriceReduce(sumValuationPriceReduce);
+        inspectionAccountTotal.setSumWarranty(sumWarranty);
+        inspectionAccountTotal.setSumPerformanceBond(sumPerformanceBond);
+        inspectionAccountTotal.setSumShouldAmount(sumShouldAmount);
+        inspectionAccountTotal.setSumCompensation(sumCompensation);
+        if (sumPrice != null && sumEndPrice != null){
+            Double sumPre = ExcelUtils.computerDivide(sumPrice,sumPrice.add(sumEndPrice),4);
+            inspectionAccountTotal.setPercentage(new BigDecimal(sumPre*100));
+
+        }
+
+        return inspectionAccountTotal;
     }
 }

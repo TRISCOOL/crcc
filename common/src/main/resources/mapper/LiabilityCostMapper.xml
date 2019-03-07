@@ -1,0 +1,439 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.crcc.common.mapper.LiabilityCostMapper" >
+  <resultMap id="BaseResultMap" type="com.crcc.common.model.LiabilityCost" >
+    <id column="id" property="id" jdbcType="BIGINT" />
+    <result column="project_id" property="projectId" jdbcType="BIGINT" />
+    <result column="report_time" property="reportTime" jdbcType="TIMESTAMP" />
+    <result column="contract_price" property="contractPrice" jdbcType="DECIMAL" />
+    <result column="construction_output_value" property="constructionOutputValue" jdbcType="DECIMAL" />
+    <result column="advance_pricing" property="advancePricing" jdbcType="DECIMAL" />
+    <result column="completed_uncalculated" property="completedUncalculated" jdbcType="DECIMAL" />
+    <result column="should_price" property="shouldPrice" jdbcType="DECIMAL" />
+    <result column="owner_total" property="ownerTotal" jdbcType="DECIMAL" />
+    <result column="sum_owner_total" property="sumOwnerTotal" jdbcType="DECIMAL" />
+    <result column="budget" property="budget" jdbcType="DECIMAL" />
+    <result column="actual_sum" property="actualSum" jdbcType="DECIMAL" />
+    <result column="actual_manage" property="actualManage" jdbcType="DECIMAL" />
+    <result column="confirm_price" property="confirmPrice" jdbcType="DECIMAL" />
+    <result column="comprehensive_income" property="comprehensiveIncome" jdbcType="DECIMAL" />
+    <result column="comprehensive_income_percentage" property="comprehensiveIncomePercentage" jdbcType="DECIMAL" />
+    <result column="cost_super_percentage" property="costSuperPercentage" jdbcType="DECIMAL" />
+    <result column="production_value_percentage" property="productionValuePercentage" jdbcType="DECIMAL" />
+    <result column="management_percentage" property="managementPercentage" jdbcType="DECIMAL" />
+    <result column="unconfirm_price" property="unconfirmPrice" jdbcType="DECIMAL" />
+    <result column="should_appropriation" property="shouldAppropriation" jdbcType="DECIMAL" />
+    <result column="real_appropriation" property="realAppropriation" jdbcType="DECIMAL" />
+    <result column="in_place_percentage" property="inPlacePercentage" jdbcType="DECIMAL" />
+    <result column="create_time" property="createTime" jdbcType="TIMESTAMP" />
+    <result column="create_user" property="createUser" jdbcType="BIGINT" />
+    <result column="update_time" property="updateTime" jdbcType="TIMESTAMP" />
+    <result column="update_user" property="updateUser" jdbcType="BIGINT" />
+  </resultMap>
+  <resultMap id="ResultMapWithBLOBs" type="com.crcc.common.model.LiabilityCost" extends="BaseResultMap" >
+    <result column="remark" property="remark" jdbcType="LONGVARCHAR" />
+  </resultMap>
+  <sql id="Base_Column_List" >
+    id, project_id, report_time, contract_price, construction_output_value, advance_pricing, 
+    completed_uncalculated, should_price, owner_total, sum_owner_total, budget, actual_sum, 
+    actual_manage, confirm_price, comprehensive_income, comprehensive_income_percentage, 
+    cost_super_percentage, production_value_percentage, management_percentage, unconfirm_price, 
+    should_appropriation, real_appropriation, in_place_percentage, create_time, create_user, 
+    update_time, update_user
+  </sql>
+  <sql id="Blob_Column_List" >
+    remark
+  </sql>
+  <select id="selectByPrimaryKey" resultMap="ResultMapWithBLOBs" parameterType="java.lang.Long" >
+    select 
+    <include refid="Base_Column_List" />
+    ,
+    <include refid="Blob_Column_List" />
+    from liability_cost
+    where id = #{id,jdbcType=BIGINT}
+  </select>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Long" >
+    delete from liability_cost
+    where id = #{id,jdbcType=BIGINT}
+  </delete>
+  <insert id="insert" parameterType="com.crcc.common.model.LiabilityCost" >
+    insert into liability_cost (id, project_id, report_time, 
+      contract_price, construction_output_value, 
+      advance_pricing, completed_uncalculated, 
+      should_price, owner_total, sum_owner_total, 
+      budget, actual_sum, actual_manage, 
+      confirm_price, comprehensive_income, comprehensive_income_percentage, 
+      cost_super_percentage, production_value_percentage, 
+      management_percentage, unconfirm_price, should_appropriation, 
+      real_appropriation, in_place_percentage, create_time, 
+      create_user, update_time, update_user, 
+      remark)
+    values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{reportTime,jdbcType=TIMESTAMP}, 
+      #{contractPrice,jdbcType=DECIMAL}, #{constructionOutputValue,jdbcType=DECIMAL}, 
+      #{advancePricing,jdbcType=DECIMAL}, #{completedUncalculated,jdbcType=DECIMAL}, 
+      #{shouldPrice,jdbcType=DECIMAL}, #{ownerTotal,jdbcType=DECIMAL}, #{sumOwnerTotal,jdbcType=DECIMAL}, 
+      #{budget,jdbcType=DECIMAL}, #{actualSum,jdbcType=DECIMAL}, #{actualManage,jdbcType=DECIMAL}, 
+      #{confirmPrice,jdbcType=DECIMAL}, #{comprehensiveIncome,jdbcType=DECIMAL}, #{comprehensiveIncomePercentage,jdbcType=DECIMAL}, 
+      #{costSuperPercentage,jdbcType=DECIMAL}, #{productionValuePercentage,jdbcType=DECIMAL}, 
+      #{managementPercentage,jdbcType=DECIMAL}, #{unconfirmPrice,jdbcType=DECIMAL}, #{shouldAppropriation,jdbcType=DECIMAL}, 
+      #{realAppropriation,jdbcType=DECIMAL}, #{inPlacePercentage,jdbcType=DECIMAL}, #{createTime,jdbcType=TIMESTAMP}, 
+      #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, 
+      #{remark,jdbcType=LONGVARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.crcc.common.model.LiabilityCost" keyProperty="id" useGeneratedKeys="true">
+    insert into liability_cost
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="projectId != null" >
+        project_id,
+      </if>
+      <if test="reportTime != null" >
+        report_time,
+      </if>
+      <if test="contractPrice != null" >
+        contract_price,
+      </if>
+      <if test="constructionOutputValue != null" >
+        construction_output_value,
+      </if>
+      <if test="advancePricing != null" >
+        advance_pricing,
+      </if>
+      <if test="completedUncalculated != null" >
+        completed_uncalculated,
+      </if>
+      <if test="shouldPrice != null" >
+        should_price,
+      </if>
+      <if test="ownerTotal != null" >
+        owner_total,
+      </if>
+      <if test="sumOwnerTotal != null" >
+        sum_owner_total,
+      </if>
+      <if test="budget != null" >
+        budget,
+      </if>
+      <if test="actualSum != null" >
+        actual_sum,
+      </if>
+      <if test="actualManage != null" >
+        actual_manage,
+      </if>
+      <if test="confirmPrice != null" >
+        confirm_price,
+      </if>
+      <if test="comprehensiveIncome != null" >
+        comprehensive_income,
+      </if>
+      <if test="comprehensiveIncomePercentage != null" >
+        comprehensive_income_percentage,
+      </if>
+      <if test="costSuperPercentage != null" >
+        cost_super_percentage,
+      </if>
+      <if test="productionValuePercentage != null" >
+        production_value_percentage,
+      </if>
+      <if test="managementPercentage != null" >
+        management_percentage,
+      </if>
+      <if test="unconfirmPrice != null" >
+        unconfirm_price,
+      </if>
+      <if test="shouldAppropriation != null" >
+        should_appropriation,
+      </if>
+      <if test="realAppropriation != null" >
+        real_appropriation,
+      </if>
+      <if test="inPlacePercentage != null" >
+        in_place_percentage,
+      </if>
+      <if test="createTime != null" >
+        create_time,
+      </if>
+      <if test="createUser != null" >
+        create_user,
+      </if>
+      <if test="updateTime != null" >
+        update_time,
+      </if>
+      <if test="updateUser != null" >
+        update_user,
+      </if>
+      <if test="remark != null" >
+        remark,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=BIGINT},
+      </if>
+      <if test="projectId != null" >
+        #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractPrice != null" >
+        #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="constructionOutputValue != null" >
+        #{constructionOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="advancePricing != null" >
+        #{advancePricing,jdbcType=DECIMAL},
+      </if>
+      <if test="completedUncalculated != null" >
+        #{completedUncalculated,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldPrice != null" >
+        #{shouldPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ownerTotal != null" >
+        #{ownerTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sumOwnerTotal != null" >
+        #{sumOwnerTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="budget != null" >
+        #{budget,jdbcType=DECIMAL},
+      </if>
+      <if test="actualSum != null" >
+        #{actualSum,jdbcType=DECIMAL},
+      </if>
+      <if test="actualManage != null" >
+        #{actualManage,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmPrice != null" >
+        #{confirmPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="comprehensiveIncome != null" >
+        #{comprehensiveIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="comprehensiveIncomePercentage != null" >
+        #{comprehensiveIncomePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="costSuperPercentage != null" >
+        #{costSuperPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="productionValuePercentage != null" >
+        #{productionValuePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="managementPercentage != null" >
+        #{managementPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="unconfirmPrice != null" >
+        #{unconfirmPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAppropriation != null" >
+        #{shouldAppropriation,jdbcType=DECIMAL},
+      </if>
+      <if test="realAppropriation != null" >
+        #{realAppropriation,jdbcType=DECIMAL},
+      </if>
+      <if test="inPlacePercentage != null" >
+        #{inPlacePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </trim>
+  </insert>
+  <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.LiabilityCost" >
+    update liability_cost
+    <set >
+      <if test="projectId != null" >
+        project_id = #{projectId,jdbcType=BIGINT},
+      </if>
+      <if test="reportTime != null" >
+        report_time = #{reportTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="contractPrice != null" >
+        contract_price = #{contractPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="constructionOutputValue != null" >
+        construction_output_value = #{constructionOutputValue,jdbcType=DECIMAL},
+      </if>
+      <if test="advancePricing != null" >
+        advance_pricing = #{advancePricing,jdbcType=DECIMAL},
+      </if>
+      <if test="completedUncalculated != null" >
+        completed_uncalculated = #{completedUncalculated,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldPrice != null" >
+        should_price = #{shouldPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="ownerTotal != null" >
+        owner_total = #{ownerTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="sumOwnerTotal != null" >
+        sum_owner_total = #{sumOwnerTotal,jdbcType=DECIMAL},
+      </if>
+      <if test="budget != null" >
+        budget = #{budget,jdbcType=DECIMAL},
+      </if>
+      <if test="actualSum != null" >
+        actual_sum = #{actualSum,jdbcType=DECIMAL},
+      </if>
+      <if test="actualManage != null" >
+        actual_manage = #{actualManage,jdbcType=DECIMAL},
+      </if>
+      <if test="confirmPrice != null" >
+        confirm_price = #{confirmPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="comprehensiveIncome != null" >
+        comprehensive_income = #{comprehensiveIncome,jdbcType=DECIMAL},
+      </if>
+      <if test="comprehensiveIncomePercentage != null" >
+        comprehensive_income_percentage = #{comprehensiveIncomePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="costSuperPercentage != null" >
+        cost_super_percentage = #{costSuperPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="productionValuePercentage != null" >
+        production_value_percentage = #{productionValuePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="managementPercentage != null" >
+        management_percentage = #{managementPercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="unconfirmPrice != null" >
+        unconfirm_price = #{unconfirmPrice,jdbcType=DECIMAL},
+      </if>
+      <if test="shouldAppropriation != null" >
+        should_appropriation = #{shouldAppropriation,jdbcType=DECIMAL},
+      </if>
+      <if test="realAppropriation != null" >
+        real_appropriation = #{realAppropriation,jdbcType=DECIMAL},
+      </if>
+      <if test="inPlacePercentage != null" >
+        in_place_percentage = #{inPlacePercentage,jdbcType=DECIMAL},
+      </if>
+      <if test="createTime != null" >
+        create_time = #{createTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="createUser != null" >
+        create_user = #{createUser,jdbcType=BIGINT},
+      </if>
+      <if test="updateTime != null" >
+        update_time = #{updateTime,jdbcType=TIMESTAMP},
+      </if>
+      <if test="updateUser != null" >
+        update_user = #{updateUser,jdbcType=BIGINT},
+      </if>
+      <if test="remark != null" >
+        remark = #{remark,jdbcType=LONGVARCHAR},
+      </if>
+    </set>
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKeyWithBLOBs" parameterType="com.crcc.common.model.LiabilityCost" >
+    update liability_cost
+    set project_id = #{projectId,jdbcType=BIGINT},
+      report_time = #{reportTime,jdbcType=TIMESTAMP},
+      contract_price = #{contractPrice,jdbcType=DECIMAL},
+      construction_output_value = #{constructionOutputValue,jdbcType=DECIMAL},
+      advance_pricing = #{advancePricing,jdbcType=DECIMAL},
+      completed_uncalculated = #{completedUncalculated,jdbcType=DECIMAL},
+      should_price = #{shouldPrice,jdbcType=DECIMAL},
+      owner_total = #{ownerTotal,jdbcType=DECIMAL},
+      sum_owner_total = #{sumOwnerTotal,jdbcType=DECIMAL},
+      budget = #{budget,jdbcType=DECIMAL},
+      actual_sum = #{actualSum,jdbcType=DECIMAL},
+      actual_manage = #{actualManage,jdbcType=DECIMAL},
+      confirm_price = #{confirmPrice,jdbcType=DECIMAL},
+      comprehensive_income = #{comprehensiveIncome,jdbcType=DECIMAL},
+      comprehensive_income_percentage = #{comprehensiveIncomePercentage,jdbcType=DECIMAL},
+      cost_super_percentage = #{costSuperPercentage,jdbcType=DECIMAL},
+      production_value_percentage = #{productionValuePercentage,jdbcType=DECIMAL},
+      management_percentage = #{managementPercentage,jdbcType=DECIMAL},
+      unconfirm_price = #{unconfirmPrice,jdbcType=DECIMAL},
+      should_appropriation = #{shouldAppropriation,jdbcType=DECIMAL},
+      real_appropriation = #{realAppropriation,jdbcType=DECIMAL},
+      in_place_percentage = #{inPlacePercentage,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT},
+      remark = #{remark,jdbcType=LONGVARCHAR}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+  <update id="updateByPrimaryKey" parameterType="com.crcc.common.model.LiabilityCost" >
+    update liability_cost
+    set project_id = #{projectId,jdbcType=BIGINT},
+      report_time = #{reportTime,jdbcType=TIMESTAMP},
+      contract_price = #{contractPrice,jdbcType=DECIMAL},
+      construction_output_value = #{constructionOutputValue,jdbcType=DECIMAL},
+      advance_pricing = #{advancePricing,jdbcType=DECIMAL},
+      completed_uncalculated = #{completedUncalculated,jdbcType=DECIMAL},
+      should_price = #{shouldPrice,jdbcType=DECIMAL},
+      owner_total = #{ownerTotal,jdbcType=DECIMAL},
+      sum_owner_total = #{sumOwnerTotal,jdbcType=DECIMAL},
+      budget = #{budget,jdbcType=DECIMAL},
+      actual_sum = #{actualSum,jdbcType=DECIMAL},
+      actual_manage = #{actualManage,jdbcType=DECIMAL},
+      confirm_price = #{confirmPrice,jdbcType=DECIMAL},
+      comprehensive_income = #{comprehensiveIncome,jdbcType=DECIMAL},
+      comprehensive_income_percentage = #{comprehensiveIncomePercentage,jdbcType=DECIMAL},
+      cost_super_percentage = #{costSuperPercentage,jdbcType=DECIMAL},
+      production_value_percentage = #{productionValuePercentage,jdbcType=DECIMAL},
+      management_percentage = #{managementPercentage,jdbcType=DECIMAL},
+      unconfirm_price = #{unconfirmPrice,jdbcType=DECIMAL},
+      should_appropriation = #{shouldAppropriation,jdbcType=DECIMAL},
+      real_appropriation = #{realAppropriation,jdbcType=DECIMAL},
+      in_place_percentage = #{inPlacePercentage,jdbcType=DECIMAL},
+      create_time = #{createTime,jdbcType=TIMESTAMP},
+      create_user = #{createUser,jdbcType=BIGINT},
+      update_time = #{updateTime,jdbcType=TIMESTAMP},
+      update_user = #{updateUser,jdbcType=BIGINT}
+    where id = #{id,jdbcType=BIGINT}
+  </update>
+
+  <select id="listForPage" resultType="com.crcc.common.model.LiabilityCost">
+    SELECT
+      lc.*,
+      p.name AS projectName,
+      d.value AS projectType,
+      info.status AS projectStatus,
+      info.contract_start_time AS contractStartTime,
+      info.contract_end_time AS contractEndTime
+    FROM
+      liability_cost lc
+    LEFT JOIN
+      project p ON lc.project_id = p.id
+    LEFT JOIN
+      project_info info ON p.id = info.project_id
+    LEFT JOIN
+      dict d ON d.id = p.dict_id
+    WHERE
+    1 = 1
+    <if test="projectName != null">
+      AND p.name LIKE CONCAT('%', #{projectName}, '%')
+    </if>
+    <if test="year != null">
+      AND YEAR(lc.report_time) = #{year}
+    </if>
+    <if test="mon != null">
+      AND MONTH(lc.report_time) = #{mon}
+    </if>
+    ORDER BY lc.id DESC
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+</mapper>

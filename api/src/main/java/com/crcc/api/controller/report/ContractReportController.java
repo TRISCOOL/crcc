@@ -5,6 +5,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.OutOfContractCompensationStatistics;
+import com.crcc.common.model.OutOfContractCompensationStatisticsTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.CompensationStatisticsService;
 import com.crcc.common.utils.ExcelUtils;
@@ -84,6 +85,30 @@ public class ContractReportController extends BaseController{
                 projectId);
 
         return ResponseVo.ok(size,page,pageSize,compensationStatistics);
+    }
+
+    @GetMapping("/total_statistics/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        OutOfContractCompensationStatisticsTotal total = compensationStatisticsService.getTotalStatistics(projectName,projectId);
+        return ResponseVo.ok(total);
+    }
+
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "subcontractorName",required = false)String subcontractorName,
+                               @RequestParam(value = "teamName",required = false)String teamName,
+                               @RequestParam(value = "year",required = false)String year,
+                               @RequestParam(value = "quarter",required = false)Integer quarter,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        OutOfContractCompensationStatisticsTotal total = compensationStatisticsService.getTotal(projectName,subcontractorName,
+                teamName,year,quarter,projectId);
+
+        return ResponseVo.ok(total);
     }
 
     @PostMapping("/update/v1.1")

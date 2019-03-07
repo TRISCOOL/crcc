@@ -54,11 +54,11 @@ public class UserServiceImpl implements UserService{
             throw new CrccException(ResponseCode.PASSWORD_ERROR);
 
         //检查是否已经登录，如果已登录，就不能再登录
-        if (existUser != null && existUser.getToken() != null){
+/*        if (existUser != null && existUser.getToken() != null){
             boolean isExist = redisService.exists(existUser.getToken());
             if (isExist)
                 throw new CrccException(ResponseCode.USER_IS_ALREADY_LOGIN);
-        }
+        }*/
 
         String token = Utils.getUuid(true);
         existUser.setToken(token);

@@ -436,8 +436,8 @@ public class ExcelUtils {
         return wb;
     }
 
-    private static Double computerDivide(BigDecimal bcs,BigDecimal cs,int decimalPoint){
-        if (bcs.doubleValue() == 0d)
+    public static Double computerDivide(BigDecimal bcs,BigDecimal cs,int decimalPoint){
+        if (bcs.doubleValue() == 0d || cs.doubleValue() == 0d)
             return 0d;
 
         return bcs.divide(cs,decimalPoint,BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -1842,7 +1842,7 @@ public class ExcelUtils {
         num = num +1;
         HSSFRow twoRow = sheet.createRow(num);
         for(int i=2;i<title.length;i++){
-            cell = oneRow.createCell(i);
+            cell = twoRow.createCell(i);
             if (i == 4){
                 cell.setCellValue("上年末完工未计价");
             }else if (i>4 && i<=6){
@@ -1875,6 +1875,8 @@ public class ExcelUtils {
         CellRangeAddress address0 = new CellRangeAddress(1,1,2,6);
         CellRangeAddress address1 = new CellRangeAddress(1,1,7,10);
         CellRangeAddress address2 = new CellRangeAddress(1,1,12,16);
+        CellRangeAddress address00 = new CellRangeAddress(1,3,0,0);
+        CellRangeAddress address11 = new CellRangeAddress(1,3,1,1);
         CellRangeAddress address3 = new CellRangeAddress(2,3,2,2);
         CellRangeAddress address4 = new CellRangeAddress(2,3,3,3);
         sheet.addMergedRegion(address0);
@@ -1882,6 +1884,8 @@ public class ExcelUtils {
         sheet.addMergedRegion(address2);
         sheet.addMergedRegion(address3);
         sheet.addMergedRegion(address4);
+        sheet.addMergedRegion(address00);
+        sheet.addMergedRegion(address11);
 
         CellRangeAddress address5 = new CellRangeAddress(2,3,7,7);
         CellRangeAddress address6 = new CellRangeAddress(2,3,12,12);
@@ -1902,6 +1906,23 @@ public class ExcelUtils {
         num = num+1;
         for(ConfirmationOfRights confirmationOfRights1 : confirmationOfRights){
             HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(confirmationOfRights1.getProjectName());
+            contentRow.createCell(1).setCellValue(confirmationOfRights1.getYear()+"年"+confirmationOfRights1.getQuarter()+"季度");
+            contentRow.createCell(2).setCellValue(isNull(confirmationOfRights1.getBalanceCompleteValue()));
+            contentRow.createCell(3).setCellValue(isNull(confirmationOfRights1.getBalanceInspectionValue()));
+            contentRow.createCell(4).setCellValue(isNull(confirmationOfRights1.getSumBalance()));
+            contentRow.createCell(5).setCellValue(isNull(confirmationOfRights1.getBalanceShould()));
+            contentRow.createCell(6).setCellValue(isNull(confirmationOfRights1.getBalanceChange()));
+            contentRow.createCell(7).setCellValue(isNull(confirmationOfRights1.getCurrentProductionValue()));
+            contentRow.createCell(8).setCellValue(isNull(confirmationOfRights1.getSumHalfOne()));
+            contentRow.createCell(9).setCellValue(isNull(confirmationOfRights1.getHalfCompletedValue()));
+            contentRow.createCell(10).setCellValue(isNull(confirmationOfRights1.getOneCompletedValue()));
+            contentRow.createCell(11).setCellValue(isNull(confirmationOfRights1.getChangeValue()));
+            contentRow.createCell(12).setCellValue(isNull(confirmationOfRights1.getCompletedValue()));
+            contentRow.createCell(13).setCellValue(isNull(confirmationOfRights1.getInspection()));
+            contentRow.createCell(14).setCellValue(isNull(confirmationOfRights1.getSumFinalPeriod()));
+            contentRow.createCell(15).setCellValue(isNull(confirmationOfRights1.getFinalPeriodShould()));
+            contentRow.createCell(16).setCellValue(isNull(confirmationOfRights1.getFinalPeriodChange()));
             num++;
 
         }
