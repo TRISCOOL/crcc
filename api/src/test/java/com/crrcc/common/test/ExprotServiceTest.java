@@ -46,8 +46,23 @@ public class ExprotServiceTest {
     @Ignore
     public void test1(){
 
-        String code = getCode();
-        System.out.println(">>>>>>>>>>>>>>>>>>>"+code);
+        List<Integer> list = new ArrayList<Integer>();
+        list.add(1);
+        list.add(3);
+        list.add(2);
+        list.add(5);
+        list.add(4);
+
+        list.sort((a,b) -> {
+            return a-b;
+        });
+
+        for (Integer i : list){
+            System.out.println(i);
+        }
+
+/*        String code = getCode();
+        System.out.println(">>>>>>>>>>>>>>>>>>>"+code);*/
 /*        laborAccountService.listLaborAccount(null,null,null,null,
                 null,null,null,null);*/
 /*        String value = subcontractorService.getCodeTest();

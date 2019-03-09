@@ -5,6 +5,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.FinancialLoss;
+import com.crcc.common.model.FinancialLossTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.FinancialLossService;
 import com.crcc.common.utils.ExcelUtils;
@@ -78,6 +79,17 @@ public class FinancialLossController extends BaseController{
                 offset*pageSize, pageSize);
         Integer total = financialLossService.listForPageSize(projectId,projectName,year,quarter);
         return ResponseVo.ok(total,page,pageSize,financialLosses);
+    }
+
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "year",required = false)String year,
+                               @RequestParam(value = "quarter",required = false)Integer quarter,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        FinancialLossTotal total = financialLossService.getTotal(projectId,projectName,year,quarter);
+        return ResponseVo.ok(total);
     }
 
     @GetMapping("/export/v1.1")

@@ -3,6 +3,7 @@ package com.crcc.common.service.impl;
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.mapper.ConfirmationOfRightsMapper;
 import com.crcc.common.model.ConfirmationOfRights;
+import com.crcc.common.model.ConfirmationOfRightsTotal;
 import com.crcc.common.service.ConfirmationOfRightsService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.Utils;
@@ -102,6 +103,67 @@ public class ConfirmationOfRightsServiceImpl implements ConfirmationOfRightsServ
             }
         }
         return confirmationOfRights;
+    }
+
+    @Override
+    public ConfirmationOfRightsTotal getTotal(Long projectId, String projectName, String year, String quarter) {
+        List<ConfirmationOfRights> confirmationOfRights = listForPage(projectId,projectName,year,quarter,null,null);
+        if (confirmationOfRights != null && confirmationOfRights.size() > 0){
+            ConfirmationOfRightsTotal total = new ConfirmationOfRightsTotal();
+            BigDecimal sumCurrentProductionValue = new BigDecimal("0");
+            BigDecimal sumSumHalfOne = new BigDecimal("0");
+            BigDecimal sumHalfCompletedValue = new BigDecimal("0");
+            BigDecimal sumOneCompletedValue = new BigDecimal("0");
+            BigDecimal sumChangeValue = new BigDecimal("0");
+            BigDecimal sumCompletedValue = new BigDecimal("0");
+            BigDecimal sumInspection = new BigDecimal("0");
+            BigDecimal sumSumFinalPeriod = new BigDecimal("0");
+            BigDecimal sumFinalPeriodShould = new BigDecimal("0");
+            BigDecimal sumFinalPeriodChange = new BigDecimal("0");
+            BigDecimal sumBalanceCompleteValue = new BigDecimal("0");
+            BigDecimal sumBalanceInspectionValue = new BigDecimal("0");
+            BigDecimal sumBalanceShould = new BigDecimal("0");
+            BigDecimal sumBalanceChange = new BigDecimal("0");
+            BigDecimal sumSumBalance = new BigDecimal("0");
+            for (ConfirmationOfRights confirmation : confirmationOfRights){
+                sumBalanceChange = Utils.addBigDecimal(sumBalanceChange,confirmation.getBalanceChange());
+                sumBalanceCompleteValue = Utils.addBigDecimal(sumBalanceCompleteValue,confirmation.getBalanceCompleteValue());
+                sumBalanceInspectionValue = Utils.addBigDecimal(sumBalanceInspectionValue,confirmation.getBalanceInspectionValue());
+                sumBalanceShould = Utils.addBigDecimal(sumBalanceShould,confirmation.getBalanceShould());
+                sumChangeValue = Utils.addBigDecimal(sumChangeValue,confirmation.getChangeValue());
+                sumCompletedValue = Utils.addBigDecimal(sumCompletedValue,confirmation.getCompletedValue());
+                sumCurrentProductionValue = Utils.addBigDecimal(sumCurrentProductionValue,confirmation.getCurrentProductionValue());
+                sumFinalPeriodChange = Utils.addBigDecimal(sumFinalPeriodChange,confirmation.getFinalPeriodChange());
+                sumFinalPeriodShould = Utils.addBigDecimal(sumFinalPeriodShould,confirmation.getFinalPeriodShould());
+                sumHalfCompletedValue = Utils.addBigDecimal(sumHalfCompletedValue,confirmation.getHalfCompletedValue());
+                sumInspection = Utils.addBigDecimal(sumInspection,confirmation.getInspection());
+                sumOneCompletedValue = Utils.addBigDecimal(sumOneCompletedValue,confirmation.getOneCompletedValue());
+                sumSumBalance = Utils.addBigDecimal(sumSumBalance,confirmation.getSumBalance());
+                sumSumFinalPeriod = Utils.addBigDecimal(sumSumFinalPeriod,confirmation.getSumFinalPeriod());
+                sumSumHalfOne = Utils.addBigDecimal(sumSumHalfOne,confirmation.getSumHalfOne());
+            }
+            total.setSumBalanceChange(sumBalanceChange);
+            total.setSumBalanceCompleteValue(sumBalanceCompleteValue);
+            total.setSumBalanceInspectionValue(sumBalanceInspectionValue);
+            total.setSumBalanceShould(sumBalanceShould);
+            total.setSumChangeValue(sumChangeValue);
+            total.setSumCompletedValue(sumCompletedValue);
+            total.setSumCurrentProductionValue(sumCurrentProductionValue);
+            total.setSumFinalPeriodChange(sumFinalPeriodChange);
+            total.setSumFinalPeriodShould(sumFinalPeriodShould);
+            total.setSumHalfCompletedValue(sumHalfCompletedValue);
+            total.setSumInspection(sumInspection);
+            total.setSumOneCompletedValue(sumOneCompletedValue);
+            total.setSumBalanceShould(sumBalanceShould);
+            total.setSumSumBalance(sumSumBalance);
+            total.setSumBalanceInspectionValue(sumBalanceInspectionValue);
+            total.setSumBalanceCompleteValue(sumBalanceCompleteValue);
+            total.setSumBalanceChange(sumBalanceChange);
+            total.setSumSumFinalPeriod(sumSumFinalPeriod);
+            total.setSumSumHalfOne(sumSumHalfOne);
+            return total;
+        }
+        return null;
     }
 
     public void supplement(ConfirmationOfRights confirmationOfRights){

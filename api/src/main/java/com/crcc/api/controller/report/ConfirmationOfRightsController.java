@@ -5,6 +5,7 @@ import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.ConfirmationOfRights;
+import com.crcc.common.model.ConfirmationOfRightsTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.ConfirmationOfRightsService;
 import com.crcc.common.utils.ExcelUtils;
@@ -83,6 +84,18 @@ public class ConfirmationOfRightsController extends BaseController{
         Integer total = confirmationOfRightsService.listForPageSize(projectId,projectName,year,quarter);
 
         return ResponseVo.ok(total,page,pageSize,confirmations);
+
+    }
+
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
+                               @RequestParam(value = "quarter",required = false)String quarter,
+                               @RequestParam(value = "year",required = false)String  year,
+                               HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        ConfirmationOfRightsTotal total = confirmationOfRightsService.getTotal(projectId,projectName,year,quarter);
+        return ResponseVo.ok(total);
 
     }
 

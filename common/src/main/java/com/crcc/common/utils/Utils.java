@@ -229,6 +229,10 @@ public class Utils {
     }
 
     public static BigDecimal computerDivide(BigDecimal bcs, BigDecimal cs, int decimalPoint){
+
+        if (bcs == null || cs == null)
+            return null;
+
         if (cs.doubleValue() == 0d)
             return new BigDecimal(0);
 
@@ -256,7 +260,7 @@ public class Utils {
     }
 
     public static BigDecimal subtract(BigDecimal js,BigDecimal bjs){
-        if (js == null || js == null)
+        if (js == null || bjs == null)
             return null;
 
         return js.subtract(bjs);

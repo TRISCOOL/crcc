@@ -2,6 +2,7 @@ package com.crcc.common.service.impl;
 
 import com.crcc.common.mapper.FinancialLossMapper;
 import com.crcc.common.model.FinancialLoss;
+import com.crcc.common.model.FinancialLossTotal;
 import com.crcc.common.service.FinancialLossService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.Utils;
@@ -46,6 +47,65 @@ public class FinancialLossServiceImpl implements FinancialLossService{
     @Override
     public Integer listForPageSize(Long projectId,String projectName, String year, Integer quarter) {
         return financialLossMapper.listForPageSize(projectId,projectName,year,quarter);
+    }
+
+    @Override
+    public FinancialLossTotal getTotal(Long projectId, String projectName, String year, Integer quarter) {
+        List<FinancialLoss> financialLosses = listForPage(projectId,projectName,year,quarter,null,null);
+        if (financialLosses != null && financialLosses.size() > 0){
+            FinancialLossTotal financialLossTotal = new FinancialLossTotal();
+            BigDecimal sumTemporarilyPrice = new BigDecimal("0");
+            BigDecimal sumAlreadyPriced = new BigDecimal("0");
+            BigDecimal sumUnPriced = new BigDecimal("0");
+            BigDecimal sumSumPriced = new BigDecimal("0");
+            BigDecimal sumConfirmPriced = new BigDecimal("0");
+            BigDecimal sumInBookCost = new BigDecimal("0");
+            BigDecimal sumOutBookCost = new BigDecimal("0");
+            BigDecimal sumSumBookCost = new BigDecimal("0");
+            BigDecimal sumLossAmount = new BigDecimal("0");
+            BigDecimal sumConfirmedNetProfit = new BigDecimal("0");
+            BigDecimal sumUnConfirmedNetProfit = new BigDecimal("0");
+            BigDecimal sumLossRatio = new BigDecimal("0");
+            BigDecimal sumContractReceivable = new BigDecimal("0");
+            BigDecimal sumProfitLossSubtotal = new BigDecimal("0");
+            BigDecimal sumPotentialLoss = new BigDecimal("0");
+            BigDecimal sumTotalProfitLoss = new BigDecimal("0");
+            for (FinancialLoss financialLoss : financialLosses){
+                sumTemporarilyPrice = Utils.addBigDecimal(sumTemporarilyPrice,financialLoss.getTemporarilyPrice());
+                sumAlreadyPriced = Utils.addBigDecimal(sumAlreadyPriced,financialLoss.getAlreadyPriced());
+                sumUnPriced = Utils.addBigDecimal(sumUnPriced,financialLoss.getUnPriced());
+                sumSumPriced = Utils.addBigDecimal(sumSumPriced,financialLoss.getSumPriced());
+                sumConfirmPriced = Utils.addBigDecimal(sumConfirmPriced,financialLoss.getConfirmPriced());
+                sumInBookCost = Utils.addBigDecimal(sumInBookCost,financialLoss.getInBookCost());
+                sumOutBookCost = Utils.addBigDecimal(sumOutBookCost,financialLoss.getOutBookCost());
+                sumSumBookCost = Utils.addBigDecimal(sumSumBookCost,financialLoss.getSumBookCost());
+                sumLossAmount = Utils.addBigDecimal(sumLossAmount,financialLoss.getLossAmount());
+                sumConfirmedNetProfit = Utils.addBigDecimal(sumConfirmedNetProfit,financialLoss.getConfirmedNetProfit());
+                sumUnConfirmedNetProfit = Utils.addBigDecimal(sumUnConfirmedNetProfit,financialLoss.getUnConfirmedNetProfit());
+                sumLossRatio = Utils.addBigDecimal(sumLossRatio,financialLoss.getLossRatio());
+                sumContractReceivable = Utils.addBigDecimal(sumContractReceivable,financialLoss.getContractReceivable());
+                sumProfitLossSubtotal = Utils.addBigDecimal(sumProfitLossSubtotal,financialLoss.getProfitLossSubtotal());
+                sumPotentialLoss = Utils.addBigDecimal(sumPotentialLoss,financialLoss.getPotentialLoss());
+                sumTotalProfitLoss = Utils.addBigDecimal(sumTotalProfitLoss,financialLoss.getTotalProfitLoss());
+            }
+            financialLossTotal.setSumTemporarilyPrice(sumTemporarilyPrice);
+            financialLossTotal.setSumAlreadyPriced(sumAlreadyPriced);
+            financialLossTotal.setSumConfirmedNetProfit(sumConfirmedNetProfit);
+            financialLossTotal.setSumConfirmPriced(sumConfirmPriced);
+            financialLossTotal.setSumInBookCost(sumInBookCost);
+            financialLossTotal.setSumLossAmount(sumLossAmount);
+            financialLossTotal.setSumLossRatio(sumLossRatio);
+            financialLossTotal.setSumOutBookCost(sumOutBookCost);
+            financialLossTotal.setSumSumBookCost(sumSumBookCost);
+            financialLossTotal.setSumSumPriced(sumSumPriced);
+            financialLossTotal.setSumUnConfirmedNetProfit(sumUnConfirmedNetProfit);
+            financialLossTotal.setSumUnPriced(sumUnPriced);
+            financialLossTotal.setSumProfitLossSubtotal(sumProfitLossSubtotal);
+            financialLossTotal.setSumPotentialLoss(sumPotentialLoss);
+            financialLossTotal.setSumTotalProfitLoss(sumTotalProfitLoss);
+            return financialLossTotal;
+        }
+        return null;
     }
 
     public void supplement(FinancialLoss financialLoss){

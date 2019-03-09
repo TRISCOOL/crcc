@@ -1,6 +1,7 @@
 package com.crcc.common.service;
 
 import com.crcc.common.model.LiabilityCost;
+import com.crcc.common.model.LiabilityCostForList;
 
 import java.util.List;
 
@@ -9,9 +10,9 @@ public interface LiabilityCostService {
 
     boolean update(LiabilityCost liabilityCost);
 
-    List<LiabilityCost> listForPage(String projectName,Integer year,Integer month,Integer offset,Integer length);
+    List<LiabilityCostForList> listForPage(Long projectId, String projectName, Integer year, Integer month, Integer offset, Integer length);
 
-    Integer listForPageSize(String projectName,Integer year,Integer month);
+    Integer listForPageSize(Long projectId,String projectName,Integer year,Integer month);
 
 
 }
