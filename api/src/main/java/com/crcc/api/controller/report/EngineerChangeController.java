@@ -184,8 +184,8 @@ public class EngineerChangeController extends BaseController{
 
     @PostMapping("/delete/v1.1")
     @AuthRequire
-    public ResponseVo delete(@RequestParam("id")Long id){
-        boolean result = engineeringChangeService.deleteOneById(id);
+    public ResponseVo delete(@RequestBody EngineeringChangeMonthly changeMonthly){
+        boolean result = engineeringChangeService.deleteOneById(changeMonthly.getId());
         if (result)
             return ResponseVo.ok();
 

@@ -121,8 +121,8 @@ public class FinancialLossController extends BaseController{
 
     @PostMapping("/delete/v1.1")
     @AuthRequire
-    public ResponseVo delete(@RequestParam("id")Long id){
-        boolean result = financialLossService.deleteOnById(id);
+    public ResponseVo delete(@RequestBody FinancialLoss loss){
+        boolean result = financialLossService.deleteOnById(loss.getId());
         if (result)
             return ResponseVo.ok();
 

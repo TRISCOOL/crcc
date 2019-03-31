@@ -228,8 +228,8 @@ public class ForDownAccountTeamController extends BaseController{
      */
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo logicDeleteById(@RequestParam("id")Long id,HttpServletRequest request){
-
+    public ResponseVo logicDeleteById(@RequestBody LaborAccount team,HttpServletRequest request){
+        Long id = team.getId();
         LaborAccount laborAccount = laborAccountService.getDetails(id);
         if (laborAccount == null)
             return ResponseVo.error(ResponseCode.PARAM_ILLEGAL);

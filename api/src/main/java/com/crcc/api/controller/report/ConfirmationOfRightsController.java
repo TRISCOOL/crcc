@@ -128,8 +128,8 @@ public class ConfirmationOfRightsController extends BaseController{
 
     @PostMapping("/delete/v1.1")
     @AuthRequire
-    public ResponseVo delete(@RequestParam("id")Long id){
-        boolean result = confirmationOfRightsService.deleteOnById(id);
+    public ResponseVo delete(@RequestBody ConfirmationOfRights confirmation){
+        boolean result = confirmationOfRightsService.deleteOnById(confirmation.getId());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);

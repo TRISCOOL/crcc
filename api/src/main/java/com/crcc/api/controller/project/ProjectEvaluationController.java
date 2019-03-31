@@ -158,8 +158,8 @@ public class ProjectEvaluationController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo deleted(@RequestParam("id")Long id){
-        boolean result = projectEvaluationService.deletedById(id);
+    public ResponseVo deleted(@RequestBody ProjectEvaluation evaluation){
+        boolean result = projectEvaluationService.deletedById(evaluation.getId());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);

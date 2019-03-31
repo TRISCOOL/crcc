@@ -222,8 +222,8 @@ public class ContractReportController extends BaseController{
 
     @PostMapping("/delete/v1.1")
     @AuthRequire
-    public ResponseVo delete(@RequestParam("id")Long id){
-        boolean result = compensationStatisticsService.deleteOneById(id);
+    public ResponseVo delete(@RequestBody OutOfContractCompensationStatistics out){
+        boolean result = compensationStatisticsService.deleteOneById(out.getId());
         if (result)
             return ResponseVo.ok();
 

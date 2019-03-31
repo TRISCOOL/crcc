@@ -405,7 +405,8 @@ public class SubcontractorController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+    public ResponseVo logicDeleted(@RequestBody Subcontractor subcontractor,HttpServletRequest request){
+        Long id = subcontractor.getId();
         List<SubcontractorResume> subcontractorResumeList = subcontractorResumeService.listResumeBySubcontractorId(id);
         if (subcontractorResumeList != null && subcontractorResumeList.size() > 0)
             return ResponseVo.error(ResponseCode.SUBCONTRACTOR_HAVE_RESUME);

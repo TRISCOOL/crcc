@@ -176,9 +176,9 @@ public class ForDownAccountInspectionController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+    public ResponseVo logicDeleted(@RequestBody InspectionAccount inspectionAccount, HttpServletRequest request){
         User user = curUser(request);
-        boolean result = forDownAccountService.logicDeleteById(id,user.getId(),new Date());
+        boolean result = forDownAccountService.logicDeleteById(inspectionAccount.getId(),user.getId(),new Date());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);

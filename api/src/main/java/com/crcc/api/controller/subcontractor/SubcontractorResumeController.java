@@ -148,8 +148,8 @@ public class SubcontractorResumeController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo deletedById(@RequestParam("id")Long id){
-        boolean result =subcontractorResumeService.deletedById(id);
+    public ResponseVo deletedById(@RequestBody SubcontractorResume subcontractorResume){
+        boolean result =subcontractorResumeService.deletedById(subcontractorResume.getId());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);

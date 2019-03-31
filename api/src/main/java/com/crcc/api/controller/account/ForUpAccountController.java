@@ -196,9 +196,9 @@ public class ForUpAccountController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+    public ResponseVo logicDeleted(@RequestBody MeteringAccount meteringAccount,HttpServletRequest request){
         User user = curUser(request);
-        boolean result = forUpAccountService.logicDeletedById(id,user.getId(),new Date());
+        boolean result = forUpAccountService.logicDeletedById(meteringAccount.getId(),user.getId(),new Date());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);
