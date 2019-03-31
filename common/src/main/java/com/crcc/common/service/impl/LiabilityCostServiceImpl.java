@@ -55,6 +55,10 @@ public class LiabilityCostServiceImpl implements LiabilityCostService{
                 liabilityCostForList.setProjectName(liabilityCost.getProjectName());
                 liabilityCostForList.setProjectStatus(liabilityCost.getProjectStatus());
                 liabilityCostForList.setProjectType(liabilityCost.getProjectType());
+                liabilityCostForList.setId(liabilityCost.getId());
+                liabilityCostForList.setContractPrice(liabilityCost.getContractPrice());
+                liabilityCostForList.setReportTime(liabilityCost.getReportTime());
+                liabilityCostForList.setProjectId(liabilityCost.getProjectId());
 
                 Integer y = DateTimeUtil.getYear(liabilityCost.getReportTime());
                 Integer lastYear = y-1;
@@ -173,6 +177,15 @@ public class LiabilityCostServiceImpl implements LiabilityCostService{
     @Override
     public Integer listForPageSize(Long projectId,String projectName, Integer year, Integer month) {
         return liabilityCostMapper.listForPageSize(projectId,projectName,year,month);
+    }
+
+    @Override
+    public boolean deleteOnById(Long id) {
+        int result = liabilityCostMapper.deleteByPrimaryKey(id);
+        if (result != 0){
+            return true;
+        }
+        return false;
     }
 
     private void supplement(LiabilityCost liabilityCost){

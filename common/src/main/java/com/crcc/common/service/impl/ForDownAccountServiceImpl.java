@@ -144,4 +144,13 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
 
         return inspectionAccountTotal;
     }
+
+    @Override
+    public boolean logicDeleteById(Long id, Long updateUser, Date updateTime) {
+        int result = inspectionAccountMapper.logicDeleteById(id,updateUser,updateTime);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
 }

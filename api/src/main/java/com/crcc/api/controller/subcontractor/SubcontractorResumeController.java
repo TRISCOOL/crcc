@@ -145,4 +145,14 @@ public class SubcontractorResumeController extends BaseController{
         }
 
     }
+
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo deletedById(@RequestParam("id")Long id){
+        boolean result =subcontractorResumeService.deletedById(id);
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
+
 }

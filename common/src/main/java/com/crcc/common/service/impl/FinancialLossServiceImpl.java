@@ -108,6 +108,15 @@ public class FinancialLossServiceImpl implements FinancialLossService{
         return null;
     }
 
+    @Override
+    public boolean deleteOnById(Long id) {
+        int result = financialLossMapper.deleteByPrimaryKey(id);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
+
     public void supplement(FinancialLoss financialLoss){
         if (financialLoss == null)
             return;

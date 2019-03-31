@@ -24,12 +24,13 @@
     <result column="update_user" property="updateUser" jdbcType="BIGINT" />
     <result column="production_value" property="productionValue" jdbcType="DECIMAL" />
     <result column="prepayment_amount" property="prepaymentAmount" jdbcType="DECIMAL" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, metering_num, metering_time, valuation_amount_tax, valuation_amount_not_tax, 
     tax, real_amount_tax, real_amount, already_paid_amount, unpaid_amount, pay_proportion,
     extra_amount, not_calculated_amount, remark, annex_url, project_id, create_time, create_user, update_time,
-    update_user,production_value,prepayment_amount
+    update_user,production_value,prepayment_amount,deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -47,14 +48,15 @@
       tax, real_amount_tax, real_amount, 
       already_paid_amount, unpaid_amount,pay_proportion,
       extra_amount, not_calculated_amount, remark, 
-      annex_url, project_id,create_time,create_user,update_time,update_user,production_value,prepayment_amount)
+      annex_url, project_id,create_time,create_user,update_time,update_user,
+      production_value,prepayment_amount,deleted)
     values (#{id,jdbcType=BIGINT}, #{meteringNum,jdbcType=INTEGER}, #{meteringTime,jdbcType=TIMESTAMP}, 
       #{valuationAmountTax,jdbcType=DECIMAL}, #{valuationAmountNotTax,jdbcType=VARCHAR}, 
       #{tax,jdbcType=DECIMAL}, #{realAmountTax,jdbcType=DECIMAL}, #{realAmount,jdbcType=DECIMAL}, 
       #{alreadyPaidAmount,jdbcType=DECIMAL}, #{unpaidAmount,jdbcType=DECIMAL}, #{payProportion,jdbcType=DECIMAL},
       #{extraAmount,jdbcType=DECIMAL}, #{notCalculatedAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, 
       #{annexUrl,jdbcType=VARCHAR}, #{projectId,jdbcType=BIGINT},#{createTime},#{createUser},#{updateTime},
-      #{updateUser},#{productionValue},#{prepaymentAmount})
+      #{updateUser},#{productionValue},#{prepaymentAmount},#{deleted})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.MeteringAccount" keyProperty="id" useGeneratedKeys="true">
     insert into metering_account
@@ -125,6 +127,9 @@
       <if test="prepaymentAmount != null">
         prepayment_amount,
       </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -191,7 +196,10 @@
         #{productionValue},
       </if>
       <if test="prepaymentAmount != null">
-        #{prepaymentAmount}
+        #{prepaymentAmount},
+      </if>
+      <if test="deleted != null">
+        #{deleted},
       </if>
     </trim>
   </insert>
@@ -261,6 +269,9 @@
       <if test="prepaymentAmount != null">
         prepayment_amount = #{prepaymentAmount},
       </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -286,7 +297,8 @@
       update_time = #{updateTime},
       update_user = #{updateUser},
       production_value = #{productionValue},
-      prepayment_amount = #{prepaymentAmount}
+      prepayment_amount = #{prepaymentAmount},
+      deleted = #{deleted}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -312,7 +324,7 @@
     LEFT JOIN project p ON mc.project_id = p.id
     LEFT JOIN `user` cu ON mc.create_user = cu.id
     LEFT JOIN `user` uu ON mc.update_user = uu.id
-    WHERE 1=1
+    WHERE 1=1 AND deleted != 1
     <if test="projectId != null">
       AND p.id = #{projectId}
     </if>
@@ -340,12 +352,12 @@
     FROM
     metering_account mc
     LEFT JOIN project p ON mc.project_id = p.id
-    WHERE 1=1
+    WHERE 1=1 AND deleted != 1
     <if test="projectId != null">
       AND p.id = #{projectId}
     </if>
     <if test="projectName != null">
-      AND p.name = #{projectName}
+      AND p.name LIKE concat('%',#{projectName},'%')
     </if>
     <if test="meteringTime != null">
       AND date_format(mc.metering_time,'%Y-%m') = #{meteringTime}
@@ -357,4 +369,14 @@
       AND mc.production_value &gt;= #{minProductionValue} AND mc.production_value &lt;= #{maxProductionValue}
     </if>
   </select>
+
+  <update id="logicDeletedById">
+    UPDATE
+      metering_account
+    SET
+      deleted = 1,
+      update_user = #{updateUser},
+      update_time = #{updateTime}
+    WHERE id = #{id}
+  </update>
 </mapper>

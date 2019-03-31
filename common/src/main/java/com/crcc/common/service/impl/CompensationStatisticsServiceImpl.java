@@ -72,9 +72,10 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
         if (compensationStatistics == null)
             return null;
 
-        compensationStatistics.forEach(com -> {
+        //改为手动输入
+/*        compensationStatistics.forEach(com -> {
             resetAmount(com);
-        });
+        });*/
 
         return compensationStatistics;
     }
@@ -104,8 +105,10 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
                 compensationStatisticsMapper.listStatisticsForPage(projectName,projectId,offset,length);
 
         compensationStatistics.forEach(c->{
-            Double sum = compensationStatisticsMapper.getSumPriceByProject(c.getProjectId());
-            c.setStatisticsTotalAmountContract(new BigDecimal(sum).setScale(2,BigDecimal.ROUND_HALF_UP));
+//            Double sum = compensationStatisticsMapper.getSumPriceByProject(c.getProjectId());
+//            if (sum != null){
+//                c.setStatisticsTotalAmountContract(new BigDecimal(sum).setScale(2,BigDecimal.ROUND_HALF_UP));
+//            }
             if (c.getStatisticsDailyWorkSubtotal() != null && c.getStatisticsCompensationSubtotal() != null){
                 c.setStatisticsAlreadySubtotal(c.getStatisticsDailyWorkSubtotal().add(c.getStatisticsCompensationSubtotal()));
             }
@@ -238,6 +241,15 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
         return total;
     }
 
+    @Override
+    public boolean deleteOneById(Long id) {
+        int result = compensationStatisticsMapper.deleteByPrimaryKey(id);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
+
     private void supplement(OutOfContractCompensationStatistics compensationStatistics){
 
         if (compensationStatistics == null)
@@ -253,30 +265,34 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
         Long laborAccountId = compensationStatistics.getLaborAccountId();
         //合同内计量
         if (projectId != null && subId != null && laborAccountId != null){
-            Double sum = inspectionAccountMapper.sumPriceByProjectIdAndSubcontractorIdAndLaborAccountId(projectId,subId,laborAccountId);
-            compensationStatistics.setTotalAmountContract(new BigDecimal(sum));
+            //改为手输
+           /* Double sum = inspectionAccountMapper.sumPriceByProjectIdAndSubcontractorIdAndLaborAccountId(projectId,subId,laborAccountId);
+            if (sum != null){
+                compensationStatistics.setTotalAmountContract(new BigDecimal(sum));
+            }*/
+
         }
 
         //计日工小计
-        BigDecimal mechanicalClass = compensationStatistics.getMechanicalClass();
-        BigDecimal employment = compensationStatistics.getSporadicEmployment();
+        BigDecimal mechanicalClass = compensationStatistics.getMechanicalClass() == null?new BigDecimal("0"):compensationStatistics.getMechanicalClass();
+        BigDecimal employment = compensationStatistics.getSporadicEmployment() == null?new BigDecimal("0"):compensationStatistics.getSporadicEmployment();
         if (mechanicalClass != null && employment != null){
             compensationStatistics.setDailyWorkSubtotal(mechanicalClass.add(employment));
         }
 
         //赔偿小计
-        BigDecimal outIn = compensationStatistics.getOutIn();
-        BigDecimal damage = compensationStatistics.getDisasterDamage();
-        BigDecimal other = compensationStatistics.getOther();
-        BigDecimal stop = compensationStatistics.getWorkStop();
+        BigDecimal outIn = compensationStatistics.getOutIn() == null?new BigDecimal("0"):compensationStatistics.getOutIn();
+        BigDecimal damage = compensationStatistics.getDisasterDamage() == null?new BigDecimal("0"):compensationStatistics.getDisasterDamage();
+        BigDecimal other = compensationStatistics.getOther() == null?new BigDecimal("0"):compensationStatistics.getOther();
+        BigDecimal stop = compensationStatistics.getWorkStop() == null?new BigDecimal("0"):compensationStatistics.getWorkStop();
         if (outIn != null && damage != null && other != null && stop != null){
             compensationStatistics.setCompensationSubtotal(outIn.add(damage).add(other).add(stop));
         }
 
         //已计价金额合计
-        BigDecimal totalAmountContract = compensationStatistics.getTotalAmountContract();
-        BigDecimal dailyWorkSubtotal = compensationStatistics.getDailyWorkSubtotal();
-        BigDecimal compensationSubtotal = compensationStatistics.getCompensationSubtotal();
+        BigDecimal totalAmountContract = compensationStatistics.getTotalAmountContract() == null?new BigDecimal("0"):compensationStatistics.getTotalAmountContract();
+        BigDecimal dailyWorkSubtotal = compensationStatistics.getDailyWorkSubtotal()== null?new BigDecimal("0"):compensationStatistics.getDailyWorkSubtotal();
+        BigDecimal compensationSubtotal = compensationStatistics.getCompensationSubtotal() == null?new BigDecimal("0"):compensationStatistics.getCompensationSubtotal();
         BigDecimal total = null;
         if (totalAmountContract != null && dailyWorkSubtotal != null && compensationSubtotal != null){
             total = totalAmountContract.add(dailyWorkSubtotal).add(compensationSubtotal);
@@ -294,15 +310,15 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
         }
 
         //计日工及补偿已拨付金额拨付率
-        BigDecimal amountAlreadyDisbursed = compensationStatistics.getAmountAlreadyDisbursed();
+        BigDecimal amountAlreadyDisbursed = compensationStatistics.getAmountAlreadyDisbursed()== null?new BigDecimal("0"):compensationStatistics.getAmountAlreadyDisbursed();
         if (dailyWorkSubtotal != null && compensationSubtotal != null && amountAlreadyDisbursed != null){
             BigDecimal sum = dailyWorkSubtotal.add(compensationSubtotal);
             compensationStatistics.setDisbursedPercentage(Utils.computerDivide(amountAlreadyDisbursed,sum,4));
         }
 
         //预估计日工小计
-        BigDecimal esMec = compensationStatistics.getEstimateMechanicalClass();
-        BigDecimal esSe  = compensationStatistics.getEstimateSporadicEmployment();
+        BigDecimal esMec = compensationStatistics.getEstimateMechanicalClass()== null?new BigDecimal("0"):compensationStatistics.getEstimateMechanicalClass();
+        BigDecimal esSe  = compensationStatistics.getEstimateSporadicEmployment()== null?new BigDecimal("0"):compensationStatistics.getEstimateSporadicEmployment();
         BigDecimal esDailyTotal = null;
         if(esMec != null && esSe != null){
             esDailyTotal = esMec.add(esSe);
@@ -310,10 +326,10 @@ public class CompensationStatisticsServiceImpl implements CompensationStatistics
         }
 
         //预估赔偿小计
-        BigDecimal esOutIn = compensationStatistics.getEstimateOutIn();
-        BigDecimal esDamage = compensationStatistics.getEstimateDisasterDamage();
-        BigDecimal esOther = compensationStatistics.getEstimateOther();
-        BigDecimal esStop = compensationStatistics.getEstimateWorkStop();
+        BigDecimal esOutIn = compensationStatistics.getEstimateOutIn()== null?new BigDecimal("0"):compensationStatistics.getEstimateOutIn();
+        BigDecimal esDamage = compensationStatistics.getEstimateDisasterDamage()== null?new BigDecimal("0"):compensationStatistics.getEstimateDisasterDamage();
+        BigDecimal esOther = compensationStatistics.getEstimateOther()== null?new BigDecimal("0"):compensationStatistics.getEstimateOther();
+        BigDecimal esStop = compensationStatistics.getEstimateWorkStop()== null?new BigDecimal("0"):compensationStatistics.getEstimateWorkStop();
         BigDecimal esCompensationSubtotal = null;
         if (esOutIn != null && esDamage != null && esOther != null && esStop != null){
             esCompensationSubtotal = esOutIn.add(esDamage).add(esOther).add(esStop);

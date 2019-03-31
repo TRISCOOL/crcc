@@ -4,6 +4,7 @@ import com.crcc.common.model.LaborAccount;
 import com.crcc.common.model.Subcontractor;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface LaborAccountMapper {
@@ -47,4 +48,6 @@ public interface LaborAccountMapper {
 
     List<LaborAccount> selectTeamByProjectAndSub(@Param("projectId")Long projectId,
                                                  @Param("subcontractorId")Long subcontractorId);
+
+    int logicDeleteById(@Param("id")Long id, @Param("updateUser")Long updateUser, @Param("updateTime")Date updateTime);
 }

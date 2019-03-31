@@ -2,6 +2,7 @@ package com.crcc.common.service;
 
 import com.crcc.common.model.Subcontractor;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SubcontractorService {
@@ -24,6 +25,5 @@ public interface SubcontractorService {
 
     String getCodeTest();
 
-
-
+    boolean logicDeletedById(Long id, Long updateUser, Date updateTime);
 }

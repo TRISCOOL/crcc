@@ -14,5 +14,5 @@ public interface LiabilityCostService {
 
     Integer listForPageSize(Long projectId,String projectName,Integer year,Integer month);
 
-
+    boolean deleteOnById(Long id);
 }

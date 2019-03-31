@@ -795,7 +795,7 @@ public class ExcelUtils {
 
     private static Double isNull(BigDecimal value){
         if (value == null){
-            return -1d;
+            return 0d;
         }
 
         return value.setScale(2,BigDecimal.ROUND_HALF_UP).doubleValue();
@@ -1293,13 +1293,13 @@ public class ExcelUtils {
         num = num + 1;
         HSSFRow sumRow = sheet.createRow(num);
         sumRow.createCell(0).setCellValue("合计");
-        sumRow.createCell(2).setCellValue(sumStatisticsTotalAmountContract);
-        sumRow.createCell(3).setCellValue(sumStatisticsDailyWorkSubtotal);
-        sumRow.createCell(4).setCellValue(sumStatisticsCompensationSubtotal);
-        sumRow.createCell(5).setCellValue(sumStatisticsAlreadySubtotal);
-        sumRow.createCell(6).setCellValue(sumStatisticsEstimateDailyWorkSubtotal);
-        sumRow.createCell(7).setCellValue(sumStatisticsEstimateCompensationSubtotal);
-        sumRow.createCell(8).setCellValue(sumStatisticsEstimateSubtotal);
+        sumRow.createCell(2).setCellValue(transformationFromDoubleToString(sumStatisticsTotalAmountContract));
+        sumRow.createCell(3).setCellValue(transformationFromDoubleToString(sumStatisticsDailyWorkSubtotal));
+        sumRow.createCell(4).setCellValue(transformationFromDoubleToString(sumStatisticsCompensationSubtotal));
+        sumRow.createCell(5).setCellValue(transformationFromDoubleToString(sumStatisticsAlreadySubtotal));
+        sumRow.createCell(6).setCellValue(transformationFromDoubleToString(sumStatisticsEstimateDailyWorkSubtotal));
+        sumRow.createCell(7).setCellValue(transformationFromDoubleToString(sumStatisticsEstimateCompensationSubtotal));
+        sumRow.createCell(8).setCellValue(transformationFromDoubleToString(sumStatisticsEstimateSubtotal));
 
         return wb;
     }

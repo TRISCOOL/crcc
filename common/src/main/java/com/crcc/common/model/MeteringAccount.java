@@ -64,6 +64,16 @@ public class MeteringAccount {
 
     private String payProportionStr;
 
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     public String getPayProportionStr() {
         return payProportionStr;
     }

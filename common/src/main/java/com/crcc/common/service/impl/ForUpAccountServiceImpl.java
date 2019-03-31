@@ -120,6 +120,15 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
         return meteringAccountTotal;
     }
 
+    @Override
+    public boolean logicDeletedById(Long id, Long updateUser, Date updateTime) {
+        int result = meteringAccountMapper.logicDeletedById(id,updateUser,updateTime);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
+
     private void supplement(MeteringAccount meteringAccount){
         if (meteringAccount.getValuationAmountTax() != null && meteringAccount.getTax() != null){
             meteringAccount.setValuationAmountNotTax(computerNotTax(meteringAccount.getValuationAmountTax(),

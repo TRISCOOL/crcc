@@ -418,7 +418,7 @@ public class ProjectController extends BaseController{
 
         cell = Utils.getNewCell(getTitle("合同工期",titleFont),2,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph(projectInfo.getContractDay()+"天",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getContractDay()+"月",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(getTitle("合同开工日期",titleFont),1,null,true,false);
         cell.setColspan(1);
@@ -432,7 +432,7 @@ public class ProjectController extends BaseController{
 
         cell = Utils.getNewCell(getTitle("实际工期",titleFont),2,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph(projectInfo.getRealContractDay()+"天",titleFont),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph(projectInfo.getRealContractDay()+"月",titleFont),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(getTitle("实际开工时间",titleFont),1,null,true,false);
         table.addCell(cell);
@@ -471,15 +471,15 @@ public class ProjectController extends BaseController{
 
         cell = Utils.getNewCell(getTitle("投入人员",titleFont),2,null,true,true);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph(projectInfo.getInputPerson()+"人",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph(isNullAndUnit(projectInfo.getInputPerson(),"人"),font),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(getTitle("正式职工",titleFont),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph(projectInfo.getFormalEmployee()+"人",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph(isNullAndUnit(projectInfo.getFormalEmployee(),"人"),font),1,null,true,false);
         table.addCell(cell);
         cell = Utils.getNewCell(getTitle("外聘",titleFont),1,null,true,false);
         table.addCell(cell);
-        cell = Utils.getNewCell(new Paragraph(projectInfo.getExternalEmployee()+"人",font),1,null,true,false);
+        cell = Utils.getNewCell(new Paragraph(isNullAndUnit(projectInfo.getExternalEmployee(),"人"),font),1,null,true,false);
         table.addCell(cell);
 
         cell = Utils.getNewCell(getTitle("工程概述",titleFont),1,3,true,true);
@@ -490,6 +490,14 @@ public class ProjectController extends BaseController{
 
         document.add(table);
 
+    }
+
+    private String isNullAndUnit(Integer content,String unit){
+        if (content == null){
+            return "";
+        }
+
+        return content+unit;
     }
 
     private void createParagrap(List<ProjectInfoPeople> projectInfoPeople,PdfPTable table,

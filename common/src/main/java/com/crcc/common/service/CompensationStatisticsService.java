@@ -29,5 +29,7 @@ public interface CompensationStatisticsService {
 
     OutOfContractCompensationStatisticsTotal getTotalStatistics(String projectName,Long projectId);
 
+    boolean deleteOneById(Long id);
+
 
 }

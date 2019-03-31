@@ -17,4 +17,6 @@ public interface ProjectEvaluationService {
                             Integer isResponsibility);
 
     ProjectEvaluation getDetails(Long id);
+
+    boolean deletedById(Long id);
 }

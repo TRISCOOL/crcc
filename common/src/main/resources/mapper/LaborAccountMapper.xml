@@ -35,6 +35,7 @@
     <result column="contract_type" property="contractType" jdbcType="TINYINT" />
     <result column="annexUrlSq" property="annexUrlSq" jdbcType="VARCHAR" />
     <result column="legal_person" property="legalPerson" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, subcontractor_id, subcontractor_name, contract_time, construction_scope, 
@@ -42,7 +43,7 @@
     contract_person, phone, annex_url, remark, team_time, team_qualification, team_annex, 
     approval_time, approval_filing, approval_annex, settlement_time, settlement_remark, 
     settlement_amount, settlement_filing, create_time, create_user, update_time, update_user,annexUrlSq
-    status,contract_type,legal_person
+    status,contract_type,legal_person,deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -64,7 +65,7 @@
       approval_time, approval_filing, approval_annex, 
       settlement_time, settlement_remark, settlement_amount, 
       settlement_filing, create_time, create_user, 
-      update_time, update_user,status,contract_type,annexUrlSq,legal_person)
+      update_time, update_user,status,contract_type,annexUrlSq,legal_person,deleted)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
       #{subcontractorName,jdbcType=VARCHAR}, #{contractTime,jdbcType=TIMESTAMP}, #{constructionScope,jdbcType=VARCHAR}, 
       #{contractCode,jdbcType=VARCHAR}, #{teamName,jdbcType=VARCHAR}, #{estimatedContractAmount,jdbcType=DECIMAL}, 
@@ -75,7 +76,7 @@
       #{settlementTime,jdbcType=TIMESTAMP}, #{settlementRemark,jdbcType=VARCHAR}, #{settlementAmount,jdbcType=DECIMAL}, 
       #{settlementFiling,jdbcType=TINYINT}, #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, 
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT},#{status},#{contractType},#{annexUrlSq},
-      #{legalPerson})
+      #{legalPerson},#{deleted})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.LaborAccount" keyProperty="id" useGeneratedKeys="true">
     insert into labor_account
@@ -179,6 +180,9 @@
       <if test="legalPerson != null">
         legal_person,
       </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
       <if test="id != null" >
@@ -279,6 +283,9 @@
       </if>
       <if test="legalPerson != null">
         #{legalPerson},
+      </if>
+      <if test="deleted != null">
+        #{deleted},
       </if>
     </trim>
   </insert>
@@ -381,6 +388,9 @@
       <if test="legalPerson != null">
         legal_person = #{legalPerson},
       </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -417,7 +427,8 @@
       status = #{status},
       contract_type = #{contractType},
       annexUrlSq = #{annexUrlSq},
-      legal_person = #{legalPerson}
+      legal_person = #{legalPerson},
+      deleted = #{deleted}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -434,7 +445,7 @@
   </select>
 
   <select id="onlyList" resultType="com.crcc.common.model.LaborAccount">
-    SELECT id,team_name,contract_person FROM labor_account WHERE contract_type = 0 GROUP BY team_name;
+    SELECT id,team_name,contract_person FROM labor_account WHERE contract_type = 0 AND deleted != 1 GROUP BY team_name;
   </select>
 
   <select id="listForPage" resultType="com.crcc.common.model.LaborAccount">
@@ -457,7 +468,7 @@
       subcontractor s ON s.id = la.subcontractor_id
     LEFT JOIN
       labor_account la2 ON la.project_id = la2.project_id AND la.subcontractor_id = la2.subcontractor_id AND la.team_name = la2.team_name AND la2.contract_type = 0
-    WHERE 1=1
+    WHERE 1=1 AND la.deleted != 1
     <if test="projectId != null">
       AND la.project_id = #{projectId}
     </if>
@@ -484,14 +495,22 @@
 
   <select id="listForPageSize" resultType="java.lang.Integer">
     SELECT
-      COUNT(*)
+      count(*)
     FROM
-    labor_account la
+      labor_account la
     LEFT JOIN
-    project p ON la.project_id = p.id
+      project p ON la.project_id = p.id
     LEFT JOIN
-    subcontractor s ON s.id = la.subcontractor_id
-    WHERE 1=1
+      project_info info ON info.project_id = la.project_id
+    LEFT JOIN
+      `user` cu ON la.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON la.update_user = uu.id
+    LEFT JOIN
+      subcontractor s ON s.id = la.subcontractor_id
+    LEFT JOIN
+      labor_account la2 ON la.project_id = la2.project_id AND la.subcontractor_id = la2.subcontractor_id AND la.team_name = la2.team_name AND la2.contract_type = 0
+    WHERE 1=1 AND la.deleted != 1
     <if test="projectId != null">
       AND la.project_id = #{projectId}
     </if>
@@ -520,7 +539,7 @@
     WHERE
         project_id = #{projectId}
         AND subcontractor_id = #{subcontractorId}
-        AND team_name = #{teamName};
+        AND team_name = #{teamName} AND deleted != 1;
   </select>
 
   <select id="getTeamAccountByMain" resultType="com.crcc.common.model.LaborAccount">
@@ -532,7 +551,7 @@
       project_id = #{projectId}
       AND subcontractor_id = #{subcontractorId}
       AND team_name = #{teamName}
-      AND contract_type = #{contractType}
+      AND contract_type = #{contractType} AND deleted != 1
     limit 1
   </select>
 
@@ -544,11 +563,21 @@
     LEFT JOIN
       subcontractor s ON lc.subcontractor_id = s.id
     WHERE
-      lc.project_id = #{projectId}
+      lc.project_id = #{projectId} AND lc.deleted != 1
     GROUP BY s.id
   </select>
 
   <select id="selectTeamByProjectAndSub" resultType="com.crcc.common.model.LaborAccount">
-    select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} AND contract_type = 0 group by team_name;
+    select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} AND contract_type = 0 AND deleted != 1 group by team_name;
   </select>
+
+  <update id="logicDeleteById" parameterType="java.lang.Long">
+    UPDATE
+      labor_account
+    SET
+      deleted=1,
+      update_user=#{updateUser},
+      update_time=#{updateTime}
+    WHERE id = #{id}
+  </update>
 </mapper>

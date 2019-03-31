@@ -65,4 +65,13 @@ public class LiabilityCostController extends BaseController{
         return ResponseVo.ok(total,page,pageSize,liabilityCostForLists);
 
     }
+
+    @PostMapping("/delete/v1.1")
+    @AuthRequire
+    public ResponseVo delete(@RequestParam("id")Long id){
+        boolean result = liabilityCostService.deleteOnById(id);
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
 }

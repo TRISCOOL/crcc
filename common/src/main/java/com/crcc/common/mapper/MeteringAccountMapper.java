@@ -37,4 +37,8 @@ public interface MeteringAccountMapper {
                                            @Param("maxPayProportion") Double maxPayProportion,
                                            @Param("minProductionValue") Double minProductionValue,
                                            @Param("maxProductionValue") Double maxProductionValue);
+
+    int logicDeletedById(@Param("id")Long id,
+                         @Param("updateUser")Long updateUser,
+                         @Param("updateTime")Date updateTime);
 }

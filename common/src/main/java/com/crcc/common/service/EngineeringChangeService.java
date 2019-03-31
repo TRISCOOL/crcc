@@ -25,4 +25,6 @@ public interface EngineeringChangeService {
 
     EngineerChangeTotal getStatisticsTotal(Long projectId,String projectName);
 
+    boolean deleteOneById(Long id);
+
 }

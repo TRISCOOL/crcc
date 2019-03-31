@@ -3,6 +3,7 @@ package com.crcc.common.mapper;
 import com.crcc.common.model.Subcontractor;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.Date;
 import java.util.List;
 
 public interface SubcontractorMapper {
@@ -38,4 +39,6 @@ public interface SubcontractorMapper {
                             @Param("isValid")Integer isValid);
 
     List<Subcontractor> selectSubcontractorByName(@Param("subcontractorName")String subcontractorName);
+
+    int logicDeletedById(@Param("id")Long id, @Param("updateUser")Long updateUser, @Param("updateTime")Date updateTime);
 }

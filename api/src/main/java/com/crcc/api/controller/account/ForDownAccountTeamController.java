@@ -6,6 +6,7 @@ import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.ExportConfig;
 import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.LaborAccountTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.LaborAccountService;
@@ -19,6 +20,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +110,21 @@ public class ForDownAccountTeamController extends BaseController{
                 status,approval,contractPerson);
 
         return ResponseVo.ok(total,page,pageSize,laborAccounts);
+    }
+
+    @GetMapping("/total/v1.1")
+    @AuthRequire
+    public ResponseVo getTotal(@RequestParam(value = "projectName",required = false) String projectName,
+                               @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
+                               @RequestParam(value = "status",required = false) Integer status,
+                               @RequestParam(value = "approval",required = false) Integer approval,
+                               @RequestParam(value = "contractPerson",required = false)String contractPerson,
+                               HttpServletRequest request){
+
+        Long projectId = permissionProject(request);
+        LaborAccountTotal total = laborAccountService.getTotal(projectId,projectName,subcontractorName,status,
+                approval,contractPerson);
+        return ResponseVo.ok(total);
     }
 
     /**
@@ -203,5 +220,31 @@ public class ForDownAccountTeamController extends BaseController{
         return ResponseVo.ok(laborAccountService.selectTeamByProjectAndSub(projectId,subcontractorId));
     }
 
+    /**
+     * 逻辑删除
+     * @param id
+     * @param request
+     * @return
+     */
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo logicDeleteById(@RequestParam("id")Long id,HttpServletRequest request){
+
+        LaborAccount laborAccount = laborAccountService.getDetails(id);
+        if (laborAccount == null)
+            return ResponseVo.error(ResponseCode.PARAM_ILLEGAL);
+
+        LaborAccount exist = laborAccountService.getTeamByContract(laborAccount.getProjectId(),laborAccount.getSubcontractorId(),
+                laborAccount.getTeamName(),1);
+        if (exist != null)
+            return ResponseVo.error(ResponseCode.TEAM_CI_CONTRACTOR_EXISTS);
+
+        User user = curUser(request);
+        boolean result = laborAccountService.logicDeleteById(id,user.getId(),new Date());
+        if (result)
+            return ResponseVo.ok();
+
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
 
 }

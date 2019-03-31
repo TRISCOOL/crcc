@@ -7,6 +7,7 @@ import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.model.*;
 import com.crcc.common.service.ExportConfigService;
+import com.crcc.common.service.SubcontractorResumeService;
 import com.crcc.common.service.SubcontractorService;
 import com.crcc.common.utils.DateTimeUtil;
 import com.crcc.common.utils.ExcelUtils;
@@ -23,6 +24,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,6 +38,9 @@ public class SubcontractorController extends BaseController{
 
     @Autowired
     private ExportConfigService exportConfigService;
+
+    @Autowired
+    private SubcontractorResumeService subcontractorResumeService;
 
     @Value("${pdf.cache.address}")
     private String pdfCacheAddress;
@@ -396,6 +401,20 @@ public class SubcontractorController extends BaseController{
         table.addCell(cell);
 
         document.add(table);
+    }
+
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+        List<SubcontractorResume> subcontractorResumeList = subcontractorResumeService.listResumeBySubcontractorId(id);
+        if (subcontractorResumeList != null && subcontractorResumeList.size() > 0)
+            return ResponseVo.error(ResponseCode.SUBCONTRACTOR_HAVE_RESUME);
+
+        User user = curUser(request);
+        boolean result = subcontractorService.logicDeletedById(id,user.getId(),new Date());
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
     }
 
     private Paragraph getTitle(String value,Font font){

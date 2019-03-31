@@ -52,4 +52,12 @@ public class SubcontractorResumeServiceImpl implements SubcontractorResumeServic
     public List<SubcontractorResume> listResumeBySubcontractorId(Long subcontractorId) {
         return subcontractorResumeMapper.listResumeBySubcontractorId(subcontractorId);
     }
+
+    @Override
+    public boolean deletedById(Long id) {
+        int result = subcontractorResumeMapper.deleteByPrimaryKey(id);
+        if (result != 0)
+            return true;
+        return false;
+    }
 }

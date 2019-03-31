@@ -16,4 +16,6 @@ public interface PersonnelService {
                             String secondDegreeLevel,Integer workTime);
 
     Personnel getDetails(Long personnelId);
+
+    boolean deletedById(Long id);
 }

@@ -23,4 +23,6 @@ public interface ForDownAccountService {
 
     InspectionAccountTotal getTotal(Long projectId,String projectName, String subcontractorName, Integer valuationType,
                                     Date valuationTime,Double maxUnderRate,Double minUnderRate);
+
+    boolean logicDeleteById(Long id,Long updateUser,Date updateTime);
 }

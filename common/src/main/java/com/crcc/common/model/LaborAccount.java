@@ -79,6 +79,16 @@ public class LaborAccount {
 
     private String legalPerson;
 
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     public String getLegalPerson() {
         return legalPerson;
     }

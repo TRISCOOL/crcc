@@ -219,4 +219,14 @@ public class ContractReportController extends BaseController{
             e.printStackTrace();
         }
     }
+
+    @PostMapping("/delete/v1.1")
+    @AuthRequire
+    public ResponseVo delete(@RequestParam("id")Long id){
+        boolean result = compensationStatisticsService.deleteOneById(id);
+        if (result)
+            return ResponseVo.ok();
+
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
 }

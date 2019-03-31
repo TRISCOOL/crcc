@@ -192,6 +192,15 @@ public class ForUpAccountController extends BaseController{
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
 
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+        User user = curUser(request);
+        boolean result = forUpAccountService.logicDeletedById(id,user.getId(),new Date());
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
     }
 }

@@ -19,4 +19,6 @@ public interface SubcontractorResumeService {
     SubcontractorResume getDetails(Long subcontractorResumeId);
 
     List<SubcontractorResume> listResumeBySubcontractorId(Long subcontractorId);
+
+    boolean deletedById(Long id);
 }

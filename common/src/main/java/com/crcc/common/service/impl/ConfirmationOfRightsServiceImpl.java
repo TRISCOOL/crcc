@@ -166,6 +166,14 @@ public class ConfirmationOfRightsServiceImpl implements ConfirmationOfRightsServ
         return null;
     }
 
+    @Override
+    public boolean deleteOnById(Long id) {
+        int result = confirmationOfRightsMapper.deleteByPrimaryKey(id);
+        if (result != 0)
+            return true;
+        return false;
+    }
+
     public void supplement(ConfirmationOfRights confirmationOfRights){
 
         if (confirmationOfRights.getReportTime() != null){

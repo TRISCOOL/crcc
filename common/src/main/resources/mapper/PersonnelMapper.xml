@@ -549,7 +549,7 @@
     </if>
   </select>
 
-  <select id="listForPageSize" resultType="com.crcc.common.model.Personnel">
+  <select id="listForPageSize" resultType="java.lang.Integer">
     SELECT
       COUNT(*)
     FROM

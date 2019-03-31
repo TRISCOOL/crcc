@@ -49,4 +49,12 @@ public class ProjectEvaluationServiceImpl implements ProjectEvaluationService{
     public ProjectEvaluation getDetails(Long id) {
         return projectEvaluationMapper.getDetailsById(id);
     }
+
+    @Override
+    public boolean deletedById(Long id) {
+        int result = projectEvaluationMapper.deleteByPrimaryKey(id);
+        if (result != 0)
+            return true;
+        return false;
+    }
 }

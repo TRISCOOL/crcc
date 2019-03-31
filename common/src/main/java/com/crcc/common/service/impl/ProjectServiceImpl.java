@@ -137,6 +137,21 @@ public class ProjectServiceImpl implements ProjectService{
 
     private String createCodeForProject(){
         Long num =redisService.incrby(CODE_NUM,1);
+        //不知为何原因，redise的 key 老是被重置，初步判断是被人删除了，封锁了端口后再次发生，所以写了该段代码
+        if (num <= 1){
+            List<Project> projectList = projectMapper.listProjectForPage(null,null,null,null,null,null);
+            if (projectList != null && projectList.size() > 0){
+                String midCode = projectList.get(0).getCode();
+                midCode = midCode.substring(midCode.lastIndexOf("-")+1,17);
+                midCode = midCode.substring(midCode.indexOf("0")+1,3);
+                Long midNum = Long.parseLong(midCode);
+
+                midNum = midNum + 1;
+                redisService.setStr(CODE_NUM,midNum.toString());
+                num = midNum;
+            }
+
+        }
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(new Date());
         Integer year = calendar.get(Calendar.YEAR);

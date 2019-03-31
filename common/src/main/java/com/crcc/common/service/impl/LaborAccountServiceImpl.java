@@ -6,9 +6,11 @@ import com.crcc.common.mapper.InspectionAccountMapper;
 import com.crcc.common.mapper.LaborAccountMapper;
 import com.crcc.common.model.InspectionAccount;
 import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.LaborAccountTotal;
 import com.crcc.common.model.Subcontractor;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.service.RedisService;
+import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -53,6 +55,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
             return laborAccount.getContractCode();
         }
 
+        if (exisit == null){
+            throw new CrccException(ResponseCode.TEAM_NOT_HAVE_MAIN_CONTRACTOR_EXISTS);
+        }
         String label = "";
         Long num = redisService.incrby(LABORACCOUNT_CONTRACT_CODE_KEY+exisit.getContractCode(),1);
         if (num<10)
@@ -124,6 +129,30 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
+    public LaborAccountTotal getTotal(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval, String contractPerson) {
+        List<LaborAccount> laborAccountList = listLaborAccount(projectId,projectName,subcontractorName,status,approval,contractPerson,null,null);
+        if (laborAccountList != null && laborAccountList.size() > 0){
+            LaborAccountTotal total = new LaborAccountTotal();
+            BigDecimal sumEstimatedContractAmount = new BigDecimal("0");
+            BigDecimal sumShouldAmount = new BigDecimal("0");
+            BigDecimal sumRealAmount = new BigDecimal("0");
+            BigDecimal sumSettlementAmount = new BigDecimal("0");
+            for (LaborAccount laborAccount : laborAccountList){
+                sumEstimatedContractAmount = Utils.addBigDecimal(sumEstimatedContractAmount,laborAccount.getEstimatedContractAmount());
+                sumShouldAmount = Utils.addBigDecimal(sumShouldAmount,laborAccount.getShouldAmount());
+                sumRealAmount = Utils.addBigDecimal(sumRealAmount,laborAccount.getRealAmount());
+                sumSettlementAmount = Utils.addBigDecimal(sumSettlementAmount,laborAccount.getSettlementAmount());
+            }
+            total.setSumEstimatedContractAmount(sumEstimatedContractAmount);
+            total.setSumRealAmount(sumRealAmount);
+            total.setSumSettlementAmount(sumSettlementAmount);
+            total.setSumShouldAmount(sumShouldAmount);
+            return total;
+        }
+        return null;
+    }
+
+    @Override
     public List<LaborAccount> onlyLIst() {
         return laborAccountMapper.onlyList();
     }
@@ -141,5 +170,19 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Override
     public List<LaborAccount> selectTeamByProjectAndSub(Long projectId, Long subcontractorId) {
         return laborAccountMapper.selectTeamByProjectAndSub(projectId,subcontractorId);
+    }
+
+    @Override
+    public boolean logicDeleteById(Long id,Long updateUser,Date updateTime) {
+        int result = laborAccountMapper.logicDeleteById(id,updateUser,updateTime);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
+
+    @Override
+    public LaborAccount getTeamByContract(Long projectId, Long subcontractorId, String teamName, Integer contractType) {
+        return laborAccountMapper.getTeamAccountByMain(projectId,subcontractorId,teamName,contractType);
     }
 }

@@ -44,6 +44,7 @@
     <result column="company_group_evaluation" jdbcType="CHAR" property="companyGroupEvaluation" />
     <result column="name" property="name" jdbcType="VARCHAR" />
     <result column="remark" property="remark" jdbcType="VARCHAR" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List">
     id, set_up_time, taxpayer_type, registered_capital, `type`, phone, email, address,
@@ -52,7 +53,7 @@
     qualification_code, qualification_validity_period, qualification_from, safety_code, 
     safety_validity_period, safety_from, bank, bank_account, bank_from, annex, create_time, 
     create_user, update_time, update_user, profession_type, share_evaluation, qualification, 
-    share_remark, group_evaluation, group_remark, company_evaluation, company_group_evaluation,`name`,remark
+    share_remark, group_evaluation, group_remark, company_evaluation, company_group_evaluation,`name`,remark,deleted
   </sql>
   <select id="selectByPrimaryKey" parameterType="java.lang.Long" resultMap="BaseResultMap">
     select 
@@ -79,7 +80,7 @@
       update_time, update_user, profession_type, 
       share_evaluation, qualification, share_remark, 
       group_evaluation, group_remark, company_evaluation,`name`
-      company_group_evaluation,remark)
+      company_group_evaluation,remark,deleted)
     values (#{id,jdbcType=BIGINT}, #{setUpTime,jdbcType=TIMESTAMP}, #{taxpayerType,jdbcType=BIGINT},
       #{registeredCapital,jdbcType=DECIMAL}, #{type,jdbcType=BIGINT}, #{phone,jdbcType=VARCHAR},
       #{email,jdbcType=VARCHAR}, #{address,jdbcType=VARCHAR}, #{code,jdbcType=VARCHAR}, 
@@ -94,7 +95,7 @@
       #{updateTime,jdbcType=TIMESTAMP}, #{updateUser,jdbcType=BIGINT}, #{professionType},
       #{shareEvaluation,jdbcType=CHAR}, #{qualification,jdbcType=CHAR}, #{shareRemark,jdbcType=VARCHAR}, 
       #{groupEvaluation,jdbcType=CHAR}, #{groupRemark,jdbcType=VARCHAR}, #{companyEvaluation,jdbcType=CHAR}, 
-      #{companyGroupEvaluation,jdbcType=CHAR},#{name},#{remark})
+      #{companyGroupEvaluation,jdbcType=CHAR},#{name},#{remark},#{deleted})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.Subcontractor" useGeneratedKeys="true" keyProperty="id">
     insert into subcontractor
@@ -225,6 +226,9 @@
       <if test="remark != null">
         remark,
       </if>
+      <if test="deleted != null">
+        deleted,
+      </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides=",">
       <if test="id != null">
@@ -352,6 +356,9 @@
       </if>
       <if test="remark != null">
         #{remark},
+      </if>
+      <if test="deleted != null">
+        #{deleted}
       </if>
     </trim>
   </insert>
@@ -481,6 +488,9 @@
       <if test="remark != null">
         remark = #{remark},
       </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -525,7 +535,8 @@
       group_remark = #{groupRemark,jdbcType=VARCHAR},
       company_evaluation = #{companyEvaluation,jdbcType=CHAR},
       company_group_evaluation = #{companyGroupEvaluation,jdbcType=CHAR},
-      `name`=#{name}
+      `name`=#{name},
+      deleted = #{deleted}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -550,7 +561,7 @@
       `user` cu ON s.create_user = cu.id
     LEFT JOIN
       `user` uu ON s.update_user = uu.id
-	WHERE 1=1
+	WHERE 1=1 AND s.deleted != 1
     <if test="name != null">
       AND s.name LIKE concat('%',#{name},'%')
     </if>
@@ -595,7 +606,7 @@
      COUNT(*)
     FROM
       subcontractor s
-    WHERE 1=1
+    WHERE 1=1 AND deleted != 1
     <if test="name != null">
       AND s.name LIKE concat('%',#{name},'%')
     </if>
@@ -632,6 +643,17 @@
   </select>
 
   <select id="selectSubcontractorByName" resultType="com.crcc.common.model.Subcontractor">
-    SELECT *FROM subcontractor WHERE `name` = #{subcontractorName}
+    SELECT *FROM subcontractor WHERE deleted != 1 AND `name` = #{subcontractorName}
   </select>
+
+  <update id="logicDeletedById">
+    UPDATE
+      subcontractor
+    SET
+      deleted = 1,
+      update_user = #{updateUser},
+      update_time = #{updateTime}
+    WHERE
+      id = #{id}
+  </update>
 </mapper>

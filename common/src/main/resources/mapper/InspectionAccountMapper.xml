@@ -26,12 +26,13 @@
     <result column="ended_price" property="endedPrice" jdbcType="DECIMAL" />
     <result column="under_rate" property="underRate" jdbcType="DECIMAL" />
     <result column="labor_account_id" property="laborAccountId" jdbcType="BIGINT" />
+    <result column="deleted" property="deleted" jdbcType="INTEGER" />
   </resultMap>
   <sql id="Base_Column_List" >
     id, project_id, subcontractor_id, subcontractor_name, contract_price,
     valuation_period, valuation_time, valuation_type, valuation_person, valuation_price,
     valuation_price_reduce, warranty, performance_bond, compensation, should_amount, 
-    remark, annex_url, create_time, create_user, update_time, update_user,ended_price,under_rate,labor_account_id
+    remark, annex_url, create_time, create_user, update_time, update_user,ended_price,under_rate,labor_account_id,deleted
   </sql>
   <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Long" >
     select 
@@ -51,7 +52,7 @@
       warranty, performance_bond, compensation, 
       should_amount, remark, annex_url, 
       create_time, create_user, update_time, ended_price,under_rate
-      update_user,labor_account_id)
+      update_user,labor_account_id,deleted)
     values (#{id,jdbcType=BIGINT}, #{projectId,jdbcType=BIGINT}, #{subcontractorId,jdbcType=BIGINT}, 
       #{subcontractorName,jdbcType=VARCHAR}, #{contractPrice,jdbcType=DECIMAL},
       #{valuationPeriod,jdbcType=INTEGER}, #{valuationTime,jdbcType=TIMESTAMP}, #{valuationType,jdbcType=BIGINT},
@@ -59,7 +60,7 @@
       #{warranty,jdbcType=DECIMAL}, #{performanceBond,jdbcType=DECIMAL}, #{compensation,jdbcType=DECIMAL}, 
       #{shouldAmount,jdbcType=DECIMAL}, #{remark,jdbcType=VARCHAR}, #{annexUrl,jdbcType=VARCHAR}, 
       #{createTime,jdbcType=TIMESTAMP}, #{createUser,jdbcType=BIGINT}, #{updateTime,jdbcType=TIMESTAMP}, 
-      #{updateUser,jdbcType=BIGINT},#{endedPrice},#{underRate},#{laborAccountId})
+      #{updateUser,jdbcType=BIGINT},#{endedPrice},#{underRate},#{laborAccountId},#{deleted})
   </insert>
   <insert id="insertSelective" parameterType="com.crcc.common.model.InspectionAccount" keyProperty="id" useGeneratedKeys="true">
     insert into inspection_account
@@ -135,6 +136,9 @@
       </if>
       <if test="laborAccountId != null">
         labor_account_id,
+      </if>
+      <if test="deleted != null">
+        deleted,
       </if>
     </trim>
     <trim prefix="values (" suffix=")" suffixOverrides="," >
@@ -213,6 +217,9 @@
       <if test="laborAccountId != null">
         #{laborAccountId}
       </if>
+      <if test="deleted != null">
+        #{deleted}
+      </if>
     </trim>
   </insert>
   <update id="updateByPrimaryKeySelective" parameterType="com.crcc.common.model.InspectionAccount" >
@@ -287,6 +294,9 @@
       <if test="laborAccountId != null">
         labor_account_id = #{laborAccountId},
       </if>
+      <if test="deleted != null">
+        deleted = #{deleted},
+      </if>
     </set>
     where id = #{id,jdbcType=BIGINT}
   </update>
@@ -314,7 +324,8 @@
       update_user = #{updateUser,jdbcType=BIGINT},
       ended_price = #{endedPrice},
       under_rate = #{underRate},
-      labor_account_id = #{laborAccountId}
+      labor_account_id = #{laborAccountId},
+      deleted = #{deleted}
     where id = #{id,jdbcType=BIGINT}
   </update>
 
@@ -351,7 +362,7 @@
       subcontractor s ON s.id = ic.subcontractor_id
     LEFT JOIN
       labor_account ac2 on  ac.team_name = ac2.team_name AND ac2.project_id = ic.project_id and ac2.subcontractor_id = ic.subcontractor_id
-    WHERE 1=1
+    WHERE 1=1 AND ic.deleted != 1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
     </if>
@@ -381,7 +392,7 @@
      COUNT(*)
     FROM
     inspection_account ic LEFT JOIN project p ON ic.project_id = p.id LEFT JOIN subcontractor s ON ic.subcontractor_id = s.id
-    WHERE 1=1
+    WHERE 1=1 AND ic.deleted != 1
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
     </if>
@@ -407,7 +418,7 @@
       SUM(valuation_price)
     from
       inspection_account
-    where
+    where deleted != 1 AND
       project_id = #{projectId}
       and subcontractor_id = #{subcontractorId}
       and labor_account_id = #{laborAccountId};
@@ -418,9 +429,19 @@
       *
     from
       inspection_account
-    where labor_account_id = #{laborAccountId} AND project_id = #{projectId} AND subcontractor_id = #{subcontractorId}
+    where deleted != 1 AND labor_account_id = #{laborAccountId} AND project_id = #{projectId} AND subcontractor_id = #{subcontractorId}
     <if test="valuationType != null">
       AND valuation_type = #{valuationType}
     </if>
   </select>
+
+  <update id="logicDeleteById">
+    UPDATE
+      inspection_account
+    SET
+      deleted=1,
+      update_user = #{updateUser},
+      update_time = #{updateTime}
+    WHERE id = #{id}
+  </update>
 </mapper>

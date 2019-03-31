@@ -95,8 +95,8 @@ public class ForDownAccountInspectionController extends BaseController{
         List<InspectionAccount> inspectionAccounts = forDownAccountService.listForPage(projectId,projectName,subcontractorName,
                 valuationType,valuationTime,offset*pageSize,pageSize,maxUnderRate,minUnderRate);
 
-        Integer total = forDownAccountService.listForPageSize(projectId,projectName,subcontractorName,
-                valuationType,valuationTime,maxUnderRate,minUnderRate);
+        Integer total = forDownAccountService.listForPage(projectId,projectName,subcontractorName,
+                valuationType,valuationTime,null,null,maxUnderRate,minUnderRate).size();
 
         return ResponseVo.ok(total,page,pageSize,inspectionAccounts);
     }
@@ -174,7 +174,13 @@ public class ForDownAccountInspectionController extends BaseController{
 
     }
 
-
-
-
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo logicDeleted(@RequestParam("id")Long id,HttpServletRequest request){
+        User user = curUser(request);
+        boolean result = forDownAccountService.logicDeleteById(id,user.getId(),new Date());
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
 }

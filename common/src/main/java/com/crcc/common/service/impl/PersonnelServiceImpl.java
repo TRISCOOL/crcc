@@ -80,4 +80,13 @@ public class PersonnelServiceImpl implements PersonnelService{
     public Personnel getDetails(Long personnelId) {
         return personnelMapper.selectByPrimaryKey(personnelId);
     }
+
+    @Override
+    public boolean deletedById(Long id) {
+        int result = personnelMapper.deleteByPrimaryKey(id);
+        if (result != 0){
+            return true;
+        }
+        return false;
+    }
 }

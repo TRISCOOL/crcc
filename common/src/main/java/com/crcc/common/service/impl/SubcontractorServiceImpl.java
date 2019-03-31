@@ -119,4 +119,12 @@ public class SubcontractorServiceImpl implements SubcontractorService{
     public String getCodeTest() {
         return getCode();
     }
+
+    @Override
+    public boolean logicDeletedById(Long id, Long updateUser, Date updateTime) {
+        int result = subcontractorMapper.logicDeletedById(id,updateUser,updateTime);
+        if (result != 0)
+            return true;
+        return false;
+    }
 }

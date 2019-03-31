@@ -18,4 +18,6 @@ public interface ConfirmationOfRightsService {
     ConfirmationOfRights foundConfirmForLastYear(Long projectId);
 
     ConfirmationOfRightsTotal getTotal(Long projectId,String projectName,String year,String quarter);
+
+    boolean deleteOnById(Long id);
 }

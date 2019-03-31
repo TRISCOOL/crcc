@@ -27,4 +27,6 @@ public interface ForUpAccountService {
                                   Double minPayProportion,Double maxPayProportion,
                                   Double minProductionValue,Double maxProductionValue);
 
+    boolean logicDeletedById(Long id,Long updateUser,Date updateTime);
+
 }

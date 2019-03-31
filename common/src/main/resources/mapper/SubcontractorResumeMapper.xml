@@ -286,15 +286,21 @@
 
   <select id="listForPageSize" resultType="java.lang.Integer">
     SELECT
-      COUNT(*)
+      count(*)
     FROM
-    subcontractor_resume sr
+      subcontractor_resume sr
     LEFT JOIN
-    labor_account la ON sr.labor_account_id = la.id
+      labor_account la ON sr.labor_account_id = la.id
     LEFT JOIN
-    subcontractor s ON sr.subcontractor_id = s.id
+      labor_account la2 ON la.team_name = la2.team_name AND la2.subcontractor_id = sr.subcontractor_id AND la2.project_id = sr.project_id and la2.contract_type = 0
     LEFT JOIN
-    project p ON sr.project_id = p.id
+      subcontractor s ON sr.subcontractor_id = s.id
+    LEFT JOIN
+      project p ON sr.project_id = p.id
+    LEFT JOIN
+      `user` cu ON sr.create_user = cu.id
+    LEFT JOIN
+      `user` uu ON sr.update_user = uu.id
     WHERE 1=1
     <if test="subcontractorName != null">
       AND s.name LIKE concat('%',#{subcontractorName},'%')

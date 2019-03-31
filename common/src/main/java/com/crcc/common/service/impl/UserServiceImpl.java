@@ -15,6 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.*;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 @SuppressWarnings("ALL")
 @Service
@@ -250,6 +252,24 @@ public class UserServiceImpl implements UserService{
 
     private String createUserCode(){
         Long num = redisService.incrby(USER_CODE_KEY,1);
+        if (num <= 1){
+            List<User> users = userMapper.listUser(null,null,null,null,null);
+            if (users != null && users.size() > 0){
+                String midCode = users.get(0).getCode();
+                String regex = "\\d0*([\\d]+)";
+                Pattern p = Pattern.compile(regex);
+                Matcher m = p.matcher(midCode);
+                if (m.find()){
+                    String lastCode = m.group(1);
+                    Long midNum = Long.parseLong(lastCode);
+                    midNum = midNum + 1;
+                    redisService.setStr(USER_CODE_KEY,midNum.toString());
+                    num = midNum;
+                }
+
+            }
+
+        }
         if (num < 10){
             return "0000"+num;
         }

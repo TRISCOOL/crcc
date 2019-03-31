@@ -1,15 +1,54 @@
 package com.crcc.common.model;
 
+import java.math.BigDecimal;
+import java.util.Date;
+
 public class LiabilityCostForList {
     private String projectName;
     private String projectType;
     private String projectStatus;
     private String contractStartTime;
     private String contractEndTime;
+    private BigDecimal contractPrice;
+    private Date reportTime;
+    private Long id;
+    private Long projectId;
 
     private LiabilityCost lastYear;
     private LiabilityCost openTired;
     private LiabilityCost thisYear;
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
+
+    public Date getReportTime() {
+        return reportTime;
+    }
+
+    public void setReportTime(Date reportTime) {
+        this.reportTime = reportTime;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public BigDecimal getContractPrice() {
+        return contractPrice;
+    }
+
+    public void setContractPrice(BigDecimal contractPrice) {
+        this.contractPrice = contractPrice;
+    }
 
     public String getProjectName() {
         return projectName;

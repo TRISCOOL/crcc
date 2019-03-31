@@ -229,7 +229,12 @@ public class ManagerPeopleController extends BaseController{
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(DateTimeUtil.getYYYYMMDD(personnel.getBrithday()),font),1,null,true,false);
         table.addCell(cell);
-        Image headImg = Image.getInstance(getHeadUrl(personnel.getHeadUrl()));
+        Image headImg = null;
+        try {
+            headImg = Image.getInstance(getHeadUrl(personnel.getHeadUrl()));
+        }catch (Exception e){
+            e.printStackTrace();
+        }
         cell = Utils.getImageCell(headImg,1,4,false,false);
         table.addCell(cell);
 
@@ -351,6 +356,15 @@ public class ManagerPeopleController extends BaseController{
         table.addCell(cell);
 
         document.add(table);
+    }
+
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo deleted(@RequestParam("id")Long id){
+        boolean result = personnelService.deletedById(id);
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
     }
 
     private Paragraph getTitle(String value,Font font){

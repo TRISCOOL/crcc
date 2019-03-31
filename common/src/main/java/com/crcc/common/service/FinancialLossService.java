@@ -15,4 +15,6 @@ public interface FinancialLossService {
     Integer listForPageSize(Long projectId,String projectName,String year,Integer quarter);
 
     FinancialLossTotal getTotal(Long projectId,String projectName,String year,Integer quarter);
+
+    boolean deleteOnById(Long id);
 }

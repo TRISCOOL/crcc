@@ -146,6 +146,14 @@ public class EngineeringChangeServiceImpl implements EngineeringChangeService{
         return total;
     }
 
+    @Override
+    public boolean deleteOneById(Long id) {
+        int result = engineeringChangeMonthlyMapper.deleteByPrimaryKey(id);
+        if (result != 0)
+            return true;
+        return false;
+    }
+
     private void supplement(EngineeringChangeMonthly engineeringChangeMonthly){
         BigDecimal changeAmount = engineeringChangeMonthly.getChangeClaimAmount();
 

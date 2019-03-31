@@ -558,7 +558,8 @@
       sum(o.compensation_subtotal) as statisticsCompensationSubtotal,
       sum(o.estimate_daily_work_subtotal) as statisticsEstimateDailyWorkSubtotal,
       sum(o.estimate_compensation_subtotal) as statisticsEstimateCompensationSubtotal,
-      p.`name` AS projectName,
+      sum(o.total_amount_contract) as statisticsTotalAmountContract,
+    p.`name` AS projectName,
       pi.project_type AS projectType
     FROM
       out_of_contract_compensation_statistics o
@@ -568,7 +569,7 @@
       project p ON o.project_id = p.id
     WHERE 1=1
     <if test="projectId != null">
-      AND o.projectI=_id = #{projectId}
+      AND o.project_id = #{projectId}
     </if>
     <if test="projectName != null">
       AND p.`name` LIKE concat('%',#{projectName},'%')
@@ -591,7 +592,7 @@
       project p ON o.project_id = p.id
     WHERE 1=1
     <if test="projectId != null">
-      AND o.projectI=_id = #{projectId}
+      AND o.project_id = #{projectId}
     </if>
     <if test="projectName != null">
       AND p.`name` LIKE concat('%',#{projectName},'%')

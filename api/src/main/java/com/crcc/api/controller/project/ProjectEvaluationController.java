@@ -155,4 +155,13 @@ public class ProjectEvaluationController extends BaseController{
     public ResponseVo getDetails(@RequestParam("id")Long id){
         return ResponseVo.ok(projectEvaluationService.getDetails(id));
     }
+
+    @PostMapping("/deleted/v1.1")
+    @AuthRequire
+    public ResponseVo deleted(@RequestParam("id")Long id){
+        boolean result = projectEvaluationService.deletedById(id);
+        if (result)
+            return ResponseVo.ok();
+        return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
 }
