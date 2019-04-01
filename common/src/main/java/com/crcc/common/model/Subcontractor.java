@@ -97,6 +97,16 @@ public class Subcontractor {
 
     private String remark;
 
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     public String getRemark() {
         return remark;
     }

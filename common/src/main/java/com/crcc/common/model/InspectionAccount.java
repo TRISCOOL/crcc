@@ -61,6 +61,16 @@ public class InspectionAccount {
 
     private Double sumContractAmount;
 
+    private Integer deleted;
+
+    public Integer getDeleted() {
+        return deleted;
+    }
+
+    public void setDeleted(Integer deleted) {
+        this.deleted = deleted;
+    }
+
     public Double getSumContractAmount() {
         return sumContractAmount;
     }

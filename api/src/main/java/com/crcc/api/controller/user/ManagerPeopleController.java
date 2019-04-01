@@ -360,8 +360,8 @@ public class ManagerPeopleController extends BaseController{
 
     @PostMapping("/deleted/v1.1")
     @AuthRequire
-    public ResponseVo deleted(@RequestParam("id")Long id){
-        boolean result = personnelService.deletedById(id);
+    public ResponseVo deleted(@RequestBody Personnel personnel){
+        boolean result = personnelService.deletedById(personnel.getId());
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);

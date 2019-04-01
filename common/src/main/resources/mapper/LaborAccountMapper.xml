@@ -571,7 +571,7 @@
     select *from labor_account where project_id = #{projectId} and subcontractor_id = #{subcontractorId} AND contract_type = 0 AND deleted != 1 group by team_name;
   </select>
 
-  <update id="logicDeleteById" parameterType="java.lang.Long">
+  <update id="logicDeleteById">
     UPDATE
       labor_account
     SET
