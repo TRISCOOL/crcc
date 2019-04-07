@@ -50,4 +50,9 @@ public interface LaborAccountMapper {
                                                  @Param("subcontractorId")Long subcontractorId);
 
     int logicDeleteById(@Param("id")Long id, @Param("updateUser")Long updateUser, @Param("updateTime")Date updateTime);
+
+    List<LaborAccount> getTeamAccountByContractType(@Param("projectId")Long projectId,
+                                                    @Param("subcontractorId")Long subcontractorId,
+                                                    @Param("teamName")String teamName,
+                                                    @Param("contractType")Integer contractType);
 }

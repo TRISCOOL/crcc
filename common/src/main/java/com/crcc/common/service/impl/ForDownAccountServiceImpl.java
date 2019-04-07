@@ -1,5 +1,7 @@
 package com.crcc.common.service.impl;
 
+import com.crcc.common.exception.CrccException;
+import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.InspectionAccountMapper;
 import com.crcc.common.model.InspectionAccount;
 import com.crcc.common.model.InspectionAccountTotal;
@@ -30,6 +32,12 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     @Override
     @Transactional
     public Long addInsepectionAccount(InspectionAccount inspectionAccount) {
+
+        List<InspectionAccount> exists = inspectionAccountMapper.findByValuationPeriod(inspectionAccount.getProjectId(),inspectionAccount.getSubcontractorId(),
+                inspectionAccount.getLaborAccountId(),inspectionAccount.getValuationPeriod());
+        if (exists != null && exists.size()>0)
+            throw new CrccException(ResponseCode.INSPECTION_HAVE_SAME_PERIOD);
+
         inspectionAccount.setCreateTime(new Date());
         if (inspectionAccount.getValuationPrice() != null && inspectionAccount.getEndedPrice() != null){
             BigDecimal midValue = inspectionAccount.getValuationPrice().add(inspectionAccount.getEndedPrice());
@@ -65,7 +73,7 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     public boolean update(InspectionAccount inspectionAccount) {
 
         supplementInspectionAccount(inspectionAccount);
-        int result = inspectionAccountMapper.updateByPrimaryKey(inspectionAccount);
+        int result = inspectionAccountMapper.updateByPrimaryKeySelective(inspectionAccount);
         if (result != 0)
             return true;
         return false;
@@ -152,5 +160,10 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<InspectionAccount> findInspectionAccountByProjectAndSubAndTeam(Long projectId, Long subcontractorId, String teamName) {
+        return inspectionAccountMapper.findInspectionAccountByProjectAndSubAndTeam(projectId,subcontractorId,teamName);
     }
 }

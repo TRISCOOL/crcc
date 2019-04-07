@@ -585,14 +585,14 @@
     </if>
     <if test="isValid != null">
       <if test="isValid == 0">
-        AND datediff(s.business_license_validity_period,now()) &gt;= 90 AND datediff(s.qualification_validity_period,now()) &gt;= 90 AND datediff(s.safety_validity_period,now()) &gt;= 90
+         AND datediff(s.safety_validity_period,now()) &gt;= 90
       </if>
       <if test="isValid == 1">
-        AND datediff(s.business_license_validity_period,now()) &gt; 0 AND datediff(s.qualification_validity_period,now()) &gt; 0 AND datediff(s.safety_validity_period,now()) &gt; 0
-        AND (datediff(s.business_license_validity_period,now()) &lt; 90 OR datediff(s.qualification_validity_period,now()) &lt; 90 OR  datediff(s.safety_validity_period,now()) &lt; 90)
+        AND datediff(s.safety_validity_period,now()) &gt; 0
+        AND datediff(s.safety_validity_period,now()) &lt; 90
       </if>
       <if test="isValid == 2">
-        AND (datediff(s.business_license_validity_period,now()) &lt;= 0 OR datediff(s.qualification_validity_period,now()) &lt;= 0 OR  datediff(s.safety_validity_period,now()) &lt;= 0)
+        AND datediff(s.safety_validity_period,now()) &lt;= 0
       </if>
     </if>
     ORDER BY s.id DESC

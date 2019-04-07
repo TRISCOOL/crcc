@@ -555,6 +555,18 @@
     limit 1
   </select>
 
+  <select id="getTeamAccountByContractType" resultType="com.crcc.common.model.LaborAccount">
+    SELECT
+      *
+    FROM
+      labor_account
+    WHERE
+      project_id = #{projectId}
+    AND subcontractor_id = #{subcontractorId}
+    AND team_name = #{teamName}
+    AND contract_type = #{contractType} AND deleted != 1
+  </select>
+
   <select id="selectSubcontractorByProject" resultType="com.crcc.common.model.Subcontractor">
     SELECT
       s.*

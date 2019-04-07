@@ -46,4 +46,13 @@ public interface InspectionAccountMapper {
                                                            @Param("subcontractorId")Long subcontractorId);
 
     int logicDeleteById(@Param("id")Long id,@Param("updateUser")Long updateUser,@Param("updateTime")Date updateTime);
+
+    List<InspectionAccount> findInspectionAccountByProjectAndSubAndTeam(@Param("projectId")Long projectId,
+                                                                        @Param("subcontractorId")Long subcontractorId,
+                                                                        @Param("teamName")String teamName);
+
+    List<InspectionAccount> findByValuationPeriod(@Param("projectId")Long projectId,
+                                                  @Param("subcontractorId")Long subcontractorId,
+                                                  @Param("laborAccountId")Long laborAccountId,
+                                                  @Param("valuationPeriod")Integer valuationPeriod);
 }

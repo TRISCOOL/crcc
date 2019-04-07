@@ -13,6 +13,7 @@ import com.crcc.common.service.RedisService;
 import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.math.BigDecimal;
 import java.util.Date;
@@ -74,10 +75,36 @@ public class LaborAccountServiceImpl implements LaborAccountService{
 
     @Override
     public boolean update(LaborAccount laborAccount) {
+
         laborAccount.setUpdateTime(new Date());
         if (laborAccount.getTeamName() != null){
             laborAccount.setTeamName(laborAccount.getTeamName().trim());
         }
+
+        Long existId = laborAccount.getId();
+        LaborAccount exist = laborAccountMapper.getDetailsById(existId);
+        if (exist == null)
+            return false;
+
+        Long existProjectId = exist.getProjectId();
+        Long existSubcontractorId = exist.getSubcontractorId();
+        String existTeamName = exist.getTeamName();
+
+        //若是主合同，且相关信息有变化
+        if (exist.getContractType() == 0 && (!existProjectId.equals(laborAccount.getProjectId())
+                || !exist.getSubcontractorId().equals(laborAccount.getSubcontractorId())) ){
+            //找到对应的对下计价台账,更新对应的信息
+            List<InspectionAccount> inspectionAccounts = inspectionAccountMapper.findInspectionAccountByProjectAndSubAndTeam(existProjectId,
+                    existSubcontractorId,existTeamName);
+            if (inspectionAccounts != null && inspectionAccounts.size() > 0){
+                inspectionAccounts.forEach(inspectionAccount -> {
+                    inspectionAccount.setProjectId(laborAccount.getProjectId());
+                    inspectionAccount.setSubcontractorId(laborAccount.getSubcontractorId());
+                    inspectionAccountMapper.updateByPrimaryKeySelective(inspectionAccount);
+                });
+            }
+        }
+
         int result = laborAccountMapper.updateByPrimaryKeySelective(laborAccount);
         if (result != 0)
             return true;
@@ -173,8 +200,30 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
-    public boolean logicDeleteById(Long id,Long updateUser,Date updateTime) {
-        int result = laborAccountMapper.logicDeleteById(id,updateUser,updateTime);
+    @Transactional
+    public boolean logicDeleteById(LaborAccount laborAccount) {
+
+        Long updateUser = laborAccount.getUpdateUser();
+        Date updateTime = laborAccount.getUpdateTime();
+        if (laborAccount.getContractType() == 0){ //当是主合同时，删除包括主合同和补充合同
+            //找到补充合同，删掉
+            List<LaborAccount> laborAccountList = getTeamAccountByContractType(laborAccount.getProjectId(),
+                    laborAccount.getSubcontractorId(),laborAccount.getTeamName(),1);
+            for (LaborAccount lc : laborAccountList){
+                laborAccountMapper.logicDeleteById(lc.getId(),updateUser,updateTime);
+            }
+
+            //同时删掉对下验工计价台账
+            List<InspectionAccount> inspectionAccounts = inspectionAccountMapper.findInspectionAccountByProjectAndSubAndTeam(laborAccount.getProjectId(),laborAccount.getSubcontractorId(),
+                    laborAccount.getTeamName());
+            if (inspectionAccounts != null && inspectionAccounts.size()>0){
+                inspectionAccounts.forEach(inspectionAccount -> {
+                    inspectionAccountMapper.logicDeleteById(inspectionAccount.getId(),updateUser,updateTime);
+                });
+            }
+        }
+
+        int result = laborAccountMapper.logicDeleteById(laborAccount.getId(),updateUser,updateTime);
         if (result != 0){
             return true;
         }
@@ -184,5 +233,10 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     @Override
     public LaborAccount getTeamByContract(Long projectId, Long subcontractorId, String teamName, Integer contractType) {
         return laborAccountMapper.getTeamAccountByMain(projectId,subcontractorId,teamName,contractType);
+    }
+
+    @Override
+    public List<LaborAccount> getTeamAccountByContractType(Long projectId, Long subcontractorId, String teamName, Integer contractType) {
+        return laborAccountMapper.getTeamAccountByContractType(projectId,subcontractorId,teamName,contractType);
     }
 }

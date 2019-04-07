@@ -18,7 +18,8 @@ public enum ResponseCode {
     TEAM_MAIN_CONTRACTOR_EXISTS("602","this team had a main contractor"),
     TEAM_CI_CONTRACTOR_EXISTS("604","this team had a buchong contractor"),
     TEAM_NOT_HAVE_MAIN_CONTRACTOR_EXISTS("603","this team had not a main contractor"),
-    SUBCONTRACTOR_HAVE_RESUME("605","this subcontractor have resumes");
+    SUBCONTRACTOR_HAVE_RESUME("605","this subcontractor have resumes"),
+    INSPECTION_HAVE_SAME_PERIOD("606","this inspection have same valuation period");
 
     private String code;
     private String message;

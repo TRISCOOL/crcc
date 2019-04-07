@@ -444,4 +444,28 @@
       update_time = #{updateTime}
     WHERE id = #{id}
   </update>
+
+  <select id="findInspectionAccountByProjectAndSubAndTeam" resultType="com.crcc.common.model.InspectionAccount">
+    SELECT
+      ic.*
+    FROM
+      inspection_account ic
+    LEFT JOIN
+      labor_account lc ON ic.labor_account_id = lc.id
+    WHERE
+      ic.project_id = #{projectId}
+      AND ic.subcontractor_id = #{subcontractorId}
+      AND lc.team_name = #{teamName};
+  </select>
+
+  <select id="findByValuationPeriod" resultType="com.crcc.common.model.InspectionAccount">
+    SELECT
+      *
+    FROM
+      inspection_account
+    WHERE
+      project_id = #{projectId} AND subcontractor_id = #{subcontractorId}
+        AND labor_account_id = #{laborAccountId}
+        AND valuation_period = #{valuationPeriod}
+  </select>
 </mapper>

@@ -25,4 +25,6 @@ public interface ForDownAccountService {
                                     Date valuationTime,Double maxUnderRate,Double minUnderRate);
 
     boolean logicDeleteById(Long id,Long updateUser,Date updateTime);
+
+    List<InspectionAccount> findInspectionAccountByProjectAndSubAndTeam(Long projectId,Long subcontractorId,String teamName);
 }

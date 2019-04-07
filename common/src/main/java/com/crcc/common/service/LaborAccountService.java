@@ -34,7 +34,9 @@ public interface LaborAccountService {
 
     List<LaborAccount> selectTeamByProjectAndSub(Long projectId,Long subcontractorId);
 
-    boolean logicDeleteById(Long id, Long updateUser, Date updateTime);
+    boolean logicDeleteById(LaborAccount laborAccount);
 
     LaborAccount getTeamByContract(Long projectId,Long subcontractorId,String teamName,Integer contractType);
+
+    List<LaborAccount> getTeamAccountByContractType(Long projectId,Long subcontractorId,String teamName,Integer contractType);
 }

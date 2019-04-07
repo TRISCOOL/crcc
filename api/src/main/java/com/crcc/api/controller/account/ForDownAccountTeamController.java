@@ -222,7 +222,6 @@ public class ForDownAccountTeamController extends BaseController{
 
     /**
      * 逻辑删除
-     * @param id
      * @param request
      * @return
      */
@@ -234,13 +233,12 @@ public class ForDownAccountTeamController extends BaseController{
         if (laborAccount == null)
             return ResponseVo.error(ResponseCode.PARAM_ILLEGAL);
 
-        LaborAccount exist = laborAccountService.getTeamByContract(laborAccount.getProjectId(),laborAccount.getSubcontractorId(),
-                laborAccount.getTeamName(),1);
-        if (exist != null)
-            return ResponseVo.error(ResponseCode.TEAM_CI_CONTRACTOR_EXISTS);
-
         User user = curUser(request);
-        boolean result = laborAccountService.logicDeleteById(id,user.getId(),new Date());
+
+        laborAccount.setUpdateTime(new Date());
+        laborAccount.setUpdateUser(user.getId());
+
+        boolean result = laborAccountService.logicDeleteById(laborAccount);
         if (result)
             return ResponseVo.ok();
 
