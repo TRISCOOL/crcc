@@ -18,13 +18,13 @@ public interface LaborAccountService {
     LaborAccount getDetails(Long laborAccountId);
 
     List<LaborAccount> listLaborAccount(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval,
-                                        String contractPerson,Integer offset,Integer length);
+                                        String contractPerson,Integer offset,Integer length,String teamName);
 
     Integer listLaborAccountSize(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval,
-                                 String contractPerson);
+                                 String contractPerson,String teamName);
 
     LaborAccountTotal getTotal(Long projectId,String projectName,String subcontractorName,Integer status,Integer approval,
-                               String contractPerson);
+                               String contractPerson,String teamName);
 
     List<LaborAccount> onlyLIst();
 

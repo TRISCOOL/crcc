@@ -82,18 +82,19 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     @Override
     public List<InspectionAccount> listForPage(Long projectId,String projectName, String subcontractorName,
                                                Integer valuationType, Date valuationTime, Integer offset,Integer length,
-                                               Double maxUnderRate, Double minUnderRate) {
+                                               Double maxUnderRate, Double minUnderRate,String teamName) {
         String time = DateTimeUtil.getYYYYMM(valuationTime);
         return inspectionAccountMapper.listForPage(projectId,projectName,subcontractorName,valuationType,time,
-                minUnderRate,maxUnderRate,offset,length);
+                minUnderRate,maxUnderRate,offset,length,teamName);
     }
 
     @Override
     public Integer listForPageSize(Long projectId, String projectName, String subcontractorName,
-                                   Integer valuationType, Date valuationTime, Double maxUnderRate, Double minUnderRate) {
+                                   Integer valuationType, Date valuationTime, Double maxUnderRate, Double minUnderRate,
+                                   String teamName) {
         String time = DateTimeUtil.getYYYYMM(valuationTime);
         return inspectionAccountMapper.listForPageSize(projectId,projectName,subcontractorName,valuationType,minUnderRate,
-                maxUnderRate,time);
+                maxUnderRate,time,teamName);
     }
 
     @Override
@@ -110,10 +111,12 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     }
 
     @Override
-    public InspectionAccountTotal getTotal(Long projectId, String projectName, String subcontractorName, Integer valuationType, Date valuationTime, Double maxUnderRate, Double minUnderRate) {
+    public InspectionAccountTotal getTotal(Long projectId, String projectName, String subcontractorName,
+                                           Integer valuationType, Date valuationTime, Double maxUnderRate,
+                                           Double minUnderRate,String teamName) {
 
         List<InspectionAccount> inspectionAccounts = listForPage(projectId,projectName,
-                subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate);
+                subcontractorName,valuationType,valuationTime,null,null,maxUnderRate,minUnderRate,teamName);
 
         InspectionAccountTotal inspectionAccountTotal = new InspectionAccountTotal();
         BigDecimal sumPrice = new BigDecimal(0);
@@ -131,7 +134,7 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
                 sumValuationPrice = Utils.addBigDecimal(sumValuationPrice,inspectionAccount.getValuationPrice());
                 sumValuationPriceReduce = Utils.addBigDecimal(sumValuationPriceReduce,inspectionAccount.getValuationPriceReduce());
                 sumWarranty = Utils.addBigDecimal(sumWarranty,inspectionAccount.getWarranty());
-                sumPerformanceBond = Utils.addBigDecimal(sumCompensation,inspectionAccount.getPerformanceBond());
+                sumPerformanceBond = Utils.addBigDecimal(sumPerformanceBond,inspectionAccount.getPerformanceBond());
                 sumShouldAmount = Utils.addBigDecimal(sumShouldAmount,inspectionAccount.getShouldAmount());
                 sumCompensation = Utils.addBigDecimal(sumCompensation,inspectionAccount.getCompensation());
             }

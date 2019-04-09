@@ -119,6 +119,9 @@ public class SubcontractorController extends BaseController{
                            @RequestParam("page") Integer page,@RequestParam("pageSize") Integer pageSize){
 
         Integer offset = page - 1 < 0 ? 0 : page - 1;
+
+        name = Utils.getBlurryKeyString(name);
+
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
                 maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,offset*pageSize,pageSize,isValid);
 
@@ -177,6 +180,8 @@ public class SubcontractorController extends BaseController{
                        @RequestParam(value = "sort",required = false)List<Integer> sort,
                        @RequestParam(value = "isValid",required = false)Integer isValid,
                        HttpServletResponse response){
+
+        name = Utils.getBlurryKeyString(name);
 
         List<Subcontractor> subcontractors = subcontractorService.listSubcontractor(name,type,professionType,minAmount,
                 maxAmount,shareEvaluation,groupEvaluation,companyEvaluation,null,null,isValid);

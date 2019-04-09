@@ -48,28 +48,34 @@ public class ConfirmationOfRightsServiceImpl implements ConfirmationOfRightsServ
         List<ConfirmationOfRights> confirmationOfRights = confirmationOfRightsMapper.listForPage(projectId,
                 projectName,year,quarter,offset,length);
 
-        confirmationOfRights.forEach(confirmationOfRight ->{
-            String reportYear = confirmationOfRight.getYear();
-            //可能存在一种特殊情况，就是第一次使用的时候，可能会在数据库默认填写年初余额，即这部分数据不采用获取上一年的数据
-            if (reportYear != null && reportYear.equals("2019") &&
-                    confirmationOfRight.getBalanceInspectionValue() != null &&
-                    confirmationOfRight.getBalanceCompleteValue() != null &&
-                    confirmationOfRight.getBalanceShould() != null &&
-                    confirmationOfRight.getBalanceChange() != null){
-                confirmationOfRight.setSumBalance(confirmationOfRight.getBalanceShould().add(confirmationOfRight.getBalanceChange()));
-            }else {
-                Integer lastYear = Integer.parseInt(reportYear) - 1;
-                ConfirmationOfRights lastConfirmation =
-                        confirmationOfRightsMapper.foundConfirmByProjectAndYear(confirmationOfRight.getProjectId(),lastYear+"");
-                confirmationOfRight.setBalanceCompleteValue(lastConfirmation.getCompletedValue());
-                confirmationOfRight.setBalanceInspectionValue(lastConfirmation.getInspection());
-                confirmationOfRight.setBalanceChange(lastConfirmation.getFinalPeriodChange());
-                confirmationOfRight.setBalanceShould(lastConfirmation.getFinalPeriodShould());
-                if (lastConfirmation.getFinalPeriodChange() != null && lastConfirmation.getFinalPeriodShould() != null){
-                    confirmationOfRight.setSumBalance(lastConfirmation.getFinalPeriodChange().add(lastConfirmation.getFinalPeriodShould()));
+        if (confirmationOfRights != null && confirmationOfRights.size() > 0){
+            confirmationOfRights.forEach(confirmationOfRight ->{
+                String reportYear = confirmationOfRight.getYear();
+                //可能存在一种特殊情况，就是第一次使用的时候，可能会在数据库默认填写年初余额，即这部分数据不采用获取上一年的数据
+                if (reportYear != null && reportYear.equals("2019") &&
+                        confirmationOfRight.getBalanceInspectionValue() != null &&
+                        confirmationOfRight.getBalanceCompleteValue() != null &&
+                        confirmationOfRight.getBalanceShould() != null &&
+                        confirmationOfRight.getBalanceChange() != null){
+                    confirmationOfRight.setSumBalance(confirmationOfRight.getBalanceShould().add(confirmationOfRight.getBalanceChange()));
+                }else {
+                    Integer lastYear = Integer.parseInt(reportYear) - 1;
+                    ConfirmationOfRights lastConfirmation =
+                            confirmationOfRightsMapper.foundConfirmByProjectAndYear(confirmationOfRight.getProjectId(),lastYear+"");
+
+                    if (lastConfirmation != null){
+                        confirmationOfRight.setBalanceCompleteValue(lastConfirmation.getCompletedValue());
+                        confirmationOfRight.setBalanceInspectionValue(lastConfirmation.getInspection());
+                        confirmationOfRight.setBalanceChange(lastConfirmation.getFinalPeriodChange());
+                        confirmationOfRight.setBalanceShould(lastConfirmation.getFinalPeriodShould());
+                        if (lastConfirmation.getFinalPeriodChange() != null && lastConfirmation.getFinalPeriodShould() != null){
+                            confirmationOfRight.setSumBalance(lastConfirmation.getFinalPeriodChange().add(lastConfirmation.getFinalPeriodShould()));
+                        }
+                    }
                 }
-            }
-        });
+            });
+        }
+
         return confirmationOfRights;
     }
 

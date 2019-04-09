@@ -9,6 +9,7 @@ import com.crcc.common.model.ConfirmationOfRightsTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.ConfirmationOfRightsService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.ibatis.annotations.Param;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,6 +79,8 @@ public class ConfirmationOfRightsController extends BaseController{
         Long projectId = permissionProject(request);
         Integer offset = page - 1 < 0 ? page -1 : 0;
 
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<ConfirmationOfRights> confirmations =
                 confirmationOfRightsService.listForPage(projectId,projectName,year,quarter,offset*pageSize,pageSize);
 
@@ -94,6 +97,9 @@ public class ConfirmationOfRightsController extends BaseController{
                                @RequestParam(value = "year",required = false)String  year,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         ConfirmationOfRightsTotal total = confirmationOfRightsService.getTotal(projectId,projectName,year,quarter);
         return ResponseVo.ok(total);
 
@@ -105,6 +111,7 @@ public class ConfirmationOfRightsController extends BaseController{
                        @RequestParam(value = "year",required = false)String  year,
                        @RequestParam("token")String token, HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+        projectName = Utils.getBlurryKeyString(projectName);
         List<ConfirmationOfRights> confirmationOfRights = confirmationOfRightsService.listForPage(projectId,projectName,year,quarter,
                 null,null);
         String[] titles = {"项目名称","填报时间","上年末开累完成产值","上年末开累验工计价","小计","合同内应计未计",

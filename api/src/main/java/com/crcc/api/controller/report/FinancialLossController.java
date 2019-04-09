@@ -9,6 +9,7 @@ import com.crcc.common.model.FinancialLossTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.FinancialLossService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -74,6 +75,9 @@ public class FinancialLossController extends BaseController{
                            @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<FinancialLoss> financialLosses = financialLossService.listForPage(projectId,projectName,year,quarter,
                 offset*pageSize, pageSize);
@@ -88,6 +92,9 @@ public class FinancialLossController extends BaseController{
                                @RequestParam(value = "quarter",required = false)Integer quarter,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         FinancialLossTotal total = financialLossService.getTotal(projectId,projectName,year,quarter);
         return ResponseVo.ok(total);
     }
@@ -98,6 +105,9 @@ public class FinancialLossController extends BaseController{
                        @RequestParam(value = "quarter",required = false)Integer quarter,
                        @RequestParam("token")String token, HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<FinancialLoss> financialLosses = financialLossService.listForPage(projectId,projectName,year,quarter,
                 null,null);
         String[] titles = {"序号","项目名称","填报时间","合同金额（万元）","已计价","未计价","小计","财务确认收入","账内成本",

@@ -469,6 +469,9 @@
     LEFT JOIN
       labor_account la2 ON la.project_id = la2.project_id AND la.subcontractor_id = la2.subcontractor_id AND la.team_name = la2.team_name AND la2.contract_type = 0
     WHERE 1=1 AND la.deleted != 1
+    <if test="teamName != null">
+      AND la.team_name LIKE CONCAT('%',#{teamName},'%')
+    </if>
     <if test="projectId != null">
       AND la.project_id = #{projectId}
     </if>
@@ -511,6 +514,9 @@
     LEFT JOIN
       labor_account la2 ON la.project_id = la2.project_id AND la.subcontractor_id = la2.subcontractor_id AND la.team_name = la2.team_name AND la2.contract_type = 0
     WHERE 1=1 AND la.deleted != 1
+    <if test="teamName != null">
+      AND la.team_name LIKE CONCAT('%',#{teamName},'%')
+    </if>
     <if test="projectId != null">
       AND la.project_id = #{projectId}
     </if>

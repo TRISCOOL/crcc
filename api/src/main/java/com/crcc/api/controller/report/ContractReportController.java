@@ -9,6 +9,7 @@ import com.crcc.common.model.OutOfContractCompensationStatisticsTotal;
 import com.crcc.common.model.User;
 import com.crcc.common.service.CompensationStatisticsService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -75,6 +76,11 @@ public class ContractReportController extends BaseController{
                            HttpServletRequest request){
 
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
         Integer offset = page - 1 < 0?0:page-1;
 
         List<OutOfContractCompensationStatistics> compensationStatistics =
@@ -92,6 +98,9 @@ public class ContractReportController extends BaseController{
     public ResponseVo getTotal(@RequestParam(value = "projectName",required = false)String projectName,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         OutOfContractCompensationStatisticsTotal total = compensationStatisticsService.getTotalStatistics(projectName,projectId);
         return ResponseVo.ok(total);
     }
@@ -105,6 +114,11 @@ public class ContractReportController extends BaseController{
                                @RequestParam(value = "quarter",required = false)Integer quarter,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
         OutOfContractCompensationStatisticsTotal total = compensationStatisticsService.getTotal(projectName,subcontractorName,
                 teamName,year,quarter,projectId);
 
@@ -153,6 +167,9 @@ public class ContractReportController extends BaseController{
         Integer offset = page-1<0?0:page-1;
 
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<OutOfContractCompensationStatistics> result =
                 compensationStatisticsService.listStatisticsForPage(projectName,projectId,offset*pageSize,pageSize);
 
@@ -171,6 +188,11 @@ public class ContractReportController extends BaseController{
                            @RequestParam(value = "token")String token,
                            HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
         List<OutOfContractCompensationStatistics> compensationStatistics =
                 compensationStatisticsService.listForPage(projectName,subcontractorName,teamName,year,quarter,
                         null,null,projectId);
@@ -200,6 +222,9 @@ public class ContractReportController extends BaseController{
                            @RequestParam(value = "token")String token,
                            HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<OutOfContractCompensationStatistics> compensationStatistics =
                 compensationStatisticsService.listStatisticsForPage(projectName,projectId,null,null);
 

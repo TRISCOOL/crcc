@@ -9,6 +9,7 @@ import com.crcc.common.model.EngineeringChangeMonthly;
 import com.crcc.common.model.User;
 import com.crcc.common.service.EngineeringChangeService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -84,6 +85,9 @@ public class EngineerChangeController extends BaseController{
                            @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<EngineeringChangeMonthly> engineeringChangeMonthlies = engineeringChangeService.listForPage(projectId,projectName,
                 year,quarter,offset*pageSize,pageSize);
@@ -98,6 +102,9 @@ public class EngineerChangeController extends BaseController{
                                @RequestParam(value = "quarter",required = false)Integer quarter,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         EngineerChangeTotal total = engineeringChangeService.getTotal(projectName,projectId,year,quarter);
         return ResponseVo.ok(total);
     }
@@ -114,6 +121,9 @@ public class EngineerChangeController extends BaseController{
                                      HttpServletRequest request){
         Integer offset = page -1 <0 ? 0: page-1;
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<EngineeringChangeMonthly> engineeringChangeMonthlies =
                 engineeringChangeService.listStatisticsForPage(projectId,projectName,offset*pageSize,pageSize);
 
@@ -126,6 +136,9 @@ public class EngineerChangeController extends BaseController{
     public ResponseVo getTotalStatistics(@RequestParam(value = "projectName",required = false)String projectName,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         EngineerChangeTotal total = engineeringChangeService.getStatisticsTotal(projectId,projectName);
         return ResponseVo.ok(total);
     }
@@ -137,6 +150,9 @@ public class EngineerChangeController extends BaseController{
                            @RequestParam(value = "token")String token,
                            HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<EngineeringChangeMonthly> engineeringChangeMonthlies =
                 engineeringChangeService.listForPage(projectId,projectName,year,quarter,null,null);
 
@@ -162,6 +178,9 @@ public class EngineerChangeController extends BaseController{
                                      @RequestParam(value = "token")String token,
                            HttpServletResponse response){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<EngineeringChangeMonthly> engineeringChangeMonthlies =
                 engineeringChangeService.listStatisticsForPage(projectId,projectName,null,null);
 

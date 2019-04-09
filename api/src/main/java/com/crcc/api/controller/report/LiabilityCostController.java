@@ -8,6 +8,7 @@ import com.crcc.common.model.LiabilityCost;
 import com.crcc.common.model.LiabilityCostForList;
 import com.crcc.common.model.User;
 import com.crcc.common.service.LiabilityCostService;
+import com.crcc.common.utils.Utils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -56,6 +57,8 @@ public class LiabilityCostController extends BaseController{
                            @RequestParam(value = "pageSize",required = false)Integer pageSize,
                            HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
 
         Integer offset = page - 1 < 0 ? 0:page-1;
         List<LiabilityCostForList> liabilityCostForLists = liabilityCostService.listForPage(projectId,projectName,

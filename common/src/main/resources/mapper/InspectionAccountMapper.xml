@@ -363,6 +363,9 @@
     LEFT JOIN
       labor_account ac2 on  ac.team_name = ac2.team_name AND ac2.project_id = ic.project_id and ac2.subcontractor_id = ic.subcontractor_id
     WHERE 1=1 AND ic.deleted != 1
+    <if test="teamName != null">
+      AND ac.team_name = #{teamName}
+    </if>
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
     </if>
@@ -391,8 +394,14 @@
     SELECT
      COUNT(*)
     FROM
-    inspection_account ic LEFT JOIN project p ON ic.project_id = p.id LEFT JOIN subcontractor s ON ic.subcontractor_id = s.id
+      inspection_account ic
+    LEFT JOIN project p ON ic.project_id = p.id
+    LEFT JOIN subcontractor s ON ic.subcontractor_id = s.id
+    LEFT JOIN labor_account ac ON ic.labor_account_id = ac.id
     WHERE 1=1 AND ic.deleted != 1
+    <if test="teamName != null">
+      AND ac.team_name LIKE concat('%',#{teamName},'%')
+    </if>
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
     </if>

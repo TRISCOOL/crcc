@@ -103,6 +103,8 @@ public class ForUpAccountController extends BaseController{
 
         Long projectId = permissionProject(request);
 
+        projectName = Utils.getBlurryKeyString(projectName);
+
         Integer offset = page - 1 < 0 ? 0 : page - 1;
 
         List<MeteringAccount> meteringAccounts = forUpAccountService.listForPage(projectId,projectName,meteringTime,
@@ -125,6 +127,9 @@ public class ForUpAccountController extends BaseController{
                                @RequestParam(value = "maxProductionValue",required = false)Double maxProductionValue,
                                HttpServletRequest request){
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         MeteringAccountTotal total = forUpAccountService.getTotal(projectId,projectName,meteringTime,minPayProportion,
                 maxPayProportion,minProductionValue,maxProductionValue);
         return ResponseVo.ok(total);
@@ -163,6 +168,8 @@ public class ForUpAccountController extends BaseController{
                                   @RequestParam(value = "exportType",required = false)String exportType,
                             @RequestParam(value = "sort",required = false)List<Integer> sort){
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
 
         List<MeteringAccount> meteringAccounts = forUpAccountService.listForPage(projectId,projectName,meteringTime,
                 minPayProportion,maxPayProportion,minProductionValue,maxProductionValue,null,null);

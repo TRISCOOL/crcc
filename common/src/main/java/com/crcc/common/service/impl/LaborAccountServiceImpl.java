@@ -126,8 +126,8 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
-    public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson, Integer offset, Integer length) {
-        List<LaborAccount> laborAccountList = laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,contractPerson,offset,length);
+    public List<LaborAccount> listLaborAccount(Long projectId,String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson, Integer offset, Integer length,String teamName) {
+        List<LaborAccount> laborAccountList = laborAccountMapper.listForPage(projectId,projectName,subcontractorName,status,approval,contractPerson,offset,length,teamName);
         //获取结算金额，当所属队伍的对下验工计价台账有末次计算时（valuationType=2），累计该队伍的计价金额（包括中期计价与末次计价的累计）
         laborAccountList.forEach(laborAccount -> {
             Long laborAccountId = laborAccount.getId();
@@ -151,13 +151,13 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     }
 
     @Override
-    public Integer listLaborAccountSize(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson) {
-        return laborAccountMapper.listForPageSize(projectId,projectName,subcontractorName,status,approval,contractPerson);
+    public Integer listLaborAccountSize(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval,String contractPerson,String teamName) {
+        return laborAccountMapper.listForPageSize(projectId,projectName,subcontractorName,status,approval,contractPerson,teamName);
     }
 
     @Override
-    public LaborAccountTotal getTotal(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval, String contractPerson) {
-        List<LaborAccount> laborAccountList = listLaborAccount(projectId,projectName,subcontractorName,status,approval,contractPerson,null,null);
+    public LaborAccountTotal getTotal(Long projectId, String projectName, String subcontractorName, Integer status, Integer approval, String contractPerson,String teamName) {
+        List<LaborAccount> laborAccountList = listLaborAccount(projectId,projectName,subcontractorName,status,approval,contractPerson,null,null,teamName);
         if (laborAccountList != null && laborAccountList.size() > 0){
             LaborAccountTotal total = new LaborAccountTotal();
             BigDecimal sumEstimatedContractAmount = new BigDecimal("0");

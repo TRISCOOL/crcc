@@ -95,6 +95,7 @@ public class ForDownAccountTeamController extends BaseController{
     @GetMapping("/list/v1.1")
     public ResponseVo listForPage(@RequestParam(value = "projectName",required = false) String projectName,
                                   @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
+                                  @RequestParam(value = "teanName",required = false)String teamName,
                                   @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "approval",required = false) Integer approval,
                                   @RequestParam(value = "contractPerson",required = false)String contractPerson,
@@ -103,11 +104,16 @@ public class ForDownAccountTeamController extends BaseController{
                                   HttpServletRequest request){
         Integer offset = page - 1 < 0 ? 0 : page-1;
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
         List<LaborAccount> laborAccounts = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
-                status,approval,contractPerson,offset*pageSize,pageSize);
+                status,approval,contractPerson,offset*pageSize,pageSize,teamName);
 
         Integer total = laborAccountService.listLaborAccountSize(projectId,projectName,subcontractorName,
-                status,approval,contractPerson);
+                status,approval,contractPerson,teamName);
 
         return ResponseVo.ok(total,page,pageSize,laborAccounts);
     }
@@ -119,11 +125,17 @@ public class ForDownAccountTeamController extends BaseController{
                                @RequestParam(value = "status",required = false) Integer status,
                                @RequestParam(value = "approval",required = false) Integer approval,
                                @RequestParam(value = "contractPerson",required = false)String contractPerson,
+                               @RequestParam(value = "teamName",required = false)String teamName,
                                HttpServletRequest request){
 
         Long projectId = permissionProject(request);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
         LaborAccountTotal total = laborAccountService.getTotal(projectId,projectName,subcontractorName,status,
-                approval,contractPerson);
+                approval,contractPerson,teamName);
         return ResponseVo.ok(total);
     }
 
@@ -139,6 +151,7 @@ public class ForDownAccountTeamController extends BaseController{
     @GetMapping("/export/v1.1")
     public void export(@RequestParam(value = "projectName",required = false) String projectName,
                              @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
+                             @RequestParam(value = "teamName",required = false)String teamName,
                              @RequestParam(value = "status",required = false) Integer status,
                              @RequestParam(value = "approval",required = false) Integer approval,
                        @RequestParam(value = "contractPerson",required = false)String contractPerson,
@@ -147,8 +160,11 @@ public class ForDownAccountTeamController extends BaseController{
                        @RequestParam(value = "sort",required = false)List<Integer> sort){
 
         Long projectId = permissionProjectOnlyToken(token);
+        projectName = Utils.getBlurryKeyString(projectName);
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+        teamName = Utils.getBlurryKeyString(teamName);
         List<LaborAccount> laborAccountList = laborAccountService.listLaborAccount(projectId,projectName,subcontractorName,
-                status,approval,contractPerson,null,null);
+                status,approval,contractPerson,null,null,teamName);
         HSSFWorkbook hb = null;
         if (exportType != null && sort != null){
             List<ExportConfig> exportConfigs = exportConfigService.findExportConfigs(exportType,sort);

@@ -122,6 +122,8 @@ public class ProjectController extends BaseController{
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
 
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<Project> projectList = projectService.listProjectForPage(code,projectName, projectType,status,
                 offset*pageSize,pageSize);
 
@@ -144,6 +146,8 @@ public class ProjectController extends BaseController{
                                     @RequestParam(value = "projectType",required = false)Long projectType,
                                     @RequestParam(value = "status",required = false)Integer status,
                                     HttpServletResponse response){
+
+        projectName = Utils.getBlurryKeyString(projectName);
 
         List<Project> projectList = projectService.listProjectForPage(code,projectName,projectType,status,
                 null,null);
@@ -307,6 +311,11 @@ public class ProjectController extends BaseController{
         projectManager = replaceNull(projectManager);
         projectSecretary = replaceNull(projectSecretary);
         chiefEngineer = replaceNull(chiefEngineer);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        projectManager = Utils.getBlurryKeyString(projectManager);
+        projectSecretary = Utils.getBlurryKeyString(projectSecretary);
+        chiefEngineer = Utils.getBlurryKeyString(chiefEngineer);
 
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,projectManager,
@@ -567,6 +576,12 @@ public class ProjectController extends BaseController{
                                       HttpServletResponse response) {
 
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        projectManager = Utils.getBlurryKeyString(projectManager);
+        projectSecretary = Utils.getBlurryKeyString(projectSecretary);
+        chiefEngineer = Utils.getBlurryKeyString(chiefEngineer);
+
         List<ProjectInfo> projectInfoList = projectService.listProjectInfoForUser(projectId,projectName,status,
                 projectManager,projectSecretary,chiefEngineer,contractStartTime,contractEndTime,realContractStartTime,
                 realContractEndTime,null,null);

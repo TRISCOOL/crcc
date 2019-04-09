@@ -14,15 +14,15 @@ public interface ForDownAccountService {
 
     List<InspectionAccount> listForPage(Long projectId,String projectName, String subcontractorName, Integer valuationType,
                                         Date valuationTime,Integer offset,Integer length,Double maxUnderRate,
-                                        Double minUnderRate);
+                                        Double minUnderRate,String teamName);
 
     Integer listForPageSize(Long projectId,String projectName, String subcontractorName, Integer valuationType,
-                            Date valuationTime,Double maxUnderRate,Double minUnderRate);
+                            Date valuationTime,Double maxUnderRate,Double minUnderRate,String teamName);
 
     InspectionAccount getDetails(Long inspectionAccountId);
 
     InspectionAccountTotal getTotal(Long projectId,String projectName, String subcontractorName, Integer valuationType,
-                                    Date valuationTime,Double maxUnderRate,Double minUnderRate);
+                                    Date valuationTime,Double maxUnderRate,Double minUnderRate,String teamName);
 
     boolean logicDeleteById(Long id,Long updateUser,Date updateTime);
 

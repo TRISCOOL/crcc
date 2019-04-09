@@ -8,6 +8,7 @@ import com.crcc.common.model.SubcontractorResume;
 import com.crcc.common.model.User;
 import com.crcc.common.service.SubcontractorResumeService;
 import com.crcc.common.utils.ExcelUtils;
+import com.crcc.common.utils.Utils;
 import org.apache.poi.hssf.usermodel.HSSFWorkbook;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -86,6 +87,8 @@ public class SubcontractorResumeController extends BaseController{
 
         Integer offset = page - 1 < 0 ? 0 : page - 1;
 
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
+
         List<SubcontractorResume> resumeList = subcontractorResumeService.listSubcontractorResumeForPage(
                 subcontractorName,projectEvaluation,gm,offset*pageSize,pageSize);
 
@@ -125,6 +128,8 @@ public class SubcontractorResumeController extends BaseController{
     public void export(@RequestParam(value = "subcontractorName",required = false)String subcontractorName,
                              @RequestParam(value = "projectEvaluation",required = false)String projectEvaluation,
                              @RequestParam(value = "gm",required = false)String gm, HttpServletResponse response){
+
+        subcontractorName = Utils.getBlurryKeyString(subcontractorName);
 
         List<SubcontractorResume> subcontractorResumeList = subcontractorResumeService.listSubcontractorResumeForPage(
                 subcontractorName,projectEvaluation,gm,null,null);

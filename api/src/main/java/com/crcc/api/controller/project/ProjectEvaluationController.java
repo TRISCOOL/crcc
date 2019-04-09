@@ -96,6 +96,8 @@ public class ProjectEvaluationController extends BaseController{
 
         Long projectId = permissionProject(request);
 
+        projectName = Utils.getBlurryKeyString(projectName);
+
         Integer offset = page - 1 < 0 ? 0 : page-1;
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
                 engineeringStatus,isSign,isResponsibility,offset*pageSize,pageSize);
@@ -118,6 +120,9 @@ public class ProjectEvaluationController extends BaseController{
                        HttpServletResponse response){
 
         Long projectId = permissionProjectOnlyToken(token);
+
+        projectName = Utils.getBlurryKeyString(projectName);
+
         List<ProjectEvaluation> projectEvaluations = projectEvaluationService.listForPage(projectId,projectName,evaluationStatus,
                 engineeringStatus,isSign,isResponsibility,null,null);
         HSSFWorkbook hb = null;

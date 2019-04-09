@@ -291,4 +291,23 @@ public class Utils {
         return 0;
     }
 
+    public static String getBlurryKeyString(String key){
+        if (key == null)
+            return null;
+
+        String[] list = key.split("");
+        if (list.length <= 1)
+            return key;
+
+        StringBuffer sb = new StringBuffer();
+        for (int i=0;i<list.length;i++){
+            String s = list[i];
+            if (i < list.length - 1){
+                s = s+"%";
+            }
+            sb.append(s);
+        }
+        return sb.toString();
+    }
+
 }

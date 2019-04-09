@@ -27,13 +27,15 @@ public interface LaborAccountMapper {
                                    @Param("status") Integer status,
                                    @Param("approvalFiling") Integer approvalFiling,
                                    @Param("contractPerson") String contractPerson,
-                                   @Param("offset") Integer offset,@Param("length") Integer length);
+                                   @Param("offset") Integer offset,@Param("length") Integer length,
+                                   @Param("teamName")String teamName);
 
     Integer listForPageSize(@Param("projectId")Long projectId, @Param("projectName") String projectName,
                             @Param("subcontractorName") String subcontractorName,
                             @Param("status") Integer status,
                             @Param("approvalFiling") Integer approvalFiling,
-                            @Param("contractPerson") String contractPerson);
+                            @Param("contractPerson") String contractPerson,
+                            @Param("teamName")String teamName);
 
     List<LaborAccount> onlyList();
 
