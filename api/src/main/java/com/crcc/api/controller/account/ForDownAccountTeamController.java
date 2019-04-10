@@ -95,7 +95,7 @@ public class ForDownAccountTeamController extends BaseController{
     @GetMapping("/list/v1.1")
     public ResponseVo listForPage(@RequestParam(value = "projectName",required = false) String projectName,
                                   @RequestParam(value = "subcontractorName",required = false) String subcontractorName,
-                                  @RequestParam(value = "teanName",required = false)String teamName,
+                                  @RequestParam(value = "teamName",required = false)String teamName,
                                   @RequestParam(value = "status",required = false) Integer status,
                                   @RequestParam(value = "approval",required = false) Integer approval,
                                   @RequestParam(value = "contractPerson",required = false)String contractPerson,

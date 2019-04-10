@@ -364,7 +364,7 @@
       labor_account ac2 on  ac.team_name = ac2.team_name AND ac2.project_id = ic.project_id and ac2.subcontractor_id = ic.subcontractor_id
     WHERE 1=1 AND ic.deleted != 1
     <if test="teamName != null">
-      AND ac.team_name = #{teamName}
+      AND ac.team_name LIKE concat('%',#{teamName},'%')
     </if>
     <if test="projectId != null">
       AND ic.project_id = #{projectId}
