@@ -476,5 +476,6 @@
       project_id = #{projectId} AND subcontractor_id = #{subcontractorId}
         AND labor_account_id = #{laborAccountId}
         AND valuation_period = #{valuationPeriod}
+        AND deleted != 1
   </select>
 </mapper>
