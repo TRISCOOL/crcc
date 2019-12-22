@@ -4,9 +4,7 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
-import com.crcc.common.model.InspectionAccount;
-import com.crcc.common.model.InspectionAccountTotal;
-import com.crcc.common.model.User;
+import com.crcc.common.model.*;
 import com.crcc.common.service.ForDownAccountService;
 import com.crcc.common.utils.ExcelUtils;
 import com.crcc.common.utils.Utils;
@@ -200,5 +198,105 @@ public class ForDownAccountInspectionController extends BaseController{
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
+
+    @GetMapping("/list_count_labor/v1.1")
+    @AuthRequire
+    public ResponseVo listCountForLabor(@RequestParam(value = "projectName",required = false)String projectName,
+                                        @RequestParam(value = "subName",required = false)String subName,
+                                        @RequestParam(value = "teamName",required = false)String teamName,
+                                        @RequestParam("page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                                        HttpServletRequest request){
+
+        projectName = Utils.getBlurryKeyString(projectName);
+        subName = Utils.getBlurryKeyString(subName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
+        Long projectId = permissionProject(request);
+
+        Integer realPage = page - 1 < 0?0:page-1;
+
+        List<InspectionCountForLabor> inspectionCountForLaborList = forDownAccountService.listCountForLabor(projectName,
+                subName,teamName,realPage*pageSize,pageSize,projectId);
+
+        Integer count = forDownAccountService.listCountForLaborCount(projectName,subName,teamName,projectId);
+
+        return ResponseVo.ok(count,page,pageSize,inspectionCountForLaborList);
+    }
+
+    @GetMapping("/list_count_project/v1.1")
+    @AuthRequire
+    public ResponseVo listCountForProject(@RequestParam(value = "projectName",required = false)String projectName,
+                                          @RequestParam("page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                                          HttpServletRequest request){
+        projectName = Utils.getBlurryKeyString(projectName);
+
+        Long projectId = permissionProject(request);
+
+        Integer realPage = page - 1 < 0?0:page-1;
+
+        List<InspectionCountForProject> forProjects = forDownAccountService.listInspectionCountForProject(projectId,projectName,
+                realPage*pageSize,pageSize);
+
+        Integer count = forDownAccountService.listInspectionCountForProjectCount(projectId,projectName);
+
+        return ResponseVo.ok(count,page,pageSize,forProjects);
+    }
+
+    @GetMapping("/list_count_project_export/v1.1")
+    public void listCountForProjectExport(@RequestParam(value = "projectName",required = false)String projectName,
+                                                @RequestParam("token")String token,
+                                                HttpServletResponse response){
+        projectName = Utils.getBlurryKeyString(projectName);
+
+        Long projectId = permissionProjectOnlyToken(token);
+
+        List<InspectionCountForProject> forProjects = forDownAccountService.listInspectionCountForProject(projectId,
+                projectName,null,null);
+
+        String[] title = {"项目名称","合同金额","计价总金额","扣款", "扣除质保金","扣除履约保证金",
+                "计日工及补偿费用","应支付金额","已完未计","对下计价率"};
+        HSSFWorkbook wb = ExcelUtils.getInspectionProjectExcel("对下验工计价台账项目汇总表","对下验工计价台账项目汇总表",title,forProjects);
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            response.setHeader("Content-disposition", "attachment; filename="+new String("对下验工计价台账项目汇总表".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+    }
+
+    @GetMapping("/list_count_labor_export/v1.1")
+    public void listCountForProjectExport(@RequestParam(value = "projectName",required = false)String projectName,
+                                                @RequestParam(value = "subName",required = false)String subName,
+                                                @RequestParam(value = "teamName",required = false)String teamName,
+                                                @RequestParam("token")String token,
+                                                HttpServletResponse response){
+        projectName = Utils.getBlurryKeyString(projectName);
+        subName = Utils.getBlurryKeyString(subName);
+        teamName = Utils.getBlurryKeyString(teamName);
+
+        Long projectId = permissionProjectOnlyToken(token);
+
+        List<InspectionCountForLabor> inspectionCountForLabors = forDownAccountService.listCountForLabor(projectName,subName,teamName,
+                null,null,projectId);
+
+
+        String[] title = {"项目名称","分包商名称","队伍名称","合同金额","已计价期数","截至日期","计价类型","计价总金额","扣款",
+                "扣除质保金","扣除履约保证金","计日工及补偿费用","应支付金额","已完未计","对下计价率"};
+        HSSFWorkbook wb = ExcelUtils.getInspectionLarborExcel("对下验工计价台账项目所属队伍汇总表","对下验工计价台账项目所属队伍汇总表",title,inspectionCountForLabors);
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            response.setHeader("Content-disposition", "attachment; filename="+new String("对下验工计价台账项目所属队伍汇总表".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

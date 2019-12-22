@@ -98,6 +98,10 @@ public class BaseController {
             }
         }
 
+        if (user == null){
+            throw new CrccException(ResponseCode.AUTH_FAILED);
+        }
+
         if (user.getType() == null)
             throw new CrccException(ResponseCode.AUTH_FAILED);
 

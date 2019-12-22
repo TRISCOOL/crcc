@@ -1,6 +1,7 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.MeteringAccount;
+import com.crcc.common.model.MeteringAccountForProjectCount;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -41,4 +42,10 @@ public interface MeteringAccountMapper {
     int logicDeletedById(@Param("id")Long id,
                          @Param("updateUser")Long updateUser,
                          @Param("updateTime")Date updateTime);
+
+    List<MeteringAccountForProjectCount> listCountForProject(@Param("projectId")Long projectId,
+                                                             @Param("projectName")String projectName,
+                                                             @Param("offset")Integer offset,@Param("length")Integer length);
+
+    Integer listCountForProjectCount(@Param("projectId")Long projectId,@Param("projectName")String projectName);
 }

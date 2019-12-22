@@ -114,6 +114,7 @@ public class ProjectController extends BaseController{
      * @return
      */
     @GetMapping("/list/v1.1")
+    @AuthRequire
     public ResponseVo listProject(@RequestParam(value = "projectName",required = false)String projectName,
                                   @RequestParam(value = "code",required = false)String code,
                                   @RequestParam(value = "projectType",required = false)Long projectType,

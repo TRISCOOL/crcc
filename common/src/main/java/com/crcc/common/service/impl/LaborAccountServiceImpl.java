@@ -239,4 +239,9 @@ public class LaborAccountServiceImpl implements LaborAccountService{
     public List<LaborAccount> getTeamAccountByContractType(Long projectId, Long subcontractorId, String teamName, Integer contractType) {
         return laborAccountMapper.getTeamAccountByContractType(projectId,subcontractorId,teamName,contractType);
     }
+
+    @Override
+    public Double getSumContractAmountByProject(Long projectId) {
+        return laborAccountMapper.getSumContractAmountByProject(projectId);
+    }
 }

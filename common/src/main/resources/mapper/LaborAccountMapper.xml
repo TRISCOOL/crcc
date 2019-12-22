@@ -548,6 +548,15 @@
         AND team_name = #{teamName} AND deleted != 1;
   </select>
 
+  <select id="getSumContractAmountByProject" resultType="java.lang.Double">
+    SELECT
+    SUM(estimated_contract_amount) AS contractAmount
+    FROM
+    labor_account
+    WHERE
+    project_id = #{projectId} AND deleted != 1;
+  </select>
+
   <select id="getTeamAccountByMain" resultType="com.crcc.common.model.LaborAccount">
     SELECT
       *

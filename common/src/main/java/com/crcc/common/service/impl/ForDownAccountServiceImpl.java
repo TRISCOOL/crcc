@@ -3,9 +3,7 @@ package com.crcc.common.service.impl;
 import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.InspectionAccountMapper;
-import com.crcc.common.model.InspectionAccount;
-import com.crcc.common.model.InspectionAccountTotal;
-import com.crcc.common.model.LaborAccount;
+import com.crcc.common.model.*;
 import com.crcc.common.service.ForDownAccountService;
 import com.crcc.common.service.LaborAccountService;
 import com.crcc.common.utils.DateTimeUtil;
@@ -168,5 +166,79 @@ public class ForDownAccountServiceImpl implements ForDownAccountService{
     @Override
     public List<InspectionAccount> findInspectionAccountByProjectAndSubAndTeam(Long projectId, Long subcontractorId, String teamName) {
         return inspectionAccountMapper.findInspectionAccountByProjectAndSubAndTeam(projectId,subcontractorId,teamName);
+    }
+
+    @Override
+    public List<InspectionCountForLabor> listCountForLabor(String projectName, String subcontractorName, String teamName,
+                                                           Integer offset, Integer length,Long projectId) {
+        List<InspectionCountForLabor> inspectionCountForLabors =
+                inspectionAccountMapper.listInspectionCountForLabor(subcontractorName,projectName,teamName,offset,length,
+                        projectId);
+
+        if (inspectionCountForLabors.size() <= 0)
+            return null;
+
+        inspectionCountForLabors.forEach(count ->{
+            Long pId = count.getProjectId();
+            Long subId = count.getSubcontractorId();
+            Long teamId = count.getLaborAccountId();
+            String tName = count.getTeamName();
+            if (pId != null && subId != null && teamId != null && tName != null){
+                Double sumContractPrice = laborAccountService.getSumContractAmount(pId,subId,tName);
+                if (sumContractPrice != null){
+                    BigDecimal realSumContractPrice = new BigDecimal(sumContractPrice);
+                    count.setContractPrice(realSumContractPrice.setScale(2,BigDecimal.ROUND_HALF_UP));
+                }
+
+                InspectionAccount newInspection = inspectionAccountMapper.getNew(pId,subId,teamId);
+                if (newInspection != null){
+                    count.setNewPeriodTime(newInspection.getValuationTime());
+                    count.setNewPeriodType(newInspection.getValuationType());
+                }
+
+                BigDecimal sumValuationPrice = count.getSumValuationPrice();
+                BigDecimal sumEndedPrice = count.getSumEndedPrice();
+                if (sumValuationPrice != null && sumEndedPrice != null){
+                    BigDecimal sumRate = Utils.computerDivide(sumValuationPrice,sumValuationPrice.add(sumEndedPrice),4);
+                    count.setSumRate(sumRate);
+                }
+            }
+        });
+        return inspectionCountForLabors;
+    }
+
+    @Override
+    public Integer listCountForLaborCount(String projectName, String subcontractorName, String teamName,Long projectId) {
+        return inspectionAccountMapper.listInspectionCountForLaborCount(subcontractorName,projectName,teamName,projectId);
+    }
+
+    @Override
+    public List<InspectionCountForProject> listInspectionCountForProject(Long projectId, String projectName, Integer offset, Integer length) {
+        List<InspectionCountForProject> inspectionCountForProjects =
+                inspectionAccountMapper.listInspectionCountForProject(projectId,projectName,offset,length);
+
+        if (inspectionCountForProjects.size() <= 0)
+            return null;
+
+        for (InspectionCountForProject forProject : inspectionCountForProjects){
+            Double sumContractPrice = laborAccountService.getSumContractAmountByProject(forProject.getProjectId());
+            if (sumContractPrice != null){
+                BigDecimal real = new BigDecimal(sumContractPrice);
+                forProject.setContractPrice(real.setScale(2,BigDecimal.ROUND_HALF_UP));
+            }
+
+            BigDecimal sumValuationPrice = forProject.getSumValuationPrice();
+            BigDecimal sumEndedPrice = forProject.getSumEndedPrice();
+            if (sumValuationPrice != null && sumEndedPrice != null){
+                BigDecimal sumRate = Utils.computerDivide(sumValuationPrice,sumValuationPrice.add(sumEndedPrice),4);
+                forProject.setSumRate(sumRate);
+            }
+        }
+        return inspectionCountForProjects;
+    }
+
+    @Override
+    public Integer listInspectionCountForProjectCount(Long projectId, String projectName) {
+        return inspectionAccountMapper.listInspectionCountForProjectCount(projectId,projectName);
     }
 }

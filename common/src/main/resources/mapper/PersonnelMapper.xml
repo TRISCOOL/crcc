@@ -543,7 +543,7 @@
     <if test="workTime != null">
       AND p.work_time = #{workTime}
     </if>
-    ORDER BY p.id DESC
+    ORDER BY p.project_id DESC
     <if test="offset != null and length != null">
       limit #{offset},#{length}
     </if>

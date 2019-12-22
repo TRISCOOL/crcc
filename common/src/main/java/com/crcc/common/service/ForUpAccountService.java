@@ -1,6 +1,7 @@
 package com.crcc.common.service;
 
 import com.crcc.common.model.MeteringAccount;
+import com.crcc.common.model.MeteringAccountForProjectCount;
 import com.crcc.common.model.MeteringAccountTotal;
 
 import java.util.Date;
@@ -28,5 +29,9 @@ public interface ForUpAccountService {
                                   Double minProductionValue,Double maxProductionValue);
 
     boolean logicDeletedById(Long id,Long updateUser,Date updateTime);
+
+    List<MeteringAccountForProjectCount> listCountForProject(Long projectId,String projectName,Integer offset,Integer length);
+
+    Integer listCountForProjectCount(Long projectId,String projectName);
 
 }

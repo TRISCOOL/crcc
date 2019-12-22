@@ -379,4 +379,52 @@
       update_time = #{updateTime}
     WHERE id = #{id}
   </update>
+
+  <select id="listCountForProject" resultType="com.crcc.common.model.MeteringAccountForProjectCount">
+    SELECT
+      m.project_id AS projectId,
+      p.name AS projectName,
+      SUM(m.prepayment_amount) AS sumPrepaymentAmount,
+      SUM(m.valuation_amount_tax) AS sumValuationAmountTax,
+      SUM(m.valuation_amount_not_tax) AS valuationAmountNotTax,
+      m.tax,
+      sum(m.real_amount_tax) as sumRealAmountTax,
+      sum(m.real_amount) as sumRealAmount,
+      sum(m.already_paid_amount) as sumAlreadyPaidAmount,
+      sum(m.unpaid_amount) as sumUnpaidAmount,
+      sum(m.extra_amount) as sumExtraAmount,
+      sum(m.not_calculated_amount) as sumNotCalculatedAmount
+    FROM
+      metering_account m
+    LEFT JOIN
+      project p ON m.project_id = p.id
+      where m.deleted != 1
+    <if test="projectId != null">
+      AND m.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    GROUP BY m.project_id
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listCountForProjectCount" resultType="java.lang.Integer">
+    SELECT count(*) FROM (SELECT
+     m.*
+    FROM
+    metering_account m
+    LEFT JOIN
+    project p ON m.project_id = p.id
+    where m.deleted != 1
+    <if test="projectId != null">
+      AND m.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    GROUP BY m.project_id) AS mid
+  </select>
 </mapper>

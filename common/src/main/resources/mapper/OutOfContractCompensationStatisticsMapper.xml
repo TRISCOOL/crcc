@@ -477,7 +477,7 @@
       o.*,
       p.`name` AS projectName,
       pi.project_type AS projectType,
-      pi.contract_number AS contractNumber,
+      la.contract_code AS contractNumber,
       s.`name` AS subcontractorName,
       la.team_name AS teamName,
       la.contract_person AS contractPerson

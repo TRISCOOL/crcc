@@ -4,10 +4,7 @@ import com.crcc.api.annotations.AuthRequire;
 import com.crcc.api.controller.BaseController;
 import com.crcc.api.vo.ResponseVo;
 import com.crcc.common.exception.ResponseCode;
-import com.crcc.common.model.ExportConfig;
-import com.crcc.common.model.MeteringAccount;
-import com.crcc.common.model.MeteringAccountTotal;
-import com.crcc.common.model.User;
+import com.crcc.common.model.*;
 import com.crcc.common.service.ExportConfigService;
 import com.crcc.common.service.ForUpAccountService;
 import com.crcc.common.utils.ExcelUtils;
@@ -209,5 +206,51 @@ public class ForUpAccountController extends BaseController{
         if (result)
             return ResponseVo.ok();
         return ResponseVo.error(ResponseCode.SERVER_ERROR);
+    }
+
+    @GetMapping("/list_count_project/v1.1")
+    @AuthRequire
+    public ResponseVo listCountForProject(@RequestParam(value = "projectName",required = false)String projectName,
+                                          @RequestParam("page")Integer page,@RequestParam("pageSize")Integer pageSize,
+                                          HttpServletRequest request){
+        Long projectId = permissionProject(request);
+        projectName = Utils.getBlurryKeyString(projectName);
+
+        Integer realPage = page - 1<0?0:page-1;
+
+        List<MeteringAccountForProjectCount> meteringAccountForProjectCountList =
+                forUpAccountService.listCountForProject(projectId,projectName,realPage*pageSize,pageSize);
+
+        Integer count = forUpAccountService.listCountForProjectCount(projectId,projectName);
+
+        return ResponseVo.ok(count,page,pageSize,meteringAccountForProjectCountList);
+
+    }
+
+    @GetMapping("/list_count_project_export/v1.1")
+    public void listCountForProjectExport(@RequestParam(value = "projectName",required = false)String projectName,
+                                          @RequestParam("token")String token,
+                                          HttpServletResponse response){
+        projectName = Utils.getBlurryKeyString(projectName);
+
+        Long projectId = permissionProjectOnlyToken(token);
+
+        List<MeteringAccountForProjectCount> meteringAccountForProjectCounts =
+                forUpAccountService.listCountForProject(projectId,projectName,null,null);
+
+
+        String[] title = {"项目名称","预付款","含税","税率(%)","不含税","含税","不含税","已支付金额","未支付金额",
+                "拨付率(%)","超计价","已完未计","产值计价率"};
+        HSSFWorkbook wb = ExcelUtils.getForUpCountForProjectExcel("对上验工计价台账汇总表","对上验工计价台账汇总表",title,meteringAccountForProjectCounts);
+        OutputStream out = null;
+        try {
+            out = response.getOutputStream();
+            response.setHeader("Content-disposition", "attachment; filename="+new String("对上验工计价台账汇总表".getBytes( "utf-8" ), "ISO8859-1" )+".xls");
+            response.setContentType("application/msexcel");
+            wb.write(out);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
     }
 }

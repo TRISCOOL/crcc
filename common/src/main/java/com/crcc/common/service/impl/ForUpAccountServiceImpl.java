@@ -4,6 +4,7 @@ import com.crcc.common.exception.CrccException;
 import com.crcc.common.exception.ResponseCode;
 import com.crcc.common.mapper.MeteringAccountMapper;
 import com.crcc.common.model.MeteringAccount;
+import com.crcc.common.model.MeteringAccountForProjectCount;
 import com.crcc.common.model.MeteringAccountTotal;
 import com.crcc.common.service.ForUpAccountService;
 import com.crcc.common.utils.DateTimeUtil;
@@ -127,6 +128,39 @@ public class ForUpAccountServiceImpl implements ForUpAccountService{
             return true;
         }
         return false;
+    }
+
+    @Override
+    public List<MeteringAccountForProjectCount> listCountForProject(Long projectId, String projectName, Integer offset, Integer length) {
+        List<MeteringAccountForProjectCount> meteringAccountForProjectCountList =
+                meteringAccountMapper.listCountForProject(projectId,projectName,offset,length);
+        if (meteringAccountForProjectCountList.size() <= 0)
+            return null;
+
+        meteringAccountForProjectCountList.forEach(meteringAccountForProjectCount -> {
+            BigDecimal sumAlreadyPaidAmount = meteringAccountForProjectCount.getSumAlreadyPaidAmount();
+            BigDecimal sumUnpaidAmount = meteringAccountForProjectCount.getSumUnpaidAmount();
+            if (sumAlreadyPaidAmount != null && sumUnpaidAmount != null){
+                BigDecimal value = Utils.computerDivide(sumAlreadyPaidAmount,sumAlreadyPaidAmount.add(sumUnpaidAmount),4);
+                meteringAccountForProjectCount.setPayProportion(value);
+            }
+
+            BigDecimal sumValuationAmountTax = meteringAccountForProjectCount.getSumValuationAmountTax();
+            BigDecimal sumNotCalculatedAmount = meteringAccountForProjectCount.getSumNotCalculatedAmount();
+            BigDecimal sumExtraAmount = meteringAccountForProjectCount.getSumExtraAmount();
+            if (sumValuationAmountTax != null && sumNotCalculatedAmount != null && sumExtraAmount != null){
+                BigDecimal value = Utils.computerDivide(sumValuationAmountTax,
+                        sumValuationAmountTax.add(sumNotCalculatedAmount).add(sumExtraAmount),4);
+                meteringAccountForProjectCount.setProductionValue(value);
+            }
+        });
+
+        return meteringAccountForProjectCountList;
+    }
+
+    @Override
+    public Integer listCountForProjectCount(Long projectId, String projectName) {
+        return meteringAccountMapper.listCountForProjectCount(projectId,projectName);
     }
 
     private void supplement(MeteringAccount meteringAccount){

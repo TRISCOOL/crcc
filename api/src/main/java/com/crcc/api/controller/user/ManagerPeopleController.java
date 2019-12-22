@@ -25,6 +25,7 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.OutputStream;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -73,6 +74,7 @@ public class ManagerPeopleController extends BaseController{
     @AuthRequire
     public ResponseVo update(@RequestBody Personnel personnel,HttpServletRequest request){
         User user = curUser(request);
+        personnel.setUpdateUser(user.getId());
         boolean result = personnelService.updatePersonnel(personnel);
         if (result)
             return ResponseVo.ok();
@@ -353,6 +355,23 @@ public class ManagerPeopleController extends BaseController{
         cell = Utils.getNewCell(new Paragraph("获奖励和受表彰情况",titleFont),1,2,true,true);
         table.addCell(cell);
         cell = Utils.getNewCell(new Paragraph(personnel.getAward(),font),6,2,true,false);
+        table.addCell(cell);
+
+
+        cell = Utils.getNewCell(new Paragraph("拟调配意见",titleFont),1,4,true,true);
+        cell.setFixedHeight(120);
+        table.addCell(cell);
+        cell = Utils.getNewCell(new Paragraph("经济管理部意见：\n\n\n\n " +
+                "                                                                                         " +
+                "                                                                                         " +
+                "       年         月        日",font),6,2,false,false);
+        cell.setFixedHeight(60);
+        table.addCell(cell);
+        cell = Utils.getNewCell(new Paragraph("分管领导意见：\n\n\n\n " +
+                "                                                                                         " +
+                "                                                                                         " +
+                "       年         月        日",font),6,2,false,false);
+        cell.setFixedHeight(60);
         table.addCell(cell);
 
         document.add(table);

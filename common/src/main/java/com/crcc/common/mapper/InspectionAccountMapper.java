@@ -1,6 +1,8 @@
 package com.crcc.common.mapper;
 
 import com.crcc.common.model.InspectionAccount;
+import com.crcc.common.model.InspectionCountForLabor;
+import com.crcc.common.model.InspectionCountForProject;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.Date;
@@ -57,4 +59,24 @@ public interface InspectionAccountMapper {
                                                   @Param("subcontractorId")Long subcontractorId,
                                                   @Param("laborAccountId")Long laborAccountId,
                                                   @Param("valuationPeriod")Integer valuationPeriod);
+
+    List<InspectionCountForLabor> listInspectionCountForLabor(@Param("subcontractorName")String subcontractorName,
+                                                              @Param("projectName")String projectName,
+                                                              @Param("teamName")String teamName,
+                                                              @Param("offset")Integer offset,
+                                                              @Param("length")Integer length,@Param("projectId")Long projectId);
+
+    InspectionAccount getNew(@Param("projectId")Long projectId,@Param("subcontractorId")Long subcontractorId,
+                             @Param("laborAccountId")Long laborAccountId);
+
+    Integer listInspectionCountForLaborCount(@Param("subcontractorName")String subcontractorName,
+                                             @Param("projectName")String projectName,
+                                             @Param("teamName")String teamName,@Param("projectId")Long projectId);
+
+    Integer listInspectionCountForProjectCount(@Param("projectId")Long projectId,@Param("projectName")String projectName);
+
+    List<InspectionCountForProject> listInspectionCountForProject(@Param("projectId")Long projectId,
+                                                                  @Param("projectName")String projectName,
+                                                                  @Param("offset")Integer offset,
+                                                                  @Param("length")Integer length);
 }

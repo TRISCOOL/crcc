@@ -478,4 +478,138 @@
         AND valuation_period = #{valuationPeriod}
         AND deleted != 1
   </select>
+
+
+  <select id="listInspectionCountForLabor" resultType="com.crcc.common.model.InspectionCountForLabor">
+    SELECT
+      ic.project_id AS projectId,
+      ic.subcontractor_id AS subcontractorId,
+      ic.labor_account_id AS laborAccountId,
+      p.name as projectName,
+      s.name as subcontractorName,
+      la.team_name AS teamName,
+      max(ic.valuation_period) AS valuationPeriodCount,
+      SUM(ic.valuation_price) AS sumValuationPrice,
+      SUM(ic.valuation_price_reduce) AS sumValuationPriceReduce,
+      SUM(ic.warranty) AS sumWarranty,
+      SUM(ic.performance_bond) AS sumPerformanceBond,
+      SUM(ic.compensation) AS sumCompensation,
+      SUM(ic.should_amount) AS sumShouldAmount,
+      SUM(ic.ended_price) AS sumEndedPrice
+    FROM
+      inspection_account ic
+        LEFT JOIN
+      project p ON p.id = ic.project_id
+        LEFT JOIN
+      subcontractor s ON s.id = ic.subcontractor_id
+        LEFT JOIN
+      labor_account la ON ic.labor_account_id = la.id
+    WHERE
+      ic.deleted != 1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="subcontractorName != null">
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="teamName != null">
+      AND la.team_name LIKE concat('%',#{teamName},'%')
+    </if>
+    GROUP BY ic.project_id , ic.subcontractor_id , ic.labor_account_id
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="getNew" resultMap="BaseResultMap">
+    SELECT
+      *
+    FROM
+      inspection_account
+    WHERE
+      project_id = #{projectId}
+        AND subcontractor_id = #{subcontractorId}
+        AND labor_account_id = #{laborAccountId}
+        AND deleted != 1
+    ORDER BY valuation_period DESC
+    LIMIT 1
+  </select>
+
+  <select id="listInspectionCountForLaborCount" resultType="java.lang.Integer">
+    SELECT count(*) FROM (SELECT
+     ic.*
+    FROM
+    inspection_account ic
+    LEFT JOIN
+    project p ON p.id = ic.project_id
+    LEFT JOIN
+    subcontractor s ON s.id = ic.subcontractor_id
+    LEFT JOIN
+    labor_account la ON ic.labor_account_id = la.id
+    WHERE
+    ic.deleted != 1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    <if test="subcontractorName != null">
+      AND s.name LIKE concat('%',#{subcontractorName},'%')
+    </if>
+    <if test="teamName != null">
+      AND la.team_name LIKE concat('%',#{teamName},'%')
+    </if>
+    GROUP BY ic.project_id , ic.subcontractor_id , ic.labor_account_id) AS mid
+  </select>
+
+  <select id="listInspectionCountForProject" resultType="com.crcc.common.model.InspectionCountForProject">
+    SELECT
+      ic.project_id AS projectId,
+      p.name as projectName,
+      SUM(ic.valuation_price) AS sumValuationPrice,
+      SUM(ic.valuation_price_reduce) AS sumValuationPriceReduce,
+      SUM(ic.warranty) AS sumWarranty,
+      SUM(ic.performance_bond) AS sumPerformanceBond,
+      SUM(ic.compensation) AS sumCompensation,
+      SUM(ic.should_amount) AS sumShouldAmount,
+      SUM(ic.ended_price) AS sumEndedPrice
+    FROM
+      inspection_account ic
+        LEFT JOIN
+      project p ON p.id = ic.project_id
+    WHERE
+      ic.deleted != 1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+          GROUP BY ic.project_id
+    <if test="offset != null and length != null">
+      limit #{offset},#{length}
+    </if>
+  </select>
+
+  <select id="listInspectionCountForProjectCount" resultType="java.lang.Integer">
+    SELECT count(*) FROM (SELECT
+    ic.*
+    FROM
+    inspection_account ic
+    LEFT JOIN
+    project p ON p.id = ic.project_id
+    WHERE
+    ic.deleted != 1
+    <if test="projectId != null">
+      AND ic.project_id = #{projectId}
+    </if>
+    <if test="projectName != null">
+      AND p.name LIKE concat('%',#{projectName},'%')
+    </if>
+    GROUP BY ic.project_id) AS mid
+  </select>
 </mapper>

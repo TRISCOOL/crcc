@@ -57,4 +57,6 @@ public interface LaborAccountMapper {
                                                     @Param("subcontractorId")Long subcontractorId,
                                                     @Param("teamName")String teamName,
                                                     @Param("contractType")Integer contractType);
+
+    Double getSumContractAmountByProject(@Param("projectId")Long projectId);
 }

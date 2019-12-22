@@ -2,6 +2,8 @@ package com.crcc.common.service;
 
 import com.crcc.common.model.InspectionAccount;
 import com.crcc.common.model.InspectionAccountTotal;
+import com.crcc.common.model.InspectionCountForLabor;
+import com.crcc.common.model.InspectionCountForProject;
 
 import java.util.Date;
 import java.util.List;
@@ -27,4 +29,13 @@ public interface ForDownAccountService {
     boolean logicDeleteById(Long id,Long updateUser,Date updateTime);
 
     List<InspectionAccount> findInspectionAccountByProjectAndSubAndTeam(Long projectId,Long subcontractorId,String teamName);
+
+    List<InspectionCountForLabor> listCountForLabor(String projectName,String subcontractorName,String teamName,
+                                                    Integer offset,Integer length,Long projectId);
+
+    Integer listCountForLaborCount(String projectName,String subcontractorName,String teamName,Long projectId);
+
+    List<InspectionCountForProject> listInspectionCountForProject(Long projectId,String projectName,Integer offset,Integer length);
+
+    Integer listInspectionCountForProjectCount(Long projectId,String projectName);
 }

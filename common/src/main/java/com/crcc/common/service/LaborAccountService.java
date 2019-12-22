@@ -39,4 +39,6 @@ public interface LaborAccountService {
     LaborAccount getTeamByContract(Long projectId,Long subcontractorId,String teamName,Integer contractType);
 
     List<LaborAccount> getTeamAccountByContractType(Long projectId,Long subcontractorId,String teamName,Integer contractType);
+
+    Double getSumContractAmountByProject(Long projectId);
 }

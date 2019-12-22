@@ -753,7 +753,11 @@ public class ExcelUtils {
             contentRow.createCell(0).setCellValue(inspectionAccount.getProjectName());
             contentRow.createCell(1).setCellValue(inspectionAccount.getSubcontractorName());
             contentRow.createCell(2).setCellValue(inspectionAccount.getTeamName());
-            contentRow.createCell(3).setCellValue(isNull(new BigDecimal(inspectionAccount.getSumContractAmount())));
+            if (inspectionAccount.getSumContractAmount() == null){
+                contentRow.createCell(3).setCellValue("");
+            }else {
+                contentRow.createCell(3).setCellValue(isNull(new BigDecimal(inspectionAccount.getSumContractAmount())));
+            }
             contentRow.createCell(4).setCellValue(inspectionAccount.getValuationPeriod());
             contentRow.createCell(5).setCellValue(DateTimeUtil.getYYYYMMDD(inspectionAccount.getValuationTime()));
             contentRow.createCell(6).setCellValue(getValuationType(inspectionAccount.getValuationType()));
@@ -1929,6 +1933,8 @@ public class ExcelUtils {
         return wb;
     }
 
+
+
     //消除科学记数法
     private static String transformationFromDoubleToString(Double value){
         NumberFormat nf = NumberFormat.getInstance();
@@ -1952,4 +1958,330 @@ public class ExcelUtils {
 
         return style;
     }
+
+    @SuppressWarnings("Duplicates")
+    public static HSSFWorkbook getInspectionLarborExcel(String titleValue, String sheetName, String[] title,
+                                                        List<InspectionCountForLabor> inspectionCountForLabors){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 7){
+                cell.setCellValue("计价金额");
+            }else if (i>7 && i<=13){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = twoRow.createCell(i);
+            if (i >= 7 && i<=13){
+                cell.setCellValue(title[i]);
+            }else{
+
+            }
+            cell.setCellStyle(style);
+        }
+
+        CellRangeAddress address0 = new CellRangeAddress(1,1,7,13);
+        sheet.addMergedRegion(address0);
+        CellRangeAddress address1 = new CellRangeAddress(1,2,0,0);
+        CellRangeAddress address2 = new CellRangeAddress(1,2,1,1);
+        CellRangeAddress address3 = new CellRangeAddress(1,2,2,2);
+        CellRangeAddress address4 = new CellRangeAddress(1,2,3,3);
+        CellRangeAddress address5 = new CellRangeAddress(1,2,4,4);
+        CellRangeAddress address6 = new CellRangeAddress(1,2,5,5);
+        CellRangeAddress address7 = new CellRangeAddress(1,2,6,6);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+        sheet.addMergedRegion(address4);
+        sheet.addMergedRegion(address5);
+        sheet.addMergedRegion(address6);
+        sheet.addMergedRegion(address7);
+
+        //创建内容
+        num = num+1;
+        for(InspectionCountForLabor inspectionCountForLabor : inspectionCountForLabors){
+            if (inspectionCountForLabor == null)
+                continue;
+
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(inspectionCountForLabor.getProjectName());
+            contentRow.createCell(1).setCellValue(inspectionCountForLabor.getSubcontractorName());
+            contentRow.createCell(2).setCellValue(inspectionCountForLabor.getTeamName());
+            contentRow.createCell(3).setCellValue(isNull(inspectionCountForLabor.getContractPrice()));
+            contentRow.createCell(4).setCellValue(inspectionCountForLabor.getValuationPeriodCount());
+
+            String time = inspectionCountForLabor.getNewPeriodTime() == null?"":DateTimeUtil.getYYYYMM(inspectionCountForLabor.getNewPeriodTime());
+            contentRow.createCell(5).setCellValue(time);
+            if (inspectionCountForLabor.getNewPeriodType() == null){
+                contentRow.createCell(6).setCellValue("");
+            }else {
+                String typeStr = inspectionCountForLabor.getNewPeriodType() == 2?"末次计价":"中期计价";
+                contentRow.createCell(6).setCellValue(typeStr);
+            }
+            contentRow.createCell(7).setCellValue(isNull(inspectionCountForLabor.getSumValuationPrice()));
+            contentRow.createCell(8).setCellValue(isNull(inspectionCountForLabor.getSumValuationPriceReduce()));
+            contentRow.createCell(9).setCellValue(isNull(inspectionCountForLabor.getSumWarranty()));
+            contentRow.createCell(10).setCellValue(isNull(inspectionCountForLabor.getSumPerformanceBond()));
+            contentRow.createCell(11).setCellValue(isNull(inspectionCountForLabor.getSumCompensation()));
+            contentRow.createCell(12).setCellValue(isNull(inspectionCountForLabor.getSumShouldAmount()));
+            contentRow.createCell(13).setCellValue(isNull(inspectionCountForLabor.getSumEndedPrice()));
+            contentRow.createCell(14).setCellValue(inspectionCountForLabor.getSumRate() == null?"":inspectionCountForLabor.getSumRate().setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100+"%");
+            num++;
+
+        }
+        return wb;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public static HSSFWorkbook getInspectionProjectExcel(String titleValue, String sheetName, String[] title,
+                                                        List<InspectionCountForProject> inspectionCountForProjects){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 2){
+                cell.setCellValue("计价金额");
+            }else if (i>2 && i<=8){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = twoRow.createCell(i);
+            if (i >= 2 && i<=8){
+                cell.setCellValue(title[i]);
+            }else{
+
+            }
+            cell.setCellStyle(style);
+        }
+
+        CellRangeAddress address0 = new CellRangeAddress(1,1,2,8);
+        sheet.addMergedRegion(address0);
+        CellRangeAddress address1 = new CellRangeAddress(1,2,0,0);
+        CellRangeAddress address2 = new CellRangeAddress(1,2,1,1);
+        CellRangeAddress address3 = new CellRangeAddress(1,2,9,9);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+
+        //创建内容
+        num = num+1;
+        for(InspectionCountForProject forProject : inspectionCountForProjects){
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(forProject.getProjectName());
+            contentRow.createCell(1).setCellValue(isNull(forProject.getContractPrice()));
+            contentRow.createCell(2).setCellValue(isNull(forProject.getSumValuationPrice()));
+            contentRow.createCell(3).setCellValue(isNull(forProject.getSumValuationPriceReduce()));
+            contentRow.createCell(4).setCellValue(isNull(forProject.getSumWarranty()));
+            contentRow.createCell(5).setCellValue(isNull(forProject.getSumPerformanceBond()));
+            contentRow.createCell(6).setCellValue(isNull(forProject.getSumCompensation()));
+            contentRow.createCell(7).setCellValue(isNull(forProject.getSumShouldAmount()));
+            contentRow.createCell(8).setCellValue(isNull(forProject.getSumEndedPrice()));
+            contentRow.createCell(9).setCellValue(forProject.getSumRate() == null?"":forProject.getSumRate().setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100+"%");
+            num++;
+
+        }
+        return wb;
+    }
+
+    @SuppressWarnings("Duplicates")
+    public static HSSFWorkbook getForUpCountForProjectExcel(String titleValue, String sheetName, String[] title,
+                                                         List<MeteringAccountForProjectCount> meteringAccountForProjectCounts){
+
+        // 第一步，创建一个HSSFWorkbook，对应一个Excel文件
+        int num = 1;
+        HSSFWorkbook wb = new HSSFWorkbook();
+
+        // 第二步，在workbook中添加一个sheet,对应Excel文件中的sheet
+        HSSFSheet sheet = wb.createSheet(sheetName);
+        sheet.autoSizeColumn(1,true);
+
+        // 第三步，在sheet中添加表头第0行,注意老版本poi对Excel的行数列数有限制
+        HSSFRow row = sheet.createRow(num);
+
+        // 第四步，创建单元格，并设置值表头 设置表头居中
+        HSSFCellStyle style = wb.createCellStyle();
+        style.setAlignment(HorizontalAlignment.CENTER);
+        style.setVerticalAlignment(VerticalAlignment.CENTER);
+
+//        font.setStrikeout(true); //是否使用划线
+
+        HSSFRow titleRow = sheet.createRow(0); //title
+        HSSFCell titleCell = null;
+        for (int i=0;i<title.length;i++){
+            titleCell = titleRow.createCell(i);
+            titleCell.setCellStyle(getTitleStyle(wb));
+            if (i == 0){
+                titleCell.setCellValue(titleValue);
+            }
+        }
+        CellRangeAddress merge = new CellRangeAddress(0,0,0,title.length);
+        sheet.addMergedRegion(merge);
+
+        //声明列对象
+        HSSFCell cell = null;
+        HSSFRow oneRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = oneRow.createCell(i);
+            if (i == 2){
+                cell.setCellValue("计价金额(元)");
+            }else if (i>2 && i<=4){
+
+            }else if (i == 5){
+                cell.setCellValue("实际金额");
+            }else if (i>5 && i<=6){
+
+            }else if (i == 7){
+                cell.setCellValue("资金拨付情况");
+            }else if (i >7 && i<=9){
+
+            }else if (i== 10){
+                cell.setCellValue("其他计价");
+            }else if (i>10 && i<=11){
+
+            }else {
+                cell.setCellValue(title[i]);
+            }
+            cell.setCellStyle(style);
+        }
+
+        num = num +1;
+        HSSFRow twoRow = sheet.createRow(num);
+        for(int i=0;i<title.length;i++){
+            cell = twoRow.createCell(i);
+            if (i >= 2 && i<=11){
+                cell.setCellValue(title[i]);
+            }else{
+
+            }
+            cell.setCellStyle(style);
+        }
+
+        CellRangeAddress address0 = new CellRangeAddress(1,1,2,4);
+        sheet.addMergedRegion(address0);
+        CellRangeAddress address1 = new CellRangeAddress(1,1,5,6);
+        CellRangeAddress address2 = new CellRangeAddress(1,1,7,9);
+        CellRangeAddress address3 = new CellRangeAddress(1,1,10,11);
+        sheet.addMergedRegion(address1);
+        sheet.addMergedRegion(address2);
+        sheet.addMergedRegion(address3);
+
+        CellRangeAddress address4 = new CellRangeAddress(1,2,0,0);
+        CellRangeAddress address5 = new CellRangeAddress(1,2,1,1);
+        CellRangeAddress address6 = new CellRangeAddress(1,2,12,12);
+        sheet.addMergedRegion(address4);
+        sheet.addMergedRegion(address5);
+        sheet.addMergedRegion(address6);
+
+        //创建内容
+        num = num+1;
+        for(MeteringAccountForProjectCount forProject : meteringAccountForProjectCounts){
+            if (forProject == null)
+                continue;
+
+            HSSFRow contentRow = sheet.createRow(num);
+            contentRow.createCell(0).setCellValue(forProject.getProjectName());
+            contentRow.createCell(1).setCellValue(isNull(forProject.getSumPrepaymentAmount()));
+            contentRow.createCell(2).setCellValue(isNull(forProject.getSumValuationAmountTax()));
+            String rateStr = forProject.getTax() == null?"":forProject.getTax().setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100+"%";
+            contentRow.createCell(3).setCellValue(rateStr);
+
+            contentRow.createCell(4).setCellValue(isNull(forProject.getValuationAmountNotTax()));
+            contentRow.createCell(5).setCellValue(isNull(forProject.getSumRealAmountTax()));
+            contentRow.createCell(6).setCellValue(isNull(forProject.getSumRealAmount()));
+            contentRow.createCell(7).setCellValue(isNull(forProject.getSumAlreadyPaidAmount()));
+            contentRow.createCell(8).setCellValue(isNull(forProject.getSumUnpaidAmount()));
+
+            String payStr = forProject.getPayProportion() == null?"":forProject.getPayProportion().setScale(4,BigDecimal.ROUND_HALF_UP).doubleValue()*100+"%";
+            contentRow.createCell(9).setCellValue(payStr);
+            contentRow.createCell(10).setCellValue(isNull(forProject.getSumExtraAmount()));
+            contentRow.createCell(11).setCellValue(isNull(forProject.getSumNotCalculatedAmount()));
+
+            String produceStr = forProject.getProductionValue() == null?"":forProject.getProductionValue().doubleValue()*100+"%";
+            contentRow.createCell(12).setCellValue(produceStr);
+            num++;
+
+        }
+        return wb;
+    }
+
+
 }

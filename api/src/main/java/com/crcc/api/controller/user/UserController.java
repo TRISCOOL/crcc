@@ -149,6 +149,7 @@ public class UserController extends BaseController {
      * @return
      */
     @GetMapping("/list/v1.1")
+    @AuthRequire
     public ResponseVo listUser(@RequestParam(value = "name",required = false)String name,
                                @RequestParam(value = "code",required = false)String code,
                                @RequestParam(value = "disable",required = false)Integer disable,
