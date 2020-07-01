@@ -31,7 +31,7 @@
         <commons-io.version>2.6</commons-io.version>
         <poi.version>3.17</poi.version>
         <spring-security-taglibs.version>4.2.4.RELEASE</spring-security-taglibs.version>
-        <mysql-connector-java.version>8.0.11</mysql-connector-java.version>
+        <mysql-connector-java.version>8.0.16</mysql-connector-java.version>
         <common-dbcp.version>1.4</common-dbcp.version>
         <log4j.version>1.4</log4j.version>
         <lss-lass.version>0.0.1</lss-lass.version>
